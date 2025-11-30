@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "pnpm sdk:build && cd packages/confidential-salary-frontend && pnpm build",
+  "buildCommand": "pnpm --filter ./packages/fhevm-sdk build && pnpm --filter confidential-salary-frontend build",
   "outputDirectory": "packages/confidential-salary-frontend/build",
-  "installCommand": "pnpm install",
+  "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
   "rewrites": [
     {
