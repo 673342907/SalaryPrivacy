@@ -24,10 +24,12 @@
 3. **配置项目设置**
    - **Framework Preset**: 选择 "Other" 或 "Create React App"
    - **Root Directory**: 保持为空（使用项目根目录）
-   - **Build Command**: `cd packages/confidential-salary-frontend && pnpm install && pnpm build`
+   - **Build Command**: `pnpm sdk:build && cd packages/confidential-salary-frontend && pnpm build`
    - **Output Directory**: `packages/confidential-salary-frontend/build`
    - **Install Command**: `pnpm install`
    - **Node.js Version**: 选择 20.x
+   
+   **注意**: 如果使用 `vercel.json` 配置文件，这些设置会自动应用，无需在 Dashboard 中手动配置。
 
 4. **环境变量**（如果需要）
    - 在 "Environment Variables" 部分添加必要的环境变量
