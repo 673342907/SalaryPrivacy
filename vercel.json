@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "buildCommand": "pnpm sdk:build && cd packages/confidential-salary-frontend && pnpm build",
+  "outputDirectory": "packages/confidential-salary-frontend/build",
+  "installCommand": "pnpm install",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/static/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
+
