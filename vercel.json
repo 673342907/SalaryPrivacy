@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "pnpm sdk:build && cd packages/confidential-salary-frontend && pnpm build",
+  "buildCommand": "pnpm sdk:build && pnpm --filter confidential-salary-frontend build",
   "outputDirectory": "packages/confidential-salary-frontend/build",
   "installCommand": "pnpm install",
   "framework": null,
