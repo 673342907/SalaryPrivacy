@@ -1,6 +1,6 @@
 {
   "buildCommand": "pnpm sdk:build && cd packages/nextjs && pnpm build",
-  "installCommand": "pnpm install --frozen-lockfile",
+  "installCommand": "pnpm install --no-frozen-lockfile",
   "framework": "nextjs"
 }
 
