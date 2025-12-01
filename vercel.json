@@ -1,6 +1,6 @@
 {
-  "buildCommand": "pnpm sdk:build && cd packages/nextjs && pnpm build",
-  "installCommand": "pnpm install --no-frozen-lockfile",
+  "buildCommand": "cd test-app && npm install && npm run build",
+  "installCommand": "cd test-app && npm install",
   "framework": "nextjs"
 }
 
