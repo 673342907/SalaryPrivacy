@@ -4,7 +4,6 @@
   "outputDirectory": "packages/confidential-salary-frontend/build",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
-  "_comment": "Updated build command with debug info - 2025-11-30",
   "rewrites": [
     {
       "source": "/(.*)",
