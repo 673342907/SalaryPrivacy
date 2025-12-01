@@ -1,25 +1,6 @@
 {
-  "version": 2,
   "buildCommand": "pnpm sdk:build && cd packages/nextjs && pnpm build",
-  "outputDirectory": "packages/nextjs/.next",
   "installCommand": "pnpm install --frozen-lockfile",
-  "framework": "nextjs",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/static/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    }
-  ]
+  "framework": "nextjs"
 }
 
