@@ -157,3 +157,4 @@ ls -la build
 - ✅ Output directory found: `packages/confidential-salary-frontend/build`
 - ✅ Deployment ready
 
+

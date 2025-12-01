@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "pnpm --filter ./packages/fhevm-sdk build && cd packages/confidential-salary-frontend && pnpm build && cd ../.. && echo 'Verifying build output...' && ls -la packages/confidential-salary-frontend/build && echo 'Build directory verified!'",
+  "buildCommand": "echo '=== Debug: Current directory ===' && pwd && echo '=== Debug: Listing root ===' && ls -la && echo '=== Debug: Checking packages ===' && (ls -la packages/ || echo 'packages directory not found') && echo '=== Building SDK ===' && cd packages/fhevm-sdk && pnpm build && cd ../.. && echo '=== Building frontend ===' && cd packages/confidential-salary-frontend && pnpm build && cd ../.. && echo '=== Verifying output ===' && ls -la packages/confidential-salary-frontend/build",
   "outputDirectory": "packages/confidential-salary-frontend/build",
   "installCommand": "pnpm install --frozen-lockfile",
   "framework": null,
