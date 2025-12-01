@@ -13,6 +13,8 @@
     ]
   },
   "scripts": {
+    "build:test-app": "cd test-app && npm run build",
+    "dev:test-app": "cd test-app && npm run dev",
     "chain": "pnpm hardhat:chain",
     "compile": "pnpm hardhat:compile",
     "deploy:localhost": "pnpm hardhat:deploy && pnpm generate",
