@@ -14,3 +14,5 @@ tmp*
 create-fhevm-nextjs/
 create-fhevm-react/
 create-fhevm-vue/
+.vercel
+.env*.local
