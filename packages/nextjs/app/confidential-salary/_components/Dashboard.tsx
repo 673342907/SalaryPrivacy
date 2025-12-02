@@ -1,7 +1,7 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useFhevm } from "@fhevm-sdk";
 import { DemoDataGenerator } from "./DemoDataGenerator";
 import { TechnicalComparison } from "./TechnicalComparison";
@@ -31,11 +31,34 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
   // 对于 mock chain，使用本地 Hardhat 节点
   const initialMockChains = isMockChain ? { 31337: "http://localhost:8545" } : {};
 
+  // 检查 Relayer SDK 是否已加载（用于 Sepolia）
+  const [relayerSDKReady, setRelayerSDKReady] = useState(false);
+  
+  useEffect(() => {
+    if (typeof window !== "undefined" && chainId === 11155111) {
+      const checkRelayerSDK = () => {
+        const win = window as any;
+        if (win.relayerSDK && typeof win.relayerSDK.initSDK === "function") {
+          setRelayerSDKReady(true);
+        } else {
+          setRelayerSDKReady(false);
+        }
+      };
+      
+      checkRelayerSDK();
+      // 定期检查（因为 SDK 是异步加载的）
+      const interval = setInterval(checkRelayerSDK, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setRelayerSDKReady(true); // Mock chain 不需要 Relayer SDK
+    }
+  }, [chainId]);
+
   const { instance: fhevmInstance, status: fhevmStatus, error: fhevmError } = useFhevm({
     provider,
     chainId,
     initialMockChains,
-    enabled: !!provider && !!address, // 只有在钱包连接时才启用
+    enabled: !!provider && !!address && (isMockChain || relayerSDKReady), // 只有在钱包连接且 SDK 就绪时才启用
   });
 
   return (

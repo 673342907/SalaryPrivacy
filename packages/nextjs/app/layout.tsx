@@ -1,6 +1,7 @@
 import "@rainbow-me/rainbowkit/styles.css";
 import { DappWrapperWithProviders } from "~~/components/DappWrapperWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
+import { FHEVMLoader } from "./confidential-salary/_components/FHEVMLoader";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/helper/getMetadata";
 
@@ -19,6 +20,7 @@ const DappWrapper = ({ children }: { children: React.ReactNode }) => {
         />
       </head>
       <body>
+        <FHEVMLoader />
         <ThemeProvider enableSystem>
           <DappWrapperWithProviders>{children}</DappWrapperWithProviders>
         </ThemeProvider>
