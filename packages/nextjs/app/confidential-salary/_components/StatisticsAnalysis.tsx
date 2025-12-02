@@ -35,11 +35,27 @@ export function StatisticsAnalysis() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">统计分析</h2>
-          <p className="text-gray-600 mt-1">在不解密原始数据的情况下进行统计计算</p>
+      {/* Header with Feature Description */}
+      <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 mb-6">
+        <div className="flex items-start">
+          <span className="text-3xl mr-3">📊</span>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">统计分析</h2>
+            <p className="text-gray-700 mb-2">
+              <strong>核心功能：</strong>使用 FHE（全同态加密）技术在不解密原始薪资数据的情况下进行统计计算。这是 FHE 技术的核心优势！
+            </p>
+            <div className="bg-white rounded-lg p-3 mt-2">
+              <p className="text-sm text-gray-700 mb-2">
+                <strong>✨ 技术亮点：</strong>
+              </p>
+              <ul className="text-sm text-gray-600 ml-4 list-disc space-y-1">
+                <li>可以在加密数据上直接进行加、减、乘、除等运算</li>
+                <li>计算总薪资、平均薪资、员工数量等统计信息</li>
+                <li>无需解密任何单个员工的薪资数据</li>
+                <li>确保完全的隐私保护，同时支持数据分析</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
 

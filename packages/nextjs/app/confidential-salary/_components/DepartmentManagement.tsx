@@ -29,16 +29,32 @@ export function DepartmentManagement() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
+        <div className="flex items-start">
+          <span className="text-3xl mr-3">🏢</span>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">部门管理</h2>
+            <p className="text-gray-700 mb-2">
+              <strong>功能说明：</strong>创建和管理公司部门，为每个部门设置加密预算。部门预算将用于后续的薪资管理和预算合规检查。
+            </p>
+            <p className="text-sm text-gray-600">
+              💡 <strong>使用提示：</strong>点击"创建部门"按钮，输入部门名称和预算金额（单位：ETH），预算将以加密形式存储在区块链上。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">部门管理</h2>
-          <p className="text-gray-600 mt-1">创建和管理公司部门，设置部门预算</p>
+          <h3 className="text-xl font-semibold text-gray-900">部门列表</h3>
+          <p className="text-sm text-gray-600">当前共有 {departments.length} 个部门</p>
         </div>
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md"
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md flex items-center gap-2"
         >
-          {showCreateForm ? "取消" : "+ 创建部门"}
+          <span>{showCreateForm ? "✕" : "+"}</span>
+          {showCreateForm ? "取消创建" : "创建部门"}
         </button>
       </div>
 

@@ -56,24 +56,49 @@ export function SalaryManagement() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
+      {/* Header with Feature Description */}
+      <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 mb-6">
+        <div className="flex items-start">
+          <span className="text-3xl mr-3">💰</span>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">薪资管理</h2>
+            <p className="text-gray-700 mb-2">
+              <strong>核心功能：</strong>使用 FHE（全同态加密）技术加密提交员工薪资。薪资数据在链上以加密形式存储，只有授权用户才能解密查看。
+            </p>
+            <div className="bg-white rounded-lg p-3 mt-2">
+              <p className="text-sm text-gray-700">
+                <strong>🔐 FHE 加密流程：</strong>
+              </p>
+              <ol className="text-sm text-gray-600 mt-1 ml-4 list-decimal">
+                <li>输入员工地址和薪资金额</li>
+                <li>系统使用 FHEVM 对薪资进行加密</li>
+                <li>加密后的数据存储在区块链上</li>
+                <li>只有有权限的用户可以解密查看</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between mb-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">薪资管理</h2>
-          <p className="text-gray-600 mt-1">提交加密薪资，查看薪资信息</p>
+          <h3 className="text-xl font-semibold text-gray-900">薪资记录</h3>
+          <p className="text-sm text-gray-600">当前共有 {salaries.length} 条加密薪资记录</p>
         </div>
         <div className="flex gap-3">
           <button
             onClick={() => setShowViewForm(!showViewForm)}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold shadow-md"
+            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold shadow-md flex items-center gap-2"
           >
-            {showViewForm ? "取消" : "🔍 查看薪资"}
+            <span>🔍</span>
+            {showViewForm ? "取消" : "查看薪资"}
           </button>
           <button
             onClick={() => setShowSubmitForm(!showSubmitForm)}
-            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-md"
+            className="px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-md flex items-center gap-2"
           >
-            {showSubmitForm ? "取消" : "+ 提交薪资"}
+            <span>+</span>
+            {showSubmitForm ? "取消" : "提交薪资"}
           </button>
         </div>
       </div>

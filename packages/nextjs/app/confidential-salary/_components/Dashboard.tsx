@@ -24,10 +24,15 @@ export function ConfidentialSalaryDashboard() {
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg p-8 text-white">
         <h2 className="text-3xl font-bold mb-2">欢迎使用 ConfidentialSalary</h2>
-        <p className="text-blue-100 text-lg">
+        <p className="text-blue-100 text-lg mb-4">
           基于 FHEVM 的企业级隐私保护薪资管理系统
         </p>
-        <div className="mt-4 flex items-center gap-2 text-sm">
+        <div className="bg-white/10 rounded-lg p-4 mb-4">
+          <p className="text-sm text-blue-50">
+            <strong>💡 使用提示：</strong> 通过顶部导航栏可以访问所有功能模块。每个模块都有详细的功能说明和操作指引。
+          </p>
+        </div>
+        <div className="mt-4 flex items-center gap-2 text-sm flex-wrap">
           <span className="bg-white/20 px-3 py-1 rounded-full">
             🔐 全同态加密保护
           </span>
@@ -37,6 +42,44 @@ export function ConfidentialSalaryDashboard() {
           <span className="bg-white/20 px-3 py-1 rounded-full">
             📊 加密统计分析
           </span>
+        </div>
+      </div>
+
+      {/* Quick Guide */}
+      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+        <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center">
+          <span className="mr-2">📖</span>
+          快速开始指南
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div className="flex items-start">
+            <span className="text-2xl mr-3">1️⃣</span>
+            <div>
+              <strong className="text-gray-900">创建部门</strong>
+              <p className="text-gray-600">在"部门管理"中创建公司部门，设置加密预算</p>
+            </div>
+          </div>
+          <div className="flex items-start">
+            <span className="text-2xl mr-3">2️⃣</span>
+            <div>
+              <strong className="text-gray-900">添加员工</strong>
+              <p className="text-gray-600">在"员工管理"中添加员工，分配角色和部门</p>
+            </div>
+          </div>
+          <div className="flex items-start">
+            <span className="text-2xl mr-3">3️⃣</span>
+            <div>
+              <strong className="text-gray-900">提交薪资</strong>
+              <p className="text-gray-600">在"薪资管理"中加密提交员工薪资数据</p>
+            </div>
+          </div>
+          <div className="flex items-start">
+            <span className="text-2xl mr-3">4️⃣</span>
+            <div>
+              <strong className="text-gray-900">统计分析</strong>
+              <p className="text-gray-600">在"统计分析"中查看加密统计，无需解密原始数据</p>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -75,30 +118,43 @@ export function ConfidentialSalaryDashboard() {
 
       {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">快速操作</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-2">快速操作</h3>
+        <p className="text-sm text-gray-600 mb-4">点击下方按钮快速跳转到对应功能模块</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left">
+          <button 
+            onClick={() => window.location.hash = '#departments'}
+            className="p-4 border-2 border-blue-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left bg-blue-50/50"
+          >
             <div className="text-2xl mb-2">➕</div>
             <div className="font-semibold text-gray-900">创建部门</div>
-            <div className="text-sm text-gray-600">添加新部门</div>
+            <div className="text-sm text-gray-600">添加新部门并设置预算</div>
           </button>
 
-          <button className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors text-left">
+          <button 
+            onClick={() => window.location.hash = '#employees'}
+            className="p-4 border-2 border-green-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors text-left bg-green-50/50"
+          >
             <div className="text-2xl mb-2">👤</div>
             <div className="font-semibold text-gray-900">添加员工</div>
-            <div className="text-sm text-gray-600">注册新员工</div>
+            <div className="text-sm text-gray-600">注册新员工并分配角色</div>
           </button>
 
-          <button className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors text-left">
+          <button 
+            onClick={() => window.location.hash = '#salary'}
+            className="p-4 border-2 border-purple-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors text-left bg-purple-50/50"
+          >
             <div className="text-2xl mb-2">💵</div>
             <div className="font-semibold text-gray-900">提交薪资</div>
-            <div className="text-sm text-gray-600">加密提交薪资</div>
+            <div className="text-sm text-gray-600">使用FHE加密提交薪资</div>
           </button>
 
-          <button className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors text-left">
+          <button 
+            onClick={() => window.location.hash = '#statistics'}
+            className="p-4 border-2 border-orange-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors text-left bg-orange-50/50"
+          >
             <div className="text-2xl mb-2">📊</div>
             <div className="font-semibold text-gray-900">查看统计</div>
-            <div className="text-sm text-gray-600">加密统计分析</div>
+            <div className="text-sm text-gray-600">不解密数据统计分析</div>
           </button>
         </div>
       </div>

@@ -69,11 +69,16 @@ export default function Home() {
           <p className="text-2xl text-gray-700 mb-2">
             隐私保护薪资管理平台
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
             基于 FHEVM 的企业级隐私保护薪资管理系统
             <br />
             所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
           </p>
+          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 max-w-2xl mx-auto mb-6">
+            <p className="text-sm text-gray-700">
+              <strong>🎯 快速开始：</strong> 连接钱包后，您可以体验完整的薪资管理功能，包括部门管理、员工管理、加密薪资提交、统计分析等。
+            </p>
+          </div>
         </div>
 
         {/* Core Features */}
@@ -108,9 +113,12 @@ export default function Home() {
 
         {/* Feature Navigation */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
             🎯 功能导航
           </h2>
+          <p className="text-center text-gray-600 mb-6">
+            点击下方功能卡片，进入对应模块体验完整功能
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
               <Link
@@ -121,19 +129,23 @@ export default function Home() {
                 <div className={`
                   bg-white rounded-xl shadow-lg p-6 
                   border-2 border-transparent
-                  hover:border-${feature.color}-300
+                  hover:border-blue-300
                   hover:shadow-xl
                   transition-all duration-300
                   cursor-pointer
                   h-full
+                  relative
                 `}>
                   <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-${feature.color}-600">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 mb-4">
                     {feature.description}
                   </p>
+                  <div className="text-xs text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                    点击进入 →
+                  </div>
                 </div>
               </Link>
             ))}
