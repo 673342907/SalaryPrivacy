@@ -1,6 +1,4 @@
 {
   "version": 2,
-  "framework": "nextjs",
-  "installCommand": "cd ../.. && pnpm install && cd packages/nextjs",
-  "buildCommand": "pnpm run build"
+  "framework": "nextjs"
 }
