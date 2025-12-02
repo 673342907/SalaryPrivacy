@@ -4,6 +4,8 @@ import { useAccount } from "wagmi";
 import { useMemo, useState } from "react";
 import { useFhevm } from "@fhevm-sdk";
 import { DemoDataGenerator } from "./DemoDataGenerator";
+import { TechnicalComparison } from "./TechnicalComparison";
+import Link from "next/link";
 
 interface ConfidentialSalaryDashboardProps {
   onStartGuide?: () => void;
@@ -101,149 +103,138 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           <div className="flex items-start">
             <span className="text-2xl mr-3">4️⃣</span>
             <div>
-              <strong className="text-gray-900">统计分析</strong>
-              <p className="text-gray-600">在"统计分析"中查看加密统计，无需解密原始数据</p>
+              <strong className="text-gray-900">查看统计</strong>
+              <p className="text-gray-600">在"统计分析"中查看加密数据统计结果</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 mb-1">总员工数</p>
-              <p className="text-3xl font-bold text-gray-900">-</p>
-            </div>
-            <div className="text-4xl">👥</div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 mb-1">部门数量</p>
-              <p className="text-3xl font-bold text-gray-900">-</p>
-            </div>
-            <div className="text-4xl">🏢</div>
-          </div>
-        </div>
-
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-gray-600 mb-1">总薪资（加密）</p>
-              <p className="text-3xl font-bold text-gray-900">🔒</p>
-            </div>
-            <div className="text-4xl">💰</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
+      {/* Quick Actions - Fixed */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="text-xl font-bold text-gray-900 mb-2">快速操作</h3>
         <p className="text-sm text-gray-600 mb-4">点击下方按钮快速跳转到对应功能模块</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button 
-            onClick={() => window.location.hash = '#departments'}
-            className="p-4 border-2 border-blue-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left bg-blue-50/50"
-          >
-            <div className="text-2xl mb-2">➕</div>
-            <div className="font-semibold text-gray-900">创建部门</div>
-            <div className="text-sm text-gray-600">添加新部门并设置预算</div>
-          </button>
+          <Link href="/confidential-salary#departments">
+            <button className="w-full p-4 border-2 border-blue-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left bg-blue-50/50">
+              <div className="text-2xl mb-2">➕</div>
+              <div className="font-semibold text-gray-900">创建部门</div>
+              <div className="text-sm text-gray-600">添加新部门并设置预算</div>
+            </button>
+          </Link>
 
-          <button 
-            onClick={() => window.location.hash = '#employees'}
-            className="p-4 border-2 border-green-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors text-left bg-green-50/50"
-          >
-            <div className="text-2xl mb-2">👤</div>
-            <div className="font-semibold text-gray-900">添加员工</div>
-            <div className="text-sm text-gray-600">注册新员工并分配角色</div>
-          </button>
+          <Link href="/confidential-salary#employees">
+            <button className="w-full p-4 border-2 border-green-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors text-left bg-green-50/50">
+              <div className="text-2xl mb-2">👤</div>
+              <div className="font-semibold text-gray-900">添加员工</div>
+              <div className="text-sm text-gray-600">注册新员工并分配角色</div>
+            </button>
+          </Link>
 
-          <button 
-            onClick={() => window.location.hash = '#salary'}
-            className="p-4 border-2 border-purple-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors text-left bg-purple-50/50"
-          >
-            <div className="text-2xl mb-2">💵</div>
-            <div className="font-semibold text-gray-900">提交薪资</div>
-            <div className="text-sm text-gray-600">使用FHE加密提交薪资</div>
-          </button>
+          <Link href="/confidential-salary#salary">
+            <button className="w-full p-4 border-2 border-purple-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors text-left bg-purple-50/50">
+              <div className="text-2xl mb-2">💵</div>
+              <div className="font-semibold text-gray-900">提交薪资</div>
+              <div className="text-sm text-gray-600">使用FHE加密提交薪资</div>
+            </button>
+          </Link>
 
-          <button 
-            onClick={() => window.location.hash = '#statistics'}
-            className="p-4 border-2 border-orange-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors text-left bg-orange-50/50"
-          >
-            <div className="text-2xl mb-2">📊</div>
-            <div className="font-semibold text-gray-900">查看统计</div>
-            <div className="text-sm text-gray-600">不解密数据统计分析</div>
-          </button>
+          <Link href="/confidential-salary#statistics">
+            <button className="w-full p-4 border-2 border-orange-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors text-left bg-orange-50/50">
+              <div className="text-2xl mb-2">📊</div>
+              <div className="font-semibold text-gray-900">查看统计</div>
+              <div className="text-sm text-gray-600">加密数据统计分析</div>
+            </button>
+          </Link>
         </div>
       </div>
 
       {/* System Status */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h3 className="text-xl font-bold text-gray-900 mb-4">系统状态</h3>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="text-gray-700">FHEVM 连接</span>
-            <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-              fhevmInstance ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-            }`}>
-              {fhevmInstance ? "✅ 已连接" : "❌ 未连接"}
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="p-4 border-2 border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-gray-600">FHEVM 连接</span>
+              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                fhevmStatus === "ready" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
+              }`}>
+                {fhevmStatus === "ready" ? "✓ 已连接" : "⏳ 连接中"}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500">
+              {fhevmStatus === "ready" ? "FHEVM 实例已就绪" : "正在初始化 FHEVM..."}
+            </p>
           </div>
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="text-gray-700">钱包地址</span>
-            <span className="font-mono text-sm text-gray-900">
-              {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : "未连接"}
-            </span>
+
+          <div className="p-4 border-2 border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-gray-600">钱包地址</span>
+              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                {address ? "✓ 已连接" : "未连接"}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 font-mono break-all">
+              {address ? `${address.slice(0, 10)}...${address.slice(-8)}` : "请连接钱包"}
+            </p>
           </div>
-          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-            <span className="text-gray-700">网络</span>
-            <span className="px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">
-              Sepolia Testnet
-            </span>
+
+          <div className="p-4 border-2 border-gray-200 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-gray-600">网络</span>
+              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                Sepolia
+              </span>
+            </div>
+            <p className="text-xs text-gray-500">测试网络</p>
           </div>
         </div>
       </div>
 
+      {/* Technical Comparison */}
+      <TechnicalComparison />
+
       {/* Feature Highlights */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">核心功能</h3>
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl shadow-lg p-6">
+        <h3 className="text-xl font-bold text-gray-900 mb-4">✨ 核心功能亮点</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 border border-gray-200 rounded-lg">
-            <div className="text-2xl mb-2">🔐</div>
-            <h4 className="font-semibold text-gray-900 mb-1">全同态加密</h4>
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-2xl">🔐</span>
+              <h4 className="font-semibold text-gray-900">全同态加密</h4>
+            </div>
             <p className="text-sm text-gray-600">
               所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
             </p>
           </div>
 
-          <div className="p-4 border border-gray-200 rounded-lg">
-            <div className="text-2xl mb-2">👥</div>
-            <h4 className="font-semibold text-gray-900 mb-1">权限管理</h4>
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-2xl">👥</span>
+              <h4 className="font-semibold text-gray-900">角色权限管理</h4>
+            </div>
             <p className="text-sm text-gray-600">
-              基于角色的访问控制：Admin、HR、Manager、Employee 不同权限
+              基于智能合约的 RBAC 系统，确保数据安全和访问控制
             </p>
           </div>
 
-          <div className="p-4 border border-gray-200 rounded-lg">
-            <div className="text-2xl mb-2">📊</div>
-            <h4 className="font-semibold text-gray-900 mb-1">统计分析</h4>
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-2xl">📊</span>
+              <h4 className="font-semibold text-gray-900">加密统计分析</h4>
+            </div>
             <p className="text-sm text-gray-600">
               在不解密原始数据的情况下计算平均值、总和、分布等统计信息
             </p>
           </div>
 
-          <div className="p-4 border border-gray-200 rounded-lg">
-            <div className="text-2xl mb-2">🏢</div>
-            <h4 className="font-semibold text-gray-900 mb-1">组织管理</h4>
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="text-2xl">🏢</span>
+              <h4 className="font-semibold text-gray-900">企业级应用</h4>
+            </div>
             <p className="text-sm text-gray-600">
-              完整的部门管理、员工管理、预算管理和合规检查功能
+              完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点
             </p>
           </div>
         </div>
@@ -251,4 +242,3 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
     </div>
   );
 }
-

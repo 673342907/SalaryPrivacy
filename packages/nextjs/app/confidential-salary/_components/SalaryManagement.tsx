@@ -23,25 +23,39 @@ export function SalaryManagement() {
   const [isEncrypting, setIsEncrypting] = useState(false);
   const [isDecrypting, setIsDecrypting] = useState(false);
 
-  const handleSubmitSalary = async () => {
-    if (formData.employeeAddress && formData.amount) {
-      setIsEncrypting(true);
-      // 模拟加密过程
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setIsEncrypting(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-      const newSalary = {
-        id: salaries.length + 1,
-        employeeAddress: formData.employeeAddress,
-        employeeName: `员工 ${salaries.length + 1}`,
-        amount: formData.amount,
-        encrypted: true,
-        submittedAt: new Date().toLocaleString('zh-CN'),
-      };
-      setSalaries([...salaries, newSalary]);
-      setFormData({ employeeAddress: "", amount: "" });
-      setShowSubmitForm(false);
+  const handleSubmitSalary = async () => {
+    // 验证输入
+    if (!formData.employeeAddress.trim() || !formData.employeeAddress.startsWith("0x") || formData.employeeAddress.length !== 42) {
+      setErrorMessage("请输入有效的员工地址（0x开头，42个字符）");
+      return;
     }
+    if (!formData.amount || parseFloat(formData.amount) <= 0) {
+      setErrorMessage("请输入有效的薪资金额（大于0）");
+      return;
+    }
+
+    setErrorMessage("");
+    setIsEncrypting(true);
+    // 模拟加密过程
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsEncrypting(false);
+
+    const newSalary = {
+      id: salaries.length + 1,
+      employeeAddress: formData.employeeAddress,
+      employeeName: `员工 ${salaries.length + 1}`,
+      amount: formData.amount,
+      encrypted: true,
+      submittedAt: new Date().toLocaleString('zh-CN'),
+    };
+    setSalaries([...salaries, newSalary]);
+    setFormData({ employeeAddress: "", amount: "" });
+    setShowSubmitForm(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
   };
 
   const handleViewSalary = async () => {
@@ -56,6 +70,25 @@ export function SalaryManagement() {
 
   return (
     <div className="space-y-6">
+      {/* Success Message */}
+      {showSuccess && (
+        <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">✅</span>
+            <div>
+              <p className="font-semibold text-green-900">薪资提交成功！</p>
+              <p className="text-sm text-green-700">薪资已使用 FHE 加密并存储到区块链</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="text-green-600 hover:text-green-800"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Header with Feature Description */}
       <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 mb-6">
         <div className="flex items-start">
@@ -181,12 +214,18 @@ export function SalaryManagement() {
               </div>
             )}
 
+            {errorMessage && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-800">⚠️ {errorMessage}</p>
+              </div>
+            )}
+
             <button
               onClick={handleSubmitSalary}
               disabled={isEncrypting || !formData.employeeAddress || !formData.amount}
-              className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {isEncrypting ? "加密中..." : "提交加密薪资"}
+              {isEncrypting ? "🔐 加密中..." : "🔐 提交加密薪资"}
             </button>
           </div>
         </div>

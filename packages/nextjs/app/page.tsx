@@ -120,10 +120,20 @@ export default function Home() {
             点击下方功能卡片，进入对应模块体验完整功能
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, index) => (
+            {features.map((feature, index) => {
+              const tabMap: Record<number, string> = {
+                0: "departments",
+                1: "employees",
+                2: "salary",
+                3: "statistics",
+                4: "permissions",
+                5: "dashboard",
+              };
+              const tab = tabMap[index] || "dashboard";
+              return (
               <Link
                 key={index}
-                href="/confidential-salary"
+                href={`/confidential-salary${tab !== "dashboard" ? `#${tab}` : ""}`}
                 className="group"
               >
                 <div className={`
@@ -148,7 +158,8 @@ export default function Home() {
                   </div>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
         </div>
 

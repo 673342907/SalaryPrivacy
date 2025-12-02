@@ -22,19 +22,33 @@ export function EmployeeManagement() {
     department: "",
   });
 
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleAddEmployee = () => {
-    if (formData.address && formData.name) {
-      const newEmployee = {
-        id: employees.length + 1,
-        address: formData.address,
-        name: formData.name,
-        role: formData.role,
-        department: formData.department || "未分配",
-      };
-      setEmployees([...employees, newEmployee]);
-      setFormData({ address: "", name: "", role: "Employee", department: "" });
-      setShowAddForm(false);
+    // 验证输入
+    if (!formData.address.trim() || !formData.address.startsWith("0x") || formData.address.length !== 42) {
+      setErrorMessage("请输入有效的以太坊地址（0x开头，42个字符）");
+      return;
     }
+    if (!formData.name.trim()) {
+      setErrorMessage("请输入员工姓名");
+      return;
+    }
+
+    setErrorMessage("");
+    const newEmployee = {
+      id: employees.length + 1,
+      address: formData.address,
+      name: formData.name,
+      role: formData.role,
+      department: formData.department || "未分配",
+    };
+    setEmployees([...employees, newEmployee]);
+    setFormData({ address: "", name: "", role: "Employee", department: "" });
+    setShowAddForm(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
   };
 
   const roleColors: Record<Role, string> = {
@@ -46,6 +60,25 @@ export function EmployeeManagement() {
 
   return (
     <div className="space-y-6">
+      {/* Success Message */}
+      {showSuccess && (
+        <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">✅</span>
+            <div>
+              <p className="font-semibold text-green-900">员工添加成功！</p>
+              <p className="text-sm text-green-700">员工已添加到系统中，角色权限已设置</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="text-green-600 hover:text-green-800"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -119,11 +152,16 @@ export function EmployeeManagement() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               />
             </div>
+            {errorMessage && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-800">⚠️ {errorMessage}</p>
+              </div>
+            )}
             <button
               onClick={handleAddEmployee}
-              className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold"
+              className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
             >
-              添加员工
+              👤 添加员工
             </button>
           </div>
         </div>

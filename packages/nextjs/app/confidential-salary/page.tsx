@@ -38,6 +38,13 @@ export default function ConfidentialSalaryPage() {
   const handleNavigateToTab = (tab: string) => {
     setActiveTab(tab as TabType);
     setShowGuide(false);
+    // 滚动到对应区域
+    setTimeout(() => {
+      const element = document.getElementById(tab);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
   };
 
   if (!isConnected) {
@@ -129,12 +136,24 @@ export default function ConfidentialSalaryPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === "dashboard" && <ConfidentialSalaryDashboard onStartGuide={() => setShowGuide(true)} />}
-        {activeTab === "departments" && <DepartmentManagement />}
-        {activeTab === "employees" && <EmployeeManagement />}
-        {activeTab === "salary" && <SalaryManagement />}
-        {activeTab === "statistics" && <StatisticsAnalysis />}
-        {activeTab === "permissions" && <PermissionManagement />}
+        <div id="dashboard">
+          {activeTab === "dashboard" && <ConfidentialSalaryDashboard onStartGuide={() => setShowGuide(true)} />}
+        </div>
+        <div id="departments">
+          {activeTab === "departments" && <DepartmentManagement />}
+        </div>
+        <div id="employees">
+          {activeTab === "employees" && <EmployeeManagement />}
+        </div>
+        <div id="salary">
+          {activeTab === "salary" && <SalaryManagement />}
+        </div>
+        <div id="statistics">
+          {activeTab === "statistics" && <StatisticsAnalysis />}
+        </div>
+        <div id="permissions">
+          {activeTab === "permissions" && <PermissionManagement />}
+        </div>
       </main>
 
       {/* Onboarding Guide */}

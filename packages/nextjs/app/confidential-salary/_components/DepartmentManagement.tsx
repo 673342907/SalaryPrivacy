@@ -12,22 +12,55 @@ export function DepartmentManagement() {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", budget: "" });
 
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleCreateDepartment = () => {
-    if (formData.name && formData.budget) {
-      const newDept = {
-        id: departments.length + 1,
-        name: formData.name,
-        budget: formData.budget,
-        employeeCount: 0,
-      };
-      setDepartments([...departments, newDept]);
-      setFormData({ name: "", budget: "" });
-      setShowCreateForm(false);
+    // 验证输入
+    if (!formData.name.trim()) {
+      setErrorMessage("请输入部门名称");
+      return;
     }
+    if (!formData.budget || parseFloat(formData.budget) <= 0) {
+      setErrorMessage("请输入有效的预算金额（大于0）");
+      return;
+    }
+
+    setErrorMessage("");
+    const newDept = {
+      id: departments.length + 1,
+      name: formData.name,
+      budget: formData.budget,
+      employeeCount: 0,
+    };
+    setDepartments([...departments, newDept]);
+    setFormData({ name: "", budget: "" });
+    setShowCreateForm(false);
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
   };
 
   return (
     <div className="space-y-6">
+      {/* Success Message */}
+      {showSuccess && (
+        <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 flex items-center justify-between animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">✅</span>
+            <div>
+              <p className="font-semibold text-green-900">部门创建成功！</p>
+              <p className="text-sm text-green-700">部门已添加到列表中，预算已加密存储</p>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowSuccess(false)}
+            className="text-green-600 hover:text-green-800"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4 mb-6">
         <div className="flex items-start">
@@ -90,11 +123,16 @@ export function DepartmentManagement() {
                 💡 预算将以加密形式存储在区块链上
               </p>
             </div>
+            {errorMessage && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                <p className="text-sm text-red-800">⚠️ {errorMessage}</p>
+              </div>
+            )}
             <button
               onClick={handleCreateDepartment}
-              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold"
+              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
             >
-              创建部门
+              🔐 创建部门（加密存储）
             </button>
           </div>
         </div>
