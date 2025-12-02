@@ -1,6 +1,7 @@
 {
   "version": 2,
   "framework": "nextjs",
-  "buildCommand": "NEXT_PUBLIC_IGNORE_BUILD_ERROR=true pnpm run build",
-  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile && cd packages/nextjs"
+  "buildCommand": "pnpm run build",
+  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile && cd packages/nextjs",
+  "outputDirectory": ".next"
 }
