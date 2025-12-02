@@ -3,17 +3,28 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 
-// 动态导入 Recharts 以避免 SSR 问题
-const BarChart = dynamic(() => import("recharts").then((mod) => mod.BarChart), { ssr: false });
-const Bar = dynamic(() => import("recharts").then((mod) => mod.Bar), { ssr: false });
-const XAxis = dynamic(() => import("recharts").then((mod) => mod.XAxis), { ssr: false });
-const YAxis = dynamic(() => import("recharts").then((mod) => mod.YAxis), { ssr: false });
-const CartesianGrid = dynamic(() => import("recharts").then((mod) => mod.CartesianGrid), { ssr: false });
-const Tooltip = dynamic(() => import("recharts").then((mod) => mod.Tooltip), { ssr: false });
-const ResponsiveContainer = dynamic(() => import("recharts").then((mod) => mod.ResponsiveContainer), { ssr: false });
-const PieChart = dynamic(() => import("recharts").then((mod) => mod.PieChart), { ssr: false });
-const Pie = dynamic(() => import("recharts").then((mod) => mod.Pie), { ssr: false });
-const Cell = dynamic(() => import("recharts").then((mod) => mod.Cell), { ssr: false });
+// 动态导入 Recharts 组件以避免 SSR 问题
+const RechartsComponents = dynamic(
+  () => import("recharts").then((mod) => ({
+    default: mod,
+  })),
+  { ssr: false }
+);
+
+// 创建一个包装组件来使用 Recharts
+const ChartWrapper = ({ children }: { children: React.ReactNode }) => {
+  const [isClient, setIsClient] = useState(false);
+
+  useState(() => {
+    setIsClient(true);
+  });
+
+  if (!isClient) {
+    return <div className="h-[300px] flex items-center justify-center text-gray-500">加载图表中...</div>;
+  }
+
+  return <>{children}</>;
+};
 
 export function StatisticsAnalysis() {
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
@@ -92,75 +103,8 @@ export function StatisticsAnalysis() {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        {/* Salary Distribution Chart */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg shadow-md p-6">
-          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <span>📊</span>
-            部门薪资分布（加密数据）
-          </h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={[
-              { name: "技术部", salary: 500000, encrypted: true },
-              { name: "市场部", salary: 300000, encrypted: true },
-              { name: "财务部", salary: 200000, encrypted: true },
-              { name: "人事部", salary: 150000, encrypted: true },
-            ]}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" />
-              <XAxis dataKey="name" stroke="#64748b" />
-              <YAxis stroke="#64748b" />
-              <Tooltip 
-                formatter={(value: any) => [`🔒 ${value.toLocaleString()} ETH (加密)`, "薪资"]}
-                contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
-              />
-              <Bar dataKey="salary" fill="#6366f1" radius={[8, 8, 0, 0]}>
-                {[0, 1, 2, 3].map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={['#6366f1', '#8b5cf6', '#a855f7', '#c084fc'][index]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-          <p className="text-xs text-gray-600 mt-3 text-center bg-white/50 rounded px-3 py-2">
-            💡 数据在加密状态下计算，无需解密原始薪资
-          </p>
-        </div>
-
-        {/* Employee Count Pie Chart */}
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg shadow-md p-6">
-          <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <span>👥</span>
-            部门员工分布
-          </h4>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={[
-                  { name: "技术部", value: 15, fill: '#3b82f6' },
-                  { name: "市场部", value: 8, fill: '#10b981' },
-                  { name: "财务部", value: 5, fill: '#f59e0b' },
-                  { name: "人事部", value: 4, fill: '#ef4444' },
-                ]}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-                outerRadius={100}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {[0, 1, 2, 3].map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={['#3b82f6', '#10b981', '#f59e0b', '#ef4444'][index]} />
-                ))}
-              </Pie>
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '8px' }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
-          <p className="text-xs text-gray-600 mt-3 text-center bg-white/50 rounded px-3 py-2">
-            📊 可视化展示各部门员工数量分布
-          </p>
-        </div>
+      <div className="mb-6">
+        <RechartsCharts showCharts={true} />
       </div>
 
       {/* Department Selection */}
