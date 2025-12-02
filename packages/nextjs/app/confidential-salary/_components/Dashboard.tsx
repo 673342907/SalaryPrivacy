@@ -232,14 +232,31 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600">网络</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                chainId === 11155111 ? "bg-purple-100 text-purple-800" : "bg-orange-100 text-orange-800"
+                chainId === 11155111 
+                  ? "bg-purple-100 text-purple-800" 
+                  : chainId === 31337
+                  ? "bg-green-100 text-green-800"
+                  : "bg-orange-100 text-orange-800"
               }`}>
-                {chainId === 11155111 ? "Sepolia" : `Chain ${chainId}`}
+                {chainId === 11155111 
+                  ? "Sepolia" 
+                  : chainId === 31337
+                  ? "Localhost"
+                  : `Chain ${chainId}`}
               </span>
             </div>
             <p className="text-xs text-gray-500">
-              {chainId === 11155111 ? "测试网络" : "请切换到 Sepolia 网络"}
+              {chainId === 11155111 
+                ? "测试网络（需要 Relayer SDK）" 
+                : chainId === 31337
+                ? "本地开发网络（Hardhat）"
+                : `Chain ${chainId}（请切换到 Sepolia 或本地网络）`}
             </p>
+            {chainId === 11155111 && fhevmStatus === "error" && (
+              <p className="text-xs text-orange-600 mt-1">
+                ⚠️ Sepolia 需要 Relayer SDK，建议使用本地 Hardhat 节点进行开发
+              </p>
+            )}
           </div>
         </div>
       </div>
