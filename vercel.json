@@ -4,5 +4,5 @@
   "installCommand": "cd test-app && npm install",
   "framework": "nextjs",
   "outputDirectory": "test-app/.next",
-  "_deployTrigger": "2025-12-02-10-00"
+  "_deployTrigger": "2025-12-02-11-00-force"
 }
