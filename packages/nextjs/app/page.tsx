@@ -86,11 +86,6 @@ export default function Home() {
             <br />
             <span className="text-sm">所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算</span>
           </p>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-            基于 FHEVM 的企业级隐私保护薪资管理系统
-            <br />
-            所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
-          </p>
           <div className="bg-yellow-500/10 border border-yellow-400/30 rounded-xl p-4 max-w-2xl mx-auto mb-6 backdrop-blur-sm">
             <p className="text-sm text-yellow-100">
               <strong>🎯 快速开始：</strong> 连接钱包后，您可以体验完整的薪资管理功能，包括部门管理、员工管理、加密薪资提交、统计分析等。
@@ -153,7 +148,8 @@ export default function Home() {
                 href={`/confidential-salary${tab !== "dashboard" ? `#${tab}` : ""}`}
                 className="group"
               >
-                <div className={`
+                <div
+                  className={`
                   bg-white/5 backdrop-blur-md rounded-xl shadow-lg p-6 
                   border-2 border-white/10
                   hover:border-white/30
@@ -163,14 +159,13 @@ export default function Home() {
                   cursor-pointer
                   h-full
                   relative
-                `}>
+                `}
+                >
                   <div className="text-4xl mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-gray-300 mb-4">
-                    {feature.description}
-                  </p>
+                  <p className="text-sm text-gray-300 mb-4">{feature.description}</p>
                   <div className="text-xs text-blue-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                     点击进入 →
                   </div>
@@ -185,23 +180,18 @@ export default function Home() {
         <div className="text-center">
           {!isConnected ? (
             <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-8 max-w-md mx-auto border border-white/10">
-              <h3 className="text-xl font-bold text-white mb-4">
-                开始体验 ConfidentialSalary
-              </h3>
-              <p className="text-gray-300 mb-6">
-                连接钱包以开始使用隐私保护薪资管理系统
-              </p>
+              <h3 className="text-xl font-bold text-white mb-4">开始体验 ConfidentialSalary</h3>
+              <p className="text-gray-300 mb-6">连接钱包以开始使用隐私保护薪资管理系统</p>
               <div className="flex justify-center">
                 <RainbowKitCustomConnectButton />
               </div>
-              <p className="text-sm text-gray-400 mt-4">
-                💡 连接钱包后，系统会自动显示使用引导
-              </p>
+              <p className="text-sm text-gray-400 mt-4">💡 连接钱包后，系统会自动显示使用引导</p>
             </div>
           ) : (
             <div className="space-y-4">
               <Link href="/confidential-salary">
-                <button className={`
+                <button
+                  className={`
                   px-8 py-4 text-lg font-semibold text-white rounded-xl
                   bg-gradient-to-r from-blue-600 to-indigo-600
                   hover:from-blue-700 hover:to-indigo-700
@@ -209,7 +199,8 @@ export default function Home() {
                   transition-all duration-300
                   transform hover:scale-105
                   border border-white/20
-                `}>
+                `}
+                >
                   🚀 进入 ConfidentialSalary 平台
                 </button>
               </Link>
@@ -226,14 +217,21 @@ export default function Home() {
             <div className="text-5xl">🔬</div>
             <div className="text-center">
               <h2 className="text-2xl font-bold mb-1">基于 Zama FHEVM 技术</h2>
-              <p className="text-indigo-100 text-sm">Powered by Zama's Fully Homomorphic Encryption Virtual Machine</p>
+              <p className="text-indigo-100 text-sm">
+                Powered by Zama&apos;s Fully Homomorphic Encryption Virtual Machine
+              </p>
             </div>
           </div>
           <div className="bg-white/10 rounded-lg p-4 mb-4">
             <p className="text-sm text-center text-white/90">
               Zama 是 FHE（全同态加密）技术的领先开发者，致力于让隐私保护成为默认设置。
               <br />
-              <a href="https://www.zama.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">
+              <a
+                href="https://www.zama.ai"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-white transition-colors"
+              >
                 了解更多 →
               </a>
             </p>
@@ -242,9 +240,7 @@ export default function Home() {
 
         {/* Technical Highlights */}
         <div className="mt-8 bg-gradient-to-r from-blue-600/80 to-indigo-700/80 backdrop-blur-md rounded-2xl shadow-xl p-8 text-white border border-white/20">
-          <h2 className="text-2xl font-bold mb-6 text-center">
-            🏆 技术亮点
-          </h2>
+          <h2 className="text-2xl font-bold mb-6 text-center">🏆 技术亮点</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold mb-2">🔐 FHE 加密计算</h3>
