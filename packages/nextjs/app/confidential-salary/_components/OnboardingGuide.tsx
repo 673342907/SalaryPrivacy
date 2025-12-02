@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Step = {
   id: number;
@@ -62,22 +62,41 @@ interface OnboardingGuideProps {
 export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuideProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [showContent, setShowContent] = useState(true);
 
   const currentStepData = steps[currentStep];
   const progress = ((currentStep + 1) / steps.length) * 100;
 
+  // 步骤切换动画
+  useEffect(() => {
+    setShowContent(false);
+    const timer = setTimeout(() => {
+      setShowContent(true);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [currentStep]);
+
   const handleNext = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    } else {
-      setIsCompleted(true);
-    }
+    setIsAnimating(true);
+    setTimeout(() => {
+      if (currentStep < steps.length - 1) {
+        setCurrentStep(currentStep + 1);
+      } else {
+        setIsCompleted(true);
+      }
+      setIsAnimating(false);
+    }, 300);
   };
 
   const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
+    setIsAnimating(true);
+    setTimeout(() => {
+      if (currentStep > 0) {
+        setCurrentStep(currentStep - 1);
+      }
+      setIsAnimating(false);
+    }, 300);
   };
 
   const handleNavigate = () => {
@@ -92,16 +111,16 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
 
   if (isCompleted) {
     return (
-      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
-          <div className="text-6xl mb-4">🎉</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">引导完成！</h2>
-          <p className="text-gray-600 mb-6">
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fadeIn">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-scaleIn">
+          <div className="text-6xl mb-4 animate-bounce">🎉</div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 animate-fadeInUp">引导完成！</h2>
+          <p className="text-gray-600 mb-6 animate-fadeInUp animation-delay-100">
             您已经了解了 ConfidentialSalary 的所有核心功能。现在可以开始使用系统了！
           </p>
           <button
             onClick={onClose}
-            className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors font-semibold shadow-lg"
+            className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg transform hover:scale-105 animate-fadeInUp animation-delay-200"
           >
             开始使用
           </button>
@@ -111,38 +130,42 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fadeIn">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full animate-slideInUp">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-2xl p-6 text-white">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">欢迎使用 ConfidentialSalary</h2>
+            <h2 className="text-2xl font-bold animate-fadeInLeft">欢迎使用 ConfidentialSalary</h2>
             <button
               onClick={handleSkip}
-              className="text-white/80 hover:text-white transition-colors"
+              className="text-white/80 hover:text-white transition-all duration-300 hover:rotate-90 hover:scale-110"
             >
               ✕
             </button>
           </div>
-          <div className="w-full bg-white/20 rounded-full h-2">
+          <div className="w-full bg-white/20 rounded-full h-2 overflow-hidden">
             <div
-              className="bg-white rounded-full h-2 transition-all duration-300"
+              className="bg-white rounded-full h-2 transition-all duration-500 ease-out relative"
               style={{ width: `${progress}%` }}
-            />
+            >
+              <div className="absolute inset-0 bg-white/50 animate-shimmer"></div>
+            </div>
           </div>
-          <p className="text-sm text-blue-100 mt-2">
+          <p className="text-sm text-blue-100 mt-2 animate-fadeIn">
             步骤 {currentStep + 1} / {steps.length}
           </p>
         </div>
 
         {/* Content */}
         <div className="p-8">
-          <div className="text-center mb-6">
-            <div className="text-6xl mb-4">{currentStepData.icon}</div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+          <div className={`text-center mb-6 transition-all duration-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className={`text-6xl mb-4 inline-block transition-all duration-300 ${showContent ? 'scale-100 rotate-0' : 'scale-50 rotate-180'}`}>
+              {currentStepData.icon}
+            </div>
+            <h3 className={`text-2xl font-bold text-gray-900 mb-2 transition-all duration-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
               {currentStepData.title}
             </h3>
-            <p className="text-gray-600 text-lg">
+            <p className={`text-gray-600 text-lg transition-all duration-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
               {currentStepData.description}
             </p>
           </div>
@@ -152,12 +175,12 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
             {steps.map((step, index) => (
               <div
                 key={step.id}
-                className={`w-3 h-3 rounded-full transition-colors ${
+                className={`w-3 h-3 rounded-full transition-all duration-300 ${
                   index === currentStep
-                    ? "bg-blue-600"
+                    ? "bg-blue-600 scale-125 animate-pulse"
                     : index < currentStep
-                    ? "bg-green-500"
-                    : "bg-gray-300"
+                    ? "bg-green-500 scale-110"
+                    : "bg-gray-300 scale-100"
                 }`}
               />
             ))}
@@ -165,12 +188,15 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
 
           {/* Action Button */}
           {currentStepData.action && (
-            <div className="mb-6">
+            <div className={`mb-6 transition-all duration-300 ${showContent ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <button
                 onClick={handleNavigate}
-                className="w-full px-6 py-3 bg-blue-50 border-2 border-blue-300 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors font-semibold"
+                className="w-full px-6 py-3 bg-blue-50 border-2 border-blue-300 text-blue-700 rounded-lg hover:bg-blue-100 transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-lg hover:border-blue-400"
               >
-                {currentStepData.action} →
+                <span className="inline-flex items-center gap-2">
+                  {currentStepData.action}
+                  <span className="animate-bounce">→</span>
+                </span>
               </button>
             </div>
           )}
@@ -180,26 +206,35 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
         <div className="border-t border-gray-200 p-6 flex items-center justify-between">
           <button
             onClick={handlePrevious}
-            disabled={currentStep === 0}
-            className={`px-6 py-2 rounded-lg font-semibold transition-colors ${
-              currentStep === 0
+            disabled={currentStep === 0 || isAnimating}
+            className={`px-6 py-2 rounded-lg font-semibold transition-all duration-300 ${
+              currentStep === 0 || isAnimating
                 ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                : "bg-gray-200 text-gray-700 hover:bg-gray-300 transform hover:scale-105"
             }`}
           >
-            ← 上一步
+            <span className="inline-flex items-center gap-1">
+              <span className="transition-transform duration-300 hover:-translate-x-1">←</span>
+              上一步
+            </span>
           </button>
           <button
             onClick={handleSkip}
-            className="px-6 py-2 text-gray-600 hover:text-gray-800 font-semibold"
+            className="px-6 py-2 text-gray-600 hover:text-gray-800 font-semibold transition-all duration-300 hover:scale-105"
           >
             跳过引导
           </button>
           <button
             onClick={handleNext}
-            className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors font-semibold"
+            disabled={isAnimating}
+            className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {currentStep === steps.length - 1 ? "完成" : "下一步 →"}
+            <span className="inline-flex items-center gap-1">
+              {currentStep === steps.length - 1 ? "完成" : "下一步"}
+              {currentStep !== steps.length - 1 && (
+                <span className="transition-transform duration-300 hover:translate-x-1">→</span>
+              )}
+            </span>
           </button>
         </div>
       </div>
