@@ -3,28 +3,23 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 
-// 动态导入 Recharts 组件以避免 SSR 问题
-const RechartsComponents = dynamic(
-  () => import("recharts").then((mod) => ({
-    default: mod,
-  })),
-  { ssr: false }
-);
-
-// 创建一个包装组件来使用 Recharts
-const ChartWrapper = ({ children }: { children: React.ReactNode }) => {
-  const [isClient, setIsClient] = useState(false);
-
-  useState(() => {
-    setIsClient(true);
-  });
-
-  if (!isClient) {
-    return <div className="h-[300px] flex items-center justify-center text-gray-500">加载图表中...</div>;
+// 动态导入 Recharts 以避免 SSR 问题
+const RechartsCharts = dynamic(
+  () => import("./RechartsWrapper"),
+  { 
+    ssr: false,
+    loading: () => (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg shadow-md p-6">
+          <div className="h-[300px] flex items-center justify-center text-gray-500">加载图表中...</div>
+        </div>
+        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg shadow-md p-6">
+          <div className="h-[300px] flex items-center justify-center text-gray-500">加载图表中...</div>
+        </div>
+      </div>
+    )
   }
-
-  return <>{children}</>;
-};
+);
 
 export function StatisticsAnalysis() {
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
