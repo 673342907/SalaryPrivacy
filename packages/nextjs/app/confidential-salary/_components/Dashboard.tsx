@@ -1,8 +1,9 @@
 "use client";
 
 import { useAccount } from "wagmi";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useFhevm } from "@fhevm-sdk";
+import { DemoDataGenerator } from "./DemoDataGenerator";
 
 interface ConfidentialSalaryDashboardProps {
   onStartGuide?: () => void;
@@ -10,6 +11,7 @@ interface ConfidentialSalaryDashboardProps {
 
 export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalaryDashboardProps) {
   const { address } = useAccount();
+  const [demoData, setDemoData] = useState<any>(null);
 
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
@@ -48,6 +50,15 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           </span>
         </div>
       </div>
+
+      {/* Demo Data Generator */}
+      <DemoDataGenerator 
+        onGenerate={(data) => {
+          setDemoData(data);
+          // 可以在这里触发其他组件的更新
+          alert(`演示数据已生成！\n- ${data.departments.length} 个部门\n- ${data.employees.length} 名员工\n- ${data.salaries.length} 条薪资记录\n\n请前往对应模块查看！`);
+        }}
+      />
 
       {/* Quick Guide */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">

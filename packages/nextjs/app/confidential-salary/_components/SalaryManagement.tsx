@@ -141,14 +141,41 @@ export function SalaryManagement() {
 
             {/* Encryption Process Visualization */}
             {isEncrypting && (
-              <div className="bg-purple-50 border-2 border-purple-300 rounded-lg p-4">
-                <div className="flex items-center gap-3">
-                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-purple-600"></div>
-                  <div>
-                    <p className="font-semibold text-purple-900">正在加密...</p>
-                    <p className="text-sm text-purple-700">
-                      原始数据: {formData.amount} → 🔒 加密中 → 🔐 已加密
-                    </p>
+              <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border-2 border-purple-300 rounded-lg p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-purple-900 text-lg">🔐 FHE 加密进行中...</p>
+                      <p className="text-sm text-purple-700 mt-1">
+                        使用全同态加密技术保护您的数据
+                      </p>
+                    </div>
+                  </div>
+                  
+                  {/* Encryption Steps Animation */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <span className="text-green-600">✓</span>
+                      <span className="text-gray-700">原始数据: <strong>{formData.amount}</strong> ETH</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm">
+                      <div className="animate-pulse w-2 h-2 bg-purple-600 rounded-full"></div>
+                      <span className="text-purple-700">正在使用 FHEVM 加密...</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm opacity-50">
+                      <span className="text-gray-400">○</span>
+                      <span className="text-gray-500">生成加密密文...</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm opacity-30">
+                      <span className="text-gray-400">○</span>
+                      <span className="text-gray-500">存储到区块链...</span>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="w-full bg-purple-200 rounded-full h-2">
+                    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
                   </div>
                 </div>
               </div>
