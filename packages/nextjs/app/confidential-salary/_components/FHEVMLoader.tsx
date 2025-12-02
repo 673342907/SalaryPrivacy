@@ -20,8 +20,8 @@ export function FHEVMLoader() {
       }
     }
 
-    // 尝试从 CDN 加载
-    const SDK_CDN_URL = "https://cdn.jsdelivr.net/npm/@zama-fhe/relayer-sdk@0.1.2/dist/index.umd.js";
+    // 尝试从 CDN 加载（使用 Zama 官方 CDN）
+    const SDK_CDN_URL = "https://cdn.zama.ai/relayer-sdk-js/0.2.0/relayer-sdk-js.umd.cjs";
 
     // 检查是否已经存在脚本
     const existingScript = document.querySelector(`script[src="${SDK_CDN_URL}"]`);
