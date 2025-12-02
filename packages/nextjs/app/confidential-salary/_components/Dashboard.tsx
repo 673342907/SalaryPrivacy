@@ -12,19 +12,23 @@ interface ConfidentialSalaryDashboardProps {
 }
 
 export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalaryDashboardProps) {
-  const { address } = useAccount();
+  const { address, chainId: wagmiChainId } = useAccount();
   const [demoData, setDemoData] = useState<any>(null);
 
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
+    // 优先使用 wagmi 的 provider，如果没有则使用 window.ethereum
     return (window as any).ethereum;
-  }, []);
+  }, [address]); // 当地址变化时重新获取 provider
 
-  const { instance: fhevmInstance, status: fhevmStatus } = useFhevm({
+  // 使用 wagmi 的 chainId，如果没有则使用 Sepolia
+  const chainId = wagmiChainId || 11155111;
+
+  const { instance: fhevmInstance, status: fhevmStatus, error: fhevmError } = useFhevm({
     provider,
-    chainId: 11155111, // Sepolia
+    chainId,
     initialMockChains: {},
-    enabled: true,
+    enabled: !!provider && !!address, // 只有在钱包连接时才启用
   });
 
   return (
@@ -157,14 +161,41 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600">FHEVM 连接</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                fhevmStatus === "ready" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"
+                fhevmStatus === "ready" 
+                  ? "bg-green-100 text-green-800" 
+                  : fhevmStatus === "error"
+                  ? "bg-red-100 text-red-800"
+                  : fhevmStatus === "loading"
+                  ? "bg-yellow-100 text-yellow-800"
+                  : "bg-gray-100 text-gray-800"
               }`}>
-                {fhevmStatus === "ready" ? "✓ 已连接" : "⏳ 连接中"}
+                {fhevmStatus === "ready" 
+                  ? "✓ 已连接" 
+                  : fhevmStatus === "error"
+                  ? "❌ 错误"
+                  : fhevmStatus === "loading"
+                  ? "⏳ 连接中"
+                  : "⏸️ 未启动"}
               </span>
             </div>
             <p className="text-xs text-gray-500">
-              {fhevmStatus === "ready" ? "FHEVM 实例已就绪" : "正在初始化 FHEVM..."}
+              {fhevmStatus === "ready" 
+                ? "FHEVM 实例已就绪" 
+                : fhevmStatus === "error"
+                ? fhevmError?.message || "FHEVM 初始化失败"
+                : fhevmStatus === "loading"
+                ? "正在初始化 FHEVM..."
+                : !address
+                ? "请先连接钱包"
+                : !provider
+                ? "等待钱包提供者..."
+                : "等待初始化..."}
             </p>
+            {fhevmError && (
+              <p className="text-xs text-red-600 mt-1">
+                错误: {fhevmError.message}
+              </p>
+            )}
           </div>
 
           <div className="p-4 border-2 border-gray-200 rounded-lg">
@@ -182,11 +213,15 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           <div className="p-4 border-2 border-gray-200 rounded-lg">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600">网络</span>
-              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
-                Sepolia
+              <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                chainId === 11155111 ? "bg-purple-100 text-purple-800" : "bg-orange-100 text-orange-800"
+              }`}>
+                {chainId === 11155111 ? "Sepolia" : `Chain ${chainId}`}
               </span>
             </div>
-            <p className="text-xs text-gray-500">测试网络</p>
+            <p className="text-xs text-gray-500">
+              {chainId === 11155111 ? "测试网络" : "请切换到 Sepolia 网络"}
+            </p>
           </div>
         </div>
       </div>
