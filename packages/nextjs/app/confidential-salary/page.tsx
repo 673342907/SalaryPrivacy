@@ -10,6 +10,7 @@ import { StatisticsAnalysis } from "./_components/StatisticsAnalysis";
 import { PermissionManagement } from "./_components/PermissionManagement";
 import { OnboardingGuide } from "./_components/OnboardingGuide";
 import { DataProvider } from "./_context/DataContext";
+import { StatusBadges } from "./_components/StatusBadges";
 import { useState, useEffect } from "react";
 
 type TabType = "dashboard" | "departments" | "employees" | "salary" | "statistics" | "permissions";
@@ -94,14 +95,24 @@ export default function ConfidentialSalaryPage() {
 
   return (
     <DataProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative">
+        {/* Status Badges */}
+        <StatusBadges />
+
         {/* Header */}
-        <header className="bg-white shadow-sm border-b border-gray-200">
+        <header className="bg-white/5 backdrop-blur-md shadow-sm border-b border-white/10 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">ConfidentialSalary</h1>
-              <p className="text-sm text-gray-600">隐私保护薪资管理平台</p>
+              <h1 className="text-2xl font-bold text-white">
+                <span className="bg-gradient-to-r from-pink-400 to-blue-400 bg-clip-text text-transparent">
+                  Confidential
+                </span>
+                <span className="bg-gradient-to-r from-green-400 to-yellow-400 bg-clip-text text-transparent">
+                  Salary
+                </span>
+              </h1>
+              <p className="text-sm text-gray-300">隐私保护薪资管理平台</p>
             </div>
             <div className="flex items-center gap-4">
               <RainbowKitCustomConnectButton />
@@ -111,7 +122,7 @@ export default function ConfidentialSalaryPage() {
       </header>
 
       {/* Navigation Tabs */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="bg-white/5 backdrop-blur-md border-b border-white/10 relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex space-x-1 overflow-x-auto">
             {tabs.map((tab) => (
@@ -123,8 +134,8 @@ export default function ConfidentialSalaryPage() {
                   border-b-2 transition-colors
                   ${
                     activeTab === tab.id
-                      ? "border-blue-500 text-blue-600 bg-blue-50"
-                      : "border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300"
+                      ? "border-blue-400 text-blue-300 bg-blue-500/20"
+                      : "border-transparent text-gray-300 hover:text-white hover:border-white/30"
                   }
                 `}
               >

@@ -56,55 +56,72 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
+      {/* Background Pattern - Subtle Grid */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)`,
+        }}></div>
+      </div>
+
       {/* Hero Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white text-5xl mb-6 shadow-lg">
-            🔐
+          {/* Logo with Gradient */}
+          <div className="mb-8">
+            <h1 className="text-7xl sm:text-8xl font-bold mb-4">
+              <span className="bg-gradient-to-r from-pink-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+                Confidential
+              </span>
+              <span className="bg-gradient-to-r from-green-400 via-yellow-400 to-white bg-clip-text text-transparent">
+                Salary
+              </span>
+            </h1>
           </div>
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            ConfidentialSalary
-          </h1>
-          <p className="text-2xl text-gray-700 mb-2">
-            隐私保护薪资管理平台
+          <p className="text-2xl sm:text-3xl text-gray-300 mb-2 font-serif italic">
+            Revive Privacy
+          </p>
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto mb-6">
+            基于 FHEVM 的企业级隐私保护薪资管理系统
+            <br />
+            <span className="text-sm">所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算</span>
           </p>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
             基于 FHEVM 的企业级隐私保护薪资管理系统
             <br />
             所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
           </p>
-          <div className="bg-yellow-50 border-2 border-yellow-200 rounded-xl p-4 max-w-2xl mx-auto mb-6">
-            <p className="text-sm text-gray-700">
+          <div className="bg-yellow-500/10 border border-yellow-400/30 rounded-xl p-4 max-w-2xl mx-auto mb-6 backdrop-blur-sm">
+            <p className="text-sm text-yellow-100">
               <strong>🎯 快速开始：</strong> 连接钱包后，您可以体验完整的薪资管理功能，包括部门管理、员工管理、加密薪资提交、统计分析等。
             </p>
           </div>
         </div>
 
         {/* Core Features */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-8 mb-12 border border-white/10">
+          <h2 className="text-2xl font-bold text-white mb-6 text-center">
             ✨ 核心特性
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 border-2 border-blue-200 rounded-xl bg-blue-50">
+            <div className="p-6 border-2 border-blue-400/30 rounded-xl bg-blue-500/10 backdrop-blur-sm hover:bg-blue-500/20 transition-all">
               <div className="text-3xl mb-3">🔒</div>
-              <h3 className="font-semibold text-gray-900 mb-2">全同态加密保护</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-semibold text-white mb-2">全同态加密保护</h3>
+              <p className="text-sm text-gray-300">
                 所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
               </p>
             </div>
-            <div className="p-6 border-2 border-green-200 rounded-xl bg-green-50">
+            <div className="p-6 border-2 border-green-400/30 rounded-xl bg-green-500/10 backdrop-blur-sm hover:bg-green-500/20 transition-all">
               <div className="text-3xl mb-3">👥</div>
-              <h3 className="font-semibold text-gray-900 mb-2">角色权限管理</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-semibold text-white mb-2">角色权限管理</h3>
+              <p className="text-sm text-gray-300">
                 基于角色的访问控制：Admin、HR、Manager、Employee 不同权限
               </p>
             </div>
-            <div className="p-6 border-2 border-purple-200 rounded-xl bg-purple-50">
+            <div className="p-6 border-2 border-purple-400/30 rounded-xl bg-purple-500/10 backdrop-blur-sm hover:bg-purple-500/20 transition-all">
               <div className="text-3xl mb-3">📊</div>
-              <h3 className="font-semibold text-gray-900 mb-2">加密统计分析</h3>
-              <p className="text-sm text-gray-600">
+              <h3 className="font-semibold text-white mb-2">加密统计分析</h3>
+              <p className="text-sm text-gray-300">
                 在不解密原始数据的情况下计算平均值、总和、分布等统计信息
               </p>
             </div>
@@ -113,10 +130,10 @@ export default function Home() {
 
         {/* Feature Navigation */}
         <div className="mb-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2 text-center">
+          <h2 className="text-2xl font-bold text-white mb-2 text-center">
             🎯 功能导航
           </h2>
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center text-gray-400 mb-6">
             点击下方功能卡片，进入对应模块体验完整功能
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -137,9 +154,10 @@ export default function Home() {
                 className="group"
               >
                 <div className={`
-                  bg-white rounded-xl shadow-lg p-6 
-                  border-2 border-transparent
-                  hover:border-blue-300
+                  bg-white/5 backdrop-blur-md rounded-xl shadow-lg p-6 
+                  border-2 border-white/10
+                  hover:border-white/30
+                  hover:bg-white/10
                   hover:shadow-xl
                   transition-all duration-300
                   cursor-pointer
@@ -147,13 +165,13 @@ export default function Home() {
                   relative
                 `}>
                   <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600">
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-gray-300 mb-4">
                     {feature.description}
                   </p>
-                  <div className="text-xs text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="text-xs text-blue-400 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                     点击进入 →
                   </div>
                 </div>
@@ -166,15 +184,17 @@ export default function Home() {
         {/* CTA Section */}
         <div className="text-center">
           {!isConnected ? (
-            <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-white/5 backdrop-blur-md rounded-2xl shadow-xl p-8 max-w-md mx-auto border border-white/10">
+              <h3 className="text-xl font-bold text-white mb-4">
                 开始体验 ConfidentialSalary
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-gray-300 mb-6">
                 连接钱包以开始使用隐私保护薪资管理系统
               </p>
-              <RainbowKitCustomConnectButton />
-              <p className="text-sm text-gray-500 mt-4">
+              <div className="flex justify-center">
+                <RainbowKitCustomConnectButton />
+              </div>
+              <p className="text-sm text-gray-400 mt-4">
                 💡 连接钱包后，系统会自动显示使用引导
               </p>
             </div>
@@ -188,11 +208,12 @@ export default function Home() {
                   shadow-lg hover:shadow-xl
                   transition-all duration-300
                   transform hover:scale-105
+                  border border-white/20
                 `}>
                   🚀 进入 ConfidentialSalary 平台
                 </button>
               </Link>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-400">
                 💡 首次进入会自动显示使用引导，帮助您快速了解所有功能
               </p>
             </div>
@@ -200,7 +221,7 @@ export default function Home() {
         </div>
 
         {/* Zama Connection */}
-        <div className="mt-16 bg-gradient-to-r from-indigo-600 to-purple-700 rounded-2xl shadow-xl p-8 text-white">
+        <div className="mt-16 bg-gradient-to-r from-indigo-600/80 to-purple-700/80 backdrop-blur-md rounded-2xl shadow-xl p-8 text-white border border-white/20">
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="text-5xl">🔬</div>
             <div className="text-center">
@@ -220,7 +241,7 @@ export default function Home() {
         </div>
 
         {/* Technical Highlights */}
-        <div className="mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white">
+        <div className="mt-8 bg-gradient-to-r from-blue-600/80 to-indigo-700/80 backdrop-blur-md rounded-2xl shadow-xl p-8 text-white border border-white/20">
           <h2 className="text-2xl font-bold mb-6 text-center">
             🏆 技术亮点
           </h2>
