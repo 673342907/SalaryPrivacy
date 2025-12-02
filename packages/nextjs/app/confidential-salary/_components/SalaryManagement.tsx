@@ -83,6 +83,30 @@ export function SalaryManagement() {
         </div>
       )}
 
+      {/* Real-World Use Case */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 mb-6">
+        <div className="flex items-start gap-4">
+          <div className="text-4xl">💼</div>
+          <div className="flex-1">
+            <h3 className="text-xl font-bold text-gray-900 mb-2">真实应用场景</h3>
+            <p className="text-gray-700 mb-3">
+              <strong>问题：</strong> 传统薪资管理系统存在严重的隐私泄露风险。
+              即使使用加密存储，在进行统计分析时也需要解密所有数据，导致隐私暴露。
+            </p>
+            <p className="text-gray-700 mb-3">
+              <strong>解决方案：</strong> 使用 FHE 技术，薪资数据全程加密存储，
+              在不解密的情况下进行统计计算，既保护了隐私，又支持数据分析。
+            </p>
+            <div className="bg-white rounded-lg p-3 mt-3">
+              <p className="text-sm text-gray-700">
+                <strong>✅ 实际价值：</strong> 企业可以安全地管理薪资数据，
+                进行预算分析和合规检查，同时完全保护员工隐私，符合 GDPR、CCPA 等数据保护法规。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Header with Feature Description */}
       <div className="bg-purple-50 border-2 border-purple-200 rounded-xl p-4 mb-6">
         <div className="flex items-start">

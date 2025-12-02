@@ -199,8 +199,28 @@ export default function Home() {
           )}
         </div>
 
+        {/* Zama Connection */}
+        <div className="mt-16 bg-gradient-to-r from-indigo-600 to-purple-700 rounded-2xl shadow-xl p-8 text-white">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <div className="text-5xl">🔬</div>
+            <div className="text-center">
+              <h2 className="text-2xl font-bold mb-1">基于 Zama FHEVM 技术</h2>
+              <p className="text-indigo-100 text-sm">Powered by Zama's Fully Homomorphic Encryption Virtual Machine</p>
+            </div>
+          </div>
+          <div className="bg-white/10 rounded-lg p-4 mb-4">
+            <p className="text-sm text-center text-white/90">
+              Zama 是 FHE（全同态加密）技术的领先开发者，致力于让隐私保护成为默认设置。
+              <br />
+              <a href="https://www.zama.ai" target="_blank" rel="noopener noreferrer" className="underline hover:text-white transition-colors">
+                了解更多 →
+              </a>
+            </p>
+          </div>
+        </div>
+
         {/* Technical Highlights */}
-        <div className="mt-16 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white">
+        <div className="mt-8 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl shadow-xl p-8 text-white">
           <h2 className="text-2xl font-bold mb-6 text-center">
             🏆 技术亮点
           </h2>

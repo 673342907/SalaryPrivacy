@@ -5,6 +5,9 @@ import { useMemo, useState, useEffect } from "react";
 import { useFhevm } from "@fhevm-sdk";
 import { DemoDataGenerator } from "./DemoDataGenerator";
 import { TechnicalComparison } from "./TechnicalComparison";
+import { SecurityProof } from "./SecurityProof";
+import { ComplianceBadge } from "./ComplianceBadge";
+import { ZamaConnection } from "./ZamaConnection";
 import Link from "next/link";
 
 interface ConfidentialSalaryDashboardProps {
@@ -283,6 +286,15 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           </div>
         </div>
       </div>
+
+      {/* Zama Connection */}
+      <ZamaConnection />
+
+      {/* Security Proof */}
+      <SecurityProof />
+
+      {/* Compliance Badge */}
+      <ComplianceBadge />
 
       {/* Technical Comparison */}
       <TechnicalComparison />
