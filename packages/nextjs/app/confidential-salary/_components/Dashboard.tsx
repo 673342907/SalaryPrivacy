@@ -68,7 +68,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-xl shadow-lg p-8 text-white">
+      <div className="bg-gradient-to-r from-blue-600/80 to-indigo-700/80 backdrop-blur-md rounded-xl shadow-lg p-8 text-white border border-white/20">
         <h2 className="text-3xl font-bold mb-2">欢迎使用 ConfidentialSalary</h2>
         <p className="text-blue-100 text-lg mb-4">
           基于 FHEVM 的企业级隐私保护薪资管理系统
@@ -101,9 +101,9 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
       />
 
       {/* Quick Guide */}
-      <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+      <div className="bg-blue-500/10 backdrop-blur-md border border-blue-400/30 rounded-xl p-6">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-lg font-bold text-gray-900 flex items-center">
+          <h3 className="text-lg font-bold text-white flex items-center">
             <span className="mr-2">📖</span>
             快速开始指南
           </h3>
@@ -120,80 +120,80 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           <div className="flex items-start">
             <span className="text-2xl mr-3">1️⃣</span>
             <div>
-              <strong className="text-gray-900">创建部门</strong>
-              <p className="text-gray-600">在"部门管理"中创建公司部门，设置加密预算</p>
+              <strong className="text-white">创建部门</strong>
+              <p className="text-gray-300">在"部门管理"中创建公司部门，设置加密预算</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">2️⃣</span>
             <div>
-              <strong className="text-gray-900">添加员工</strong>
-              <p className="text-gray-600">在"员工管理"中添加员工，分配角色和部门</p>
+              <strong className="text-white">添加员工</strong>
+              <p className="text-gray-300">在"员工管理"中添加员工，分配角色和部门</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">3️⃣</span>
             <div>
-              <strong className="text-gray-900">提交薪资</strong>
-              <p className="text-gray-600">在"薪资管理"中加密提交员工薪资数据</p>
+              <strong className="text-white">提交薪资</strong>
+              <p className="text-gray-300">在"薪资管理"中加密提交员工薪资数据</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">4️⃣</span>
             <div>
-              <strong className="text-gray-900">查看统计</strong>
-              <p className="text-gray-600">在"统计分析"中查看加密数据统计结果</p>
+              <strong className="text-white">查看统计</strong>
+              <p className="text-gray-300">在"统计分析"中查看加密数据统计结果</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Quick Actions - Fixed */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-2">快速操作</h3>
-        <p className="text-sm text-gray-600 mb-4">点击下方按钮快速跳转到对应功能模块</p>
+      <div className="bg-white/5 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/10">
+        <h3 className="text-xl font-bold text-white mb-2">快速操作</h3>
+        <p className="text-sm text-gray-300 mb-4">点击下方按钮快速跳转到对应功能模块</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link href="/confidential-salary#departments">
-            <button className="w-full p-4 border-2 border-blue-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-left bg-blue-50/50">
+            <button className="w-full p-4 border-2 border-blue-400/30 rounded-lg hover:border-blue-400/50 hover:bg-blue-500/20 transition-all text-left bg-blue-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">➕</div>
-              <div className="font-semibold text-gray-900">创建部门</div>
-              <div className="text-sm text-gray-600">添加新部门并设置预算</div>
+              <div className="font-semibold text-white">创建部门</div>
+              <div className="text-sm text-gray-300">添加新部门并设置预算</div>
             </button>
           </Link>
 
           <Link href="/confidential-salary#employees">
-            <button className="w-full p-4 border-2 border-green-300 rounded-lg hover:border-green-500 hover:bg-green-50 transition-colors text-left bg-green-50/50">
+            <button className="w-full p-4 border-2 border-green-400/30 rounded-lg hover:border-green-400/50 hover:bg-green-500/20 transition-all text-left bg-green-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">👤</div>
-              <div className="font-semibold text-gray-900">添加员工</div>
-              <div className="text-sm text-gray-600">注册新员工并分配角色</div>
+              <div className="font-semibold text-white">添加员工</div>
+              <div className="text-sm text-gray-300">注册新员工并分配角色</div>
             </button>
           </Link>
 
           <Link href="/confidential-salary#salary">
-            <button className="w-full p-4 border-2 border-purple-300 rounded-lg hover:border-purple-500 hover:bg-purple-50 transition-colors text-left bg-purple-50/50">
+            <button className="w-full p-4 border-2 border-purple-400/30 rounded-lg hover:border-purple-400/50 hover:bg-purple-500/20 transition-all text-left bg-purple-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">💵</div>
-              <div className="font-semibold text-gray-900">提交薪资</div>
-              <div className="text-sm text-gray-600">使用FHE加密提交薪资</div>
+              <div className="font-semibold text-white">提交薪资</div>
+              <div className="text-sm text-gray-300">使用FHE加密提交薪资</div>
             </button>
           </Link>
 
           <Link href="/confidential-salary#statistics">
-            <button className="w-full p-4 border-2 border-orange-300 rounded-lg hover:border-orange-500 hover:bg-orange-50 transition-colors text-left bg-orange-50/50">
+            <button className="w-full p-4 border-2 border-orange-400/30 rounded-lg hover:border-orange-400/50 hover:bg-orange-500/20 transition-all text-left bg-orange-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">📊</div>
-              <div className="font-semibold text-gray-900">查看统计</div>
-              <div className="text-sm text-gray-600">加密数据统计分析</div>
+              <div className="font-semibold text-white">查看统计</div>
+              <div className="text-sm text-gray-300">加密数据统计分析</div>
             </button>
           </Link>
         </div>
       </div>
 
       {/* System Status */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">系统状态</h3>
+      <div className="bg-white/5 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/10">
+        <h3 className="text-xl font-bold text-white mb-4">系统状态</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 border-2 border-gray-200 rounded-lg">
+          <div className="p-4 border-2 border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">FHEVM 连接</span>
+              <span className="text-sm text-gray-300">FHEVM 连接</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                 fhevmStatus === "ready" 
                   ? "bg-green-100 text-green-800" 
@@ -243,21 +243,21 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             )}
           </div>
 
-          <div className="p-4 border-2 border-gray-200 rounded-lg">
+          <div className="p-4 border-2 border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">钱包地址</span>
-              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+              <span className="text-sm text-gray-300">钱包地址</span>
+              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
                 {address ? "✓ 已连接" : "未连接"}
               </span>
             </div>
-            <p className="text-xs text-gray-500 font-mono break-all">
+            <p className="text-xs text-gray-400 font-mono break-all">
               {address ? `${address.slice(0, 10)}...${address.slice(-8)}` : "请连接钱包"}
             </p>
           </div>
 
-          <div className="p-4 border-2 border-gray-200 rounded-lg">
+          <div className="p-4 border-2 border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-600">网络</span>
+              <span className="text-sm text-gray-300">网络</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                 chainId === 11155111 
                   ? "bg-purple-100 text-purple-800" 
@@ -304,45 +304,45 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
       <TechnicalComparison />
 
       {/* Feature Highlights */}
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl shadow-lg p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-4">✨ 核心功能亮点</h3>
+      <div className="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-md rounded-xl shadow-lg p-6 border border-white/10">
+        <h3 className="text-xl font-bold text-white mb-4">✨ 核心功能亮点</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">🔐</span>
-              <h4 className="font-semibold text-gray-900">全同态加密</h4>
+              <h4 className="font-semibold text-white">全同态加密</h4>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-300">
               所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
             </p>
           </div>
 
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">👥</span>
-              <h4 className="font-semibold text-gray-900">角色权限管理</h4>
+              <h4 className="font-semibold text-white">角色权限管理</h4>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-300">
               基于智能合约的 RBAC 系统，确保数据安全和访问控制
             </p>
           </div>
 
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">📊</span>
-              <h4 className="font-semibold text-gray-900">加密统计分析</h4>
+              <h4 className="font-semibold text-white">加密统计分析</h4>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-300">
               在不解密原始数据的情况下计算平均值、总和、分布等统计信息
             </p>
           </div>
 
-          <div className="bg-white rounded-lg p-4 shadow-sm">
+          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">🏢</span>
-              <h4 className="font-semibold text-gray-900">企业级应用</h4>
+              <h4 className="font-semibold text-white">企业级应用</h4>
             </div>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-300">
               完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点
             </p>
           </div>

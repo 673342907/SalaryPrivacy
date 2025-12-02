@@ -56,7 +56,7 @@ export function DemoDataGenerator({ onGenerate }: DemoDataGeneratorProps) {
   };
 
   return (
-    <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+    <div className="bg-gradient-to-r from-indigo-500/80 to-purple-600/80 backdrop-blur-md rounded-xl shadow-lg p-6 text-white border border-white/20">
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-xl font-bold mb-1">🚀 快速演示</h3>
