@@ -1,8 +1,8 @@
 "use client";
 
 import { useFhevm } from "@fhevm-sdk";
-import { useAccount } from "wagmi";
-import { useMemo } from "react";
+import { useAccount, useChainId } from "wagmi";
+import { useMemo, useState, useEffect } from "react";
 
 /**
  * 状态徽章组件
@@ -10,17 +10,51 @@ import { useMemo } from "react";
  */
 export function StatusBadges() {
   const { address } = useAccount();
+  const wagmiChainId = useChainId();
   
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
     return (window as any).ethereum;
   }, [address]);
 
+  // 使用 wagmi 的 chainId，如果没有则使用 Sepolia
+  const chainId = wagmiChainId || 11155111;
+
+  // 检查是否是 mock chain（本地开发）
+  const isMockChain = chainId === 31337;
+  
+  // 对于真实网络（Sepolia），需要 relayer SDK
+  // 对于 mock chain，使用本地 Hardhat 节点
+  const initialMockChains = isMockChain ? { 31337: "http://localhost:8545" } : {};
+
+  // 检查 Relayer SDK 是否已加载（用于 Sepolia）
+  const [relayerSDKReady, setRelayerSDKReady] = useState(false);
+  
+  useEffect(() => {
+    if (typeof window !== "undefined" && chainId === 11155111) {
+      const checkRelayerSDK = () => {
+        const win = window as any;
+        if (win.relayerSDK && typeof win.relayerSDK.initSDK === "function") {
+          setRelayerSDKReady(true);
+        } else {
+          setRelayerSDKReady(false);
+        }
+      };
+      
+      checkRelayerSDK();
+      // 定期检查（因为 SDK 是异步加载的）
+      const interval = setInterval(checkRelayerSDK, 1000);
+      return () => clearInterval(interval);
+    } else {
+      setRelayerSDKReady(true); // Mock chain 不需要 Relayer SDK
+    }
+  }, [chainId]);
+
   const { status: fhevmStatus } = useFhevm({
     provider,
-    chainId: 11155111,
-    initialMockChains: {},
-    enabled: !!provider && !!address,
+    chainId,
+    initialMockChains,
+    enabled: !!provider && !!address && (isMockChain || relayerSDKReady),
   });
 
   return (
