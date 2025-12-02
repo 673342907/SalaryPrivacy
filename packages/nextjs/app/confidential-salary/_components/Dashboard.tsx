@@ -24,10 +24,17 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
   // 使用 wagmi 的 chainId，如果没有则使用 Sepolia
   const chainId = wagmiChainId || 11155111;
 
+  // 检查是否是 mock chain（本地开发）
+  const isMockChain = chainId === 31337;
+  
+  // 对于真实网络（Sepolia），需要 relayer SDK
+  // 对于 mock chain，使用本地 Hardhat 节点
+  const initialMockChains = isMockChain ? { 31337: "http://localhost:8545" } : {};
+
   const { instance: fhevmInstance, status: fhevmStatus, error: fhevmError } = useFhevm({
     provider,
     chainId,
-    initialMockChains: {},
+    initialMockChains,
     enabled: !!provider && !!address, // 只有在钱包连接时才启用
   });
 
@@ -192,9 +199,20 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
                 : "等待初始化..."}
             </p>
             {fhevmError && (
-              <p className="text-xs text-red-600 mt-1">
-                错误: {fhevmError.message}
-              </p>
+              <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs">
+                <p className="text-red-800 font-semibold mb-1">错误详情:</p>
+                <p className="text-red-600">{fhevmError.message}</p>
+                {fhevmError.message.includes("relayerSDK") && (
+                  <div className="mt-2 text-red-700">
+                    <p className="font-semibold">💡 解决方案：</p>
+                    <ul className="list-disc list-inside mt-1 space-y-1">
+                      <li>使用本地 Hardhat 节点（Chain ID: 31337）</li>
+                      <li>或确保已加载 FHEVM Relayer SDK</li>
+                      <li>当前网络: {chainId === 31337 ? "本地开发" : `Sepolia (${chainId})`}</li>
+                    </ul>
+                  </div>
+                )}
+              </div>
             )}
           </div>
 
