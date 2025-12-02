@@ -8,13 +8,35 @@ import { EmployeeManagement } from "./_components/EmployeeManagement";
 import { SalaryManagement } from "./_components/SalaryManagement";
 import { StatisticsAnalysis } from "./_components/StatisticsAnalysis";
 import { PermissionManagement } from "./_components/PermissionManagement";
-import { useState } from "react";
+import { OnboardingGuide } from "./_components/OnboardingGuide";
+import { useState, useEffect } from "react";
 
 type TabType = "dashboard" | "departments" | "employees" | "salary" | "statistics" | "permissions";
 
 export default function ConfidentialSalaryPage() {
   const { isConnected } = useAccount();
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
+  const [showGuide, setShowGuide] = useState(false);
+
+  // 检查是否已经完成过引导
+  useEffect(() => {
+    if (isConnected) {
+      const hasSeenGuide = localStorage.getItem("confidentialSalary_hasSeenGuide");
+      if (!hasSeenGuide) {
+        setShowGuide(true);
+      }
+    }
+  }, [isConnected]);
+
+  const handleCloseGuide = () => {
+    setShowGuide(false);
+    localStorage.setItem("confidentialSalary_hasSeenGuide", "true");
+  };
+
+  const handleNavigateToTab = (tab: string) => {
+    setActiveTab(tab as TabType);
+    setShowGuide(false);
+  };
 
   if (!isConnected) {
     return (
@@ -105,13 +127,21 @@ export default function ConfidentialSalaryPage() {
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeTab === "dashboard" && <ConfidentialSalaryDashboard />}
+        {activeTab === "dashboard" && <ConfidentialSalaryDashboard onStartGuide={() => setShowGuide(true)} />}
         {activeTab === "departments" && <DepartmentManagement />}
         {activeTab === "employees" && <EmployeeManagement />}
         {activeTab === "salary" && <SalaryManagement />}
         {activeTab === "statistics" && <StatisticsAnalysis />}
         {activeTab === "permissions" && <PermissionManagement />}
       </main>
+
+      {/* Onboarding Guide */}
+      {showGuide && (
+        <OnboardingGuide
+          onClose={handleCloseGuide}
+          onNavigateToTab={handleNavigateToTab}
+        />
+      )}
       </div>
   );
 }

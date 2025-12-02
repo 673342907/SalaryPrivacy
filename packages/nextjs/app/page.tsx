@@ -163,20 +163,28 @@ export default function Home() {
                 连接钱包以开始使用隐私保护薪资管理系统
               </p>
               <RainbowKitCustomConnectButton />
+              <p className="text-sm text-gray-500 mt-4">
+                💡 连接钱包后，系统会自动显示使用引导
+              </p>
             </div>
           ) : (
-            <Link href="/confidential-salary">
-              <button className={`
-                px-8 py-4 text-lg font-semibold text-white rounded-xl
-                bg-gradient-to-r from-blue-600 to-indigo-600
-                hover:from-blue-700 hover:to-indigo-700
-                shadow-lg hover:shadow-xl
-                transition-all duration-300
-                transform hover:scale-105
-              `}>
-                🚀 进入 ConfidentialSalary 平台
-              </button>
-            </Link>
+            <div className="space-y-4">
+              <Link href="/confidential-salary">
+                <button className={`
+                  px-8 py-4 text-lg font-semibold text-white rounded-xl
+                  bg-gradient-to-r from-blue-600 to-indigo-600
+                  hover:from-blue-700 hover:to-indigo-700
+                  shadow-lg hover:shadow-xl
+                  transition-all duration-300
+                  transform hover:scale-105
+                `}>
+                  🚀 进入 ConfidentialSalary 平台
+                </button>
+              </Link>
+              <p className="text-sm text-gray-600">
+                💡 首次进入会自动显示使用引导，帮助您快速了解所有功能
+              </p>
+            </div>
           )}
         </div>
 

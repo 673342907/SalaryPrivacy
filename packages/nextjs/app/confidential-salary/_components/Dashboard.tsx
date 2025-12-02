@@ -4,7 +4,11 @@ import { useAccount } from "wagmi";
 import { useMemo } from "react";
 import { useFhevm } from "@fhevm-sdk";
 
-export function ConfidentialSalaryDashboard() {
+interface ConfidentialSalaryDashboardProps {
+  onStartGuide?: () => void;
+}
+
+export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalaryDashboardProps) {
   const { address } = useAccount();
 
   const provider = useMemo(() => {
@@ -47,10 +51,20 @@ export function ConfidentialSalaryDashboard() {
 
       {/* Quick Guide */}
       <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center">
-          <span className="mr-2">📖</span>
-          快速开始指南
-        </h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-bold text-gray-900 flex items-center">
+            <span className="mr-2">📖</span>
+            快速开始指南
+          </h3>
+          {onStartGuide && (
+            <button
+              onClick={onStartGuide}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold shadow-md"
+            >
+              🎯 开始引导
+            </button>
+          )}
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div className="flex items-start">
             <span className="text-2xl mr-3">1️⃣</span>
