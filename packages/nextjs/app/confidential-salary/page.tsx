@@ -9,6 +9,7 @@ import { SalaryManagement } from "./_components/SalaryManagement";
 import { StatisticsAnalysis } from "./_components/StatisticsAnalysis";
 import { PermissionManagement } from "./_components/PermissionManagement";
 import { OnboardingGuide } from "./_components/OnboardingGuide";
+import { DataProvider } from "./_context/DataContext";
 import { useState, useEffect } from "react";
 
 type TabType = "dashboard" | "departments" | "employees" | "salary" | "statistics" | "permissions";
@@ -92,9 +93,10 @@ export default function ConfidentialSalaryPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
+    <DataProvider>
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div>
@@ -164,6 +166,7 @@ export default function ConfidentialSalaryPage() {
         />
       )}
       </div>
+    </DataProvider>
   );
 }
 

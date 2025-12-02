@@ -2,17 +2,11 @@
 
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { useData } from "../_context/DataContext";
 
 export function SalaryManagement() {
   const { address } = useAccount();
-  const [salaries, setSalaries] = useState<Array<{
-    id: number;
-    employeeAddress: string;
-    employeeName: string;
-    amount: string;
-    encrypted: boolean;
-    submittedAt: string;
-  }>>([]);
+  const { salaries, setSalaries, addSalary } = useData();
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [showViewForm, setShowViewForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -44,14 +38,14 @@ export function SalaryManagement() {
     setIsEncrypting(false);
 
     const newSalary = {
-      id: salaries.length + 1,
+      id: salaries.length > 0 ? Math.max(...salaries.map(s => s.id)) + 1 : 1,
       employeeAddress: formData.employeeAddress,
       employeeName: `员工 ${salaries.length + 1}`,
       amount: formData.amount,
       encrypted: true,
       submittedAt: new Date().toLocaleString('zh-CN'),
     };
-    setSalaries([...salaries, newSalary]);
+    addSalary(newSalary);
     setFormData({ employeeAddress: "", amount: "" });
     setShowSubmitForm(false);
     setShowSuccess(true);

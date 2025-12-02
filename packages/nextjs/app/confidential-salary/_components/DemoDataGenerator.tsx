@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useData } from "../_context/DataContext";
 
 interface DemoDataGeneratorProps {
   onGenerate?: (data: {
@@ -12,6 +13,7 @@ interface DemoDataGeneratorProps {
 
 export function DemoDataGenerator({ onGenerate }: DemoDataGeneratorProps) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const { setDepartments, setEmployees, setSalaries } = useData();
 
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -27,20 +29,25 @@ export function DemoDataGenerator({ onGenerate }: DemoDataGeneratorProps) {
         { id: 4, name: "人事部", budget: "150000", employeeCount: 4 },
       ],
       employees: [
-        { id: 1, address: "0x1234...5678", name: "张三", role: "Admin", department: "技术部" },
-        { id: 2, address: "0x2345...6789", name: "李四", role: "HR", department: "人事部" },
-        { id: 3, address: "0x3456...7890", name: "王五", role: "Manager", department: "技术部" },
-        { id: 4, address: "0x4567...8901", name: "赵六", role: "Employee", department: "市场部" },
-        { id: 5, address: "0x5678...9012", name: "钱七", role: "Employee", department: "财务部" },
+        { id: 1, address: "0x1234567890123456789012345678901234567890", name: "张三", role: "Admin" as const, department: "技术部" },
+        { id: 2, address: "0x2345678901234567890123456789012345678901", name: "李四", role: "HR" as const, department: "人事部" },
+        { id: 3, address: "0x3456789012345678901234567890123456789012", name: "王五", role: "Manager" as const, department: "技术部" },
+        { id: 4, address: "0x4567890123456789012345678901234567890123", name: "赵六", role: "Employee" as const, department: "市场部" },
+        { id: 5, address: "0x5678901234567890123456789012345678901234", name: "钱七", role: "Employee" as const, department: "财务部" },
       ],
       salaries: [
-        { id: 1, employeeAddress: "0x1234...5678", employeeName: "张三", amount: "50000", encrypted: true, submittedAt: "2024-01-15 10:30" },
-        { id: 2, employeeAddress: "0x2345...6789", employeeName: "李四", amount: "30000", encrypted: true, submittedAt: "2024-01-15 11:00" },
-        { id: 3, employeeAddress: "0x3456...7890", employeeName: "王五", amount: "40000", encrypted: true, submittedAt: "2024-01-15 11:30" },
-        { id: 4, employeeAddress: "0x4567...8901", employeeName: "赵六", amount: "25000", encrypted: true, submittedAt: "2024-01-15 12:00" },
-        { id: 5, employeeAddress: "0x5678...9012", employeeName: "钱七", amount: "28000", encrypted: true, submittedAt: "2024-01-15 12:30" },
+        { id: 1, employeeAddress: "0x1234567890123456789012345678901234567890", employeeName: "张三", amount: "50000", encrypted: true, submittedAt: new Date().toLocaleString('zh-CN') },
+        { id: 2, employeeAddress: "0x2345678901234567890123456789012345678901", employeeName: "李四", amount: "30000", encrypted: true, submittedAt: new Date().toLocaleString('zh-CN') },
+        { id: 3, employeeAddress: "0x3456789012345678901234567890123456789012", employeeName: "王五", amount: "40000", encrypted: true, submittedAt: new Date().toLocaleString('zh-CN') },
+        { id: 4, employeeAddress: "0x4567890123456789012345678901234567890123", employeeName: "赵六", amount: "25000", encrypted: true, submittedAt: new Date().toLocaleString('zh-CN') },
+        { id: 5, employeeAddress: "0x5678901234567890123456789012345678901234", employeeName: "钱七", amount: "28000", encrypted: true, submittedAt: new Date().toLocaleString('zh-CN') },
       ],
     };
+
+    // 将数据保存到 Context
+    setDepartments(demoData.departments);
+    setEmployees(demoData.employees);
+    setSalaries(demoData.salaries);
 
     setIsGenerating(false);
     if (onGenerate) {

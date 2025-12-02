@@ -2,18 +2,13 @@
 
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { useData } from "../_context/DataContext";
 
 type Role = "Admin" | "HR" | "Manager" | "Employee";
 
 export function EmployeeManagement() {
   const { address } = useAccount();
-  const [employees, setEmployees] = useState<Array<{
-    id: number;
-    address: string;
-    name: string;
-    role: Role;
-    department: string;
-  }>>([]);
+  const { employees, setEmployees, addEmployee } = useData();
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
     address: "",
@@ -38,13 +33,13 @@ export function EmployeeManagement() {
 
     setErrorMessage("");
     const newEmployee = {
-      id: employees.length + 1,
+      id: employees.length > 0 ? Math.max(...employees.map(e => e.id)) + 1 : 1,
       address: formData.address,
       name: formData.name,
       role: formData.role,
       department: formData.department || "未分配",
     };
-    setEmployees([...employees, newEmployee]);
+    addEmployee(newEmployee);
     setFormData({ address: "", name: "", role: "Employee", department: "" });
     setShowAddForm(false);
     setShowSuccess(true);

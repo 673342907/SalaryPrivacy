@@ -1,14 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useData } from "../_context/DataContext";
 
 export function DepartmentManagement() {
-  const [departments, setDepartments] = useState<Array<{
-    id: number;
-    name: string;
-    budget: string;
-    employeeCount: number;
-  }>>([]);
+  const { departments, setDepartments, addDepartment } = useData();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", budget: "" });
 
@@ -28,12 +24,12 @@ export function DepartmentManagement() {
 
     setErrorMessage("");
     const newDept = {
-      id: departments.length + 1,
+      id: departments.length > 0 ? Math.max(...departments.map(d => d.id)) + 1 : 1,
       name: formData.name,
       budget: formData.budget,
       employeeCount: 0,
     };
-    setDepartments([...departments, newDept]);
+    addDepartment(newDept);
     setFormData({ name: "", budget: "" });
     setShowCreateForm(false);
     setShowSuccess(true);
