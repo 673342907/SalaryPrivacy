@@ -20,7 +20,7 @@ export default function ConfidentialSalaryPage() {
 
   // 检查是否已经完成过引导
   useEffect(() => {
-    if (isConnected) {
+    if (typeof window !== "undefined" && isConnected) {
       const hasSeenGuide = localStorage.getItem("confidentialSalary_hasSeenGuide");
       if (!hasSeenGuide) {
         setShowGuide(true);
@@ -30,7 +30,9 @@ export default function ConfidentialSalaryPage() {
 
   const handleCloseGuide = () => {
     setShowGuide(false);
-    localStorage.setItem("confidentialSalary_hasSeenGuide", "true");
+    if (typeof window !== "undefined") {
+      localStorage.setItem("confidentialSalary_hasSeenGuide", "true");
+    }
   };
 
   const handleNavigateToTab = (tab: string) => {
