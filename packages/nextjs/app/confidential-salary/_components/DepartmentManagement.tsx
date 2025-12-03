@@ -143,7 +143,7 @@ export function DepartmentManagement() {
           <div className="p-12 text-center">
             <div className="text-6xl mb-4">🏢</div>
             <p className="text-gray-600 mb-2">还没有创建部门</p>
-            <p className="text-sm text-gray-500">点击"创建部门"按钮开始</p>
+            <p className="text-sm text-gray-500">点击&quot;创建部门&quot;按钮开始</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
