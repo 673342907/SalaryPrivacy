@@ -2,28 +2,27 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { useFhevm, useFHEEncryption, useFHEDecrypt } from "@fhevm-sdk";
+import { 
+  useFhevm, 
+  useFHEEncryption, 
+  useFHEDecrypt,
+  useInMemoryStorage,
+  FhevmInstance 
+} from "@fhevm-sdk";
 import { ethers } from "ethers";
 import { notification } from "~~/utils/helper/notification";
+import { useWagmiEthers } from "../wagmi/useWagmiEthers";
+import { useDeployedContractInfo } from "../helper";
+import type { AllowedChainIds } from "~~/utils/helper/networks";
 
-// 合约 ABI（简化版，实际应从部署的合约获取）
-const CONFIDENTIAL_SALARY_ABI = [
-  "function createDepartment(string memory name, bytes calldata encryptedBudget) public returns (uint256)",
-  "function addEmployee(address employeeAddress, string memory name, uint8 role, uint256 departmentId) public",
-  "function submitSalary(address employeeAddress, bytes calldata encryptedSalary) public",
-  "function getDepartmentTotalSalary(uint256 departmentId) public view returns (bytes memory)",
-  "function getDepartmentAverageSalary(uint256 departmentId) public view returns (bytes memory)",
-  "function checkBudgetCompliance(uint256 departmentId) public view returns (bytes memory)",
-  "function getEncryptedSalary(address employeeAddress) public view returns (bytes memory)",
-  "function assignRole(address user, uint8 role) public",
-  "function roles(address) public view returns (uint8)",
-  "event DepartmentCreated(uint256 indexed departmentId, string name)",
-  "event EmployeeAdded(address indexed employee, string name, uint8 role, uint256 departmentId)",
-  "event SalarySubmitted(address indexed employee, uint256 departmentId)",
-] as const;
-
-// 合约地址（部署后更新）
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS || "0x0000000000000000000000000000000000000000";
+// 合约地址（从环境变量或部署信息获取）
+const getContractAddress = (): `0x${string}` | undefined => {
+  const envAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
+  if (envAddress && envAddress !== "0x0000000000000000000000000000000000000000") {
+    return envAddress as `0x${string}`;
+  }
+  return undefined;
+};
 
 /**
  * useConfidentialSalary Hook
@@ -37,21 +36,54 @@ export function useConfidentialSalary() {
     hash,
   });
 
+  // 获取合约信息
+  const allowedChainId = typeof chainId === "number" ? (chainId as AllowedChainIds) : undefined;
+  const { data: contractInfo } = useDeployedContractInfo({ 
+    contractName: "ConfidentialSalary", 
+    chainId: allowedChainId 
+  });
+
+  // 合约地址（优先使用部署信息，其次使用环境变量）
+  const contractAddress = useMemo(() => {
+    if (contractInfo?.address) {
+      return contractInfo.address as `0x${string}`;
+    }
+    return getContractAddress();
+  }, [contractInfo?.address]);
+
+  // 合约 ABI
+  const contractABI = useMemo(() => {
+    return contractInfo?.abi || [];
+  }, [contractInfo?.abi]);
+
   // FHEVM 实例
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
     return (window as any).ethereum;
   }, [address]);
 
+  const isMockChain = chainId === 31337;
+  const initialMockChains = isMockChain ? { 31337: "http://localhost:8545" } : undefined;
+
   const { instance: fhevmInstance, status: fhevmStatus } = useFhevm({
     provider,
     chainId: chainId || 11155111,
+    initialMockChains,
     enabled: !!provider && !!address,
   });
 
-  // FHE 加密和解密
-  const { encrypt } = useFHEEncryption({ instance: fhevmInstance });
-  const { decrypt } = useFHEDecrypt({ instance: fhevmInstance });
+  // Wagmi + ethers 互操作
+  const { ethersSigner, ethersReadonlyProvider } = useWagmiEthers(initialMockChains);
+
+  // FHE 加密和解密存储
+  const { storage: fhevmDecryptionSignatureStorage } = useInMemoryStorage();
+
+  // FHE 加密
+  const { encryptWith } = useFHEEncryption({ 
+    instance: fhevmInstance, 
+    ethersSigner: ethersSigner as any, 
+    contractAddress: contractAddress 
+  });
 
   // ============ 部门管理 ============
 
@@ -60,7 +92,7 @@ export function useConfidentialSalary() {
    */
   const createDepartment = useCallback(
     async (name: string, budget: number) => {
-      if (!fhevmInstance || !address) {
+      if (!fhevmInstance || !address || !contractAddress || !ethersSigner) {
         notification.error("请先连接钱包并初始化 FHEVM", { duration: 3000 });
         return;
       }
@@ -68,15 +100,18 @@ export function useConfidentialSalary() {
       try {
         const loadingId = notification.loading("正在加密预算并创建部门...", { duration: Infinity });
 
-        // 加密预算
-        const encryptedBudget = await encrypt(budget, "uint32");
+        // 使用 FHEVM SDK 加密预算
+        const encryptionMethod = await encryptWith(budget, "uint32");
+        if (!encryptionMethod) {
+          throw new Error("加密失败");
+        }
 
         // 调用合约
         await writeContract({
-          address: CONTRACT_ADDRESS as `0x${string}`,
-          abi: CONFIDENTIAL_SALARY_ABI,
+          address: contractAddress,
+          abi: contractABI as any,
           functionName: "createDepartment",
-          args: [name, encryptedBudget],
+          args: [name, encryptionMethod.encryptedData],
         });
 
         notification.remove(loadingId);
@@ -86,7 +121,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [fhevmInstance, address, encrypt, writeContract]
+    [fhevmInstance, address, contractAddress, ethersSigner, encryptWith, writeContract, contractABI]
   );
 
   /**
@@ -94,7 +129,7 @@ export function useConfidentialSalary() {
    */
   const addEmployee = useCallback(
     async (employeeAddress: string, name: string, role: number, departmentId: number) => {
-      if (!address) {
+      if (!address || !contractAddress) {
         notification.error("请先连接钱包", { duration: 3000 });
         return;
       }
@@ -103,8 +138,8 @@ export function useConfidentialSalary() {
         const loadingId = notification.loading("正在添加员工...", { duration: Infinity });
 
         await writeContract({
-          address: CONTRACT_ADDRESS as `0x${string}`,
-          abi: CONFIDENTIAL_SALARY_ABI,
+          address: contractAddress,
+          abi: contractABI as any,
           functionName: "addEmployee",
           args: [employeeAddress, name, role, departmentId],
         });
@@ -116,7 +151,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [address, writeContract]
+    [address, contractAddress, writeContract, contractABI]
   );
 
   /**
@@ -124,7 +159,7 @@ export function useConfidentialSalary() {
    */
   const submitSalary = useCallback(
     async (employeeAddress: string, amount: number) => {
-      if (!fhevmInstance || !address) {
+      if (!fhevmInstance || !address || !contractAddress || !ethersSigner) {
         notification.error("请先连接钱包并初始化 FHEVM", { duration: 3000 });
         return;
       }
@@ -132,15 +167,18 @@ export function useConfidentialSalary() {
       try {
         const loadingId = notification.loading("正在加密薪资并提交...", { duration: Infinity });
 
-        // 加密薪资
-        const encryptedSalary = await encrypt(amount, "uint32");
+        // 使用 FHEVM SDK 加密薪资
+        const encryptionMethod = await encryptWith(amount, "uint32");
+        if (!encryptionMethod) {
+          throw new Error("加密失败");
+        }
 
         // 调用合约
         await writeContract({
-          address: CONTRACT_ADDRESS as `0x${string}`,
-          abi: CONFIDENTIAL_SALARY_ABI,
+          address: contractAddress,
+          abi: contractABI as any,
           functionName: "submitSalary",
-          args: [employeeAddress, encryptedSalary],
+          args: [employeeAddress, encryptionMethod.encryptedData],
         });
 
         notification.remove(loadingId);
@@ -150,7 +188,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [fhevmInstance, address, encrypt, writeContract]
+    [fhevmInstance, address, contractAddress, ethersSigner, encryptWith, writeContract, contractABI]
   );
 
   /**
@@ -158,7 +196,7 @@ export function useConfidentialSalary() {
    */
   const assignRole = useCallback(
     async (userAddress: string, role: number) => {
-      if (!address) {
+      if (!address || !contractAddress) {
         notification.error("请先连接钱包", { duration: 3000 });
         return;
       }
@@ -167,8 +205,8 @@ export function useConfidentialSalary() {
         const loadingId = notification.loading("正在分配角色...", { duration: Infinity });
 
         await writeContract({
-          address: CONTRACT_ADDRESS as `0x${string}`,
-          abi: CONFIDENTIAL_SALARY_ABI,
+          address: contractAddress,
+          abi: contractABI as any,
           functionName: "assignRole",
           args: [userAddress, role],
         });
@@ -180,7 +218,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [address, writeContract]
+    [address, contractAddress, writeContract, contractABI]
   );
 
   // ============ 查询功能 ============
@@ -189,17 +227,18 @@ export function useConfidentialSalary() {
    * 获取部门总薪资（加密）
    */
   const getDepartmentTotalSalary = useCallback(
-    async (departmentId: number) => {
-      if (!fhevmInstance) {
-        notification.error("FHEVM 未初始化", { duration: 3000 });
+    async (departmentId: number): Promise<string | null> => {
+      if (!contractAddress || !ethersReadonlyProvider) {
+        notification.error("合约未配置或 Provider 未就绪", { duration: 3000 });
         return null;
       }
 
       try {
-        // 这里需要使用 ethers 直接调用合约
-        const provider = new ethers.BrowserProvider((window as any).ethereum);
-        const signer = await provider.getSigner();
-        const contract = new ethers.Contract(CONTRACT_ADDRESS, CONFIDENTIAL_SALARY_ABI, signer);
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractABI as any,
+          ethersReadonlyProvider
+        );
 
         const encryptedTotal = await contract.getDepartmentTotalSalary(departmentId);
         return encryptedTotal;
@@ -208,28 +247,49 @@ export function useConfidentialSalary() {
         return null;
       }
     },
-    [fhevmInstance]
+    [contractAddress, contractABI, ethersReadonlyProvider]
   );
 
   /**
-   * 解密薪资
+   * 获取加密薪资
    */
-  const decryptSalary = useCallback(
-    async (encryptedSalary: string) => {
-      if (!fhevmInstance) {
-        notification.error("FHEVM 未初始化", { duration: 3000 });
+  const getEncryptedSalary = useCallback(
+    async (employeeAddress: string): Promise<string | null> => {
+      if (!contractAddress || !ethersReadonlyProvider) {
+        notification.error("合约未配置或 Provider 未就绪", { duration: 3000 });
         return null;
       }
 
       try {
-        const decrypted = await decrypt(encryptedSalary, "uint32");
-        return Number(decrypted);
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractABI as any,
+          ethersReadonlyProvider
+        );
+
+        const encryptedSalary = await contract.getEncryptedSalary(employeeAddress);
+        return encryptedSalary;
       } catch (error: any) {
-        notification.error(`解密薪资失败: ${error.message}`, { duration: 5000 });
+        notification.error(`获取加密薪资失败: ${error.message}`, { duration: 5000 });
         return null;
       }
     },
-    [fhevmInstance, decrypt]
+    [contractAddress, contractABI, ethersReadonlyProvider]
+  );
+
+  /**
+   * 解密薪资
+   * 注意：实际解密需要在组件中使用 useFHEDecrypt Hook
+   * 这里提供一个辅助函数用于准备解密请求
+   */
+  const prepareDecryptRequest = useCallback(
+    (encryptedSalaryHandle: string) => {
+      if (!encryptedSalaryHandle || encryptedSalaryHandle === ethers.ZeroHash || !contractAddress) {
+        return undefined;
+      }
+      return [{ handle: encryptedSalaryHandle, contractAddress } as const];
+    },
+    [contractAddress]
   );
 
   // 监听交易确认
@@ -246,6 +306,9 @@ export function useConfidentialSalary() {
     isConfirming,
     isConfirmed,
     error,
+    contractAddress,
+    contractABI,
+    hasContract: !!contractAddress && contractABI.length > 0,
 
     // 功能
     createDepartment,
@@ -253,7 +316,13 @@ export function useConfidentialSalary() {
     submitSalary,
     assignRole,
     getDepartmentTotalSalary,
-    decryptSalary,
+    getEncryptedSalary,
+    prepareDecryptRequest,
+    
+    // FHEVM 实例（供组件使用）
+    fhevmInstance,
+    ethersSigner,
+    fhevmDecryptionSignatureStorage,
+    chainId: chainId || 11155111,
   };
 }
-

@@ -3,16 +3,21 @@
 import { useState } from "react";
 import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
+import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
+import { useAccount } from "wagmi";
 
 export function DepartmentManagement() {
   const { departments, addDepartment } = useData();
+  const { address } = useAccount();
+  const { createDepartment, hasContract, isPending, fhevmStatus } = useConfidentialSalary();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", budget: "" });
+  const [useBlockchain, setUseBlockchain] = useState(false); // 是否使用区块链
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleCreateDepartment = () => {
+  const handleCreateDepartment = async () => {
     // 验证输入
     if (!formData.name.trim()) {
       setErrorMessage("请输入部门名称");
@@ -24,17 +29,32 @@ export function DepartmentManagement() {
     }
 
     setErrorMessage("");
-    const newDept = {
-      id: departments.length > 0 ? Math.max(...departments.map(d => d.id)) + 1 : 1,
-      name: formData.name,
-      budget: formData.budget,
-      employeeCount: 0,
-    };
-    addDepartment(newDept);
-    setFormData({ name: "", budget: "" });
-    setShowCreateForm(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+
+    // 如果使用区块链且合约已部署
+    if (useBlockchain && hasContract && address) {
+      try {
+        await createDepartment(formData.name, parseFloat(formData.budget));
+        setFormData({ name: "", budget: "" });
+        setShowCreateForm(false);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
+      } catch (error: any) {
+        setErrorMessage(error.message || "创建部门失败");
+      }
+    } else {
+      // 使用本地数据（演示模式）
+      const newDept = {
+        id: departments.length > 0 ? Math.max(...departments.map(d => d.id)) + 1 : 1,
+        name: formData.name,
+        budget: formData.budget,
+        employeeCount: 0,
+      };
+      addDepartment(newDept);
+      setFormData({ name: "", budget: "" });
+      setShowCreateForm(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
   };
 
   return (
@@ -87,6 +107,36 @@ export function DepartmentManagement() {
           {showCreateForm ? "取消创建" : "创建部门"}
         </button>
       </div>
+
+      {/* Blockchain Mode Toggle */}
+      {hasContract && address && (
+        <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-semibold text-yellow-900 mb-1">🔗 区块链模式</h4>
+              <p className="text-sm text-yellow-800">
+                {useBlockchain 
+                  ? "数据将存储在区块链上（需要支付 Gas 费用）" 
+                  : "当前为演示模式，数据仅存储在本地"}
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={useBlockchain}
+                onChange={(e) => setUseBlockchain(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-600"></div>
+            </label>
+          </div>
+          {useBlockchain && fhevmStatus !== "ready" && (
+            <div className="mt-2 text-sm text-yellow-700">
+              ⚠️ FHEVM 状态: {fhevmStatus}，请等待初始化完成
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Create Department Form */}
       {showCreateForm && (
@@ -181,9 +231,14 @@ export function DepartmentManagement() {
             )}
             <button
               onClick={handleCreateDepartment}
-              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
+              disabled={isPending || (useBlockchain && fhevmStatus !== "ready")}
+              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              🔐 创建部门（加密存储）
+              {isPending 
+                ? "⏳ 处理中..." 
+                : useBlockchain 
+                  ? "🔐 创建部门（区块链存储）" 
+                  : "🔐 创建部门（演示模式）"}
             </button>
           </div>
         </div>
