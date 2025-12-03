@@ -1,703 +1,514 @@
-# 🔐 Universal FHEVM SDK
+# 🔐 ConfidentialSalary
 
-A framework-agnostic toolkit that helps developers build confidential dApps with ease. Built with a modular adapter architecture that works seamlessly across React, Next.js, Vue, and Node.js environments.
+**基于全同态加密的隐私保护薪资管理系统**
 
-## 🎥 **Video Demo**
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![FHEVM](https://img.shields.io/badge/FHEVM-0.9.0-green.svg)](https://docs.zama.org)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.24-orange.svg)](https://soliditylang.org)
+[![Next.js](https://img.shields.io/badge/Next.js-15.2.5-black.svg)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org)
 
-[![YouTube](https://img.shields.io/badge/YouTube-Demo%20Video-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/watch?v=UJPTUMk47hE)
+> 🏆 **Zama Developer Program 参赛项目** - 展示 FHE 技术在实际业务场景中的应用
 
-**Watch the Universal FHEVM SDK in action!** See live demos of all showcases and learn how to use the adapters in your projects.
-
-👉 **[Watch on YouTube](https://www.youtube.com/watch?v=UJPTUMk47hE)**
-
-## 🌐 **Live Examples**
-
-All examples are running with **real FHEVM interactions** on Sepolia testnet:
-
-- **![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) React Showcase:** [https://react-showcase-1738.up.railway.app/](https://react-showcase-1738.up.railway.app/)
-- **![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) Next.js Showcase:** [https://nextjs-showcase-1661.up.railway.app/](https://nextjs-showcase-1661.up.railway.app/)
-- **![Vue.js](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vue.js&logoColor=4FC08D) Vue Showcase:** [https://vue-showcase-2780.up.railway.app/](https://vue-showcase-2780.up.railway.app/)
-- **![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white) Node.js Showcase:** [packages/node-showcase/](packages/node-showcase/)
-
-**Contract Details (FHEVM 0.9.1):**
-- **FHE Counter Contract:** `0x7A14b454D19A4CB4c55E0386d04Eb0B66e6717EC`
-- **Ratings Contract:** `0xf80A030984a0AB6111B6e60973A6c16C668ede7a`
-- **Voting Contract:** `0x4189777Eb42f68Ce959E498a171e328BfDA90C46`
-- **Network:** Sepolia testnet (Chain ID: 11155111)
-- **FHEVM Version:** 0.9.1
-- **Relayer SDK:** 0.3.0-5
-
-## 🌍 **Languages / Langues / 语言**
-[![English](https://img.shields.io/badge/English-🇺🇸-blue)](README.md)
-[![Français](https://img.shields.io/badge/Français-🇫🇷-red)](README.fr.md)
-[![中文](https://img.shields.io/badge/中文-🇨🇳-green)](README.zh.md)
-
-## 📐 **Architecture Overview**
-
-### **SDK Architecture**
-
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                    Universal FHEVM SDK                               │
-│                      packages/fhevm-sdk/                               │
-└──────────────────────────────────────────────────────────────────────┘
-                                  │
-          ┌───────────────────────┼───────────────────────┐
-          │                       │                       │
-    ┌─────▼─────┐          ┌───────▼───────┐      ┌───────▼───────┐
-    │   CORE    │          │   ADAPTERS    │      │   SHOWCASES   │
-    │src/core/  │          │src/adapters/  │      │  packages/    │
-    └─────┬─────┘          └───────┬───────┘      └───────┬───────┘
-          │                        │                       │
-    ┌─────┴─────────────────────────────────────────────────────┐
-    │                                                             │
-    │  ┌──────────┐     ┌──────────┐     ┌──────────┐           │
-    │  │fhevm.ts  │     │contracts.│     │index.ts  │           │
-    │  │          │     │ts        │     │(exports) │           │
-    │  │-initialize│    │          │     └──────────┘           │
-    │  │-createEnc│    │-FhevmCon │                              │
-    │  │-decrypt  │    │tract     │                              │
-    │  │-publicDec│    └──────────┘                              │
-    │  │-test/    │                                               │
-    │  └──────────┘                                               │
-    │                                                             │
-    └─────────────────────────────────────────────────────────────┘
-                                                                  
-          ┌───────────────────────────────────────┐
-          │                                       │
-    ┌─────▼─────┐      ┌─────▼─────┐    ┌─────▼─────┐
-    │  react.ts │      │  vue.ts   │    │  node.ts  │
-    │           │      │           │    │           │
-    │useWallet  │      │useWalletVue│   │FhevmNode  │
-    │useFhevm   │      │useFhevmVue │   │(class)    │
-    │useContract│      │useContract │   └───────────┘
-    │useEncrypt │      │useEncrypt  │
-    │useDecrypt │      │useDecrypt  │
-    │useFhevmOps│      │useFhevmOps │
-    └───────────┘      └───────────┘
-                                                                  
-          ┌───────────────────────────────────────┐
-          │                                       │
-    ┌─────▼─────────┐  ┌─────▼─────────┐  ┌─────▼─────────┐
-    │react-showcase │  │nextjs-showcase │  │ vue-showcase  │
-    │               │  │                │  │               │
-    │App.tsx        │  │page.tsx        │  │App.vue         │
-    │FheCounter     │  │components/     │  │components/     │
-    │FheRatings     │  │FHECounter      │  │FHECounter      │
-    │FheVoting      │  │FHERatings      │  │FHERatings      │
-    │               │  │SimpleVoting    │  │SimpleVoting    │
-    │               │  │test/           │  │test/           │
-    └───────────────┘  └────────────────┘  └───────────────┘
-                                            
-    ┌─────────────────────────────────────────┐
-    │        node-showcase                    │
-    │                                         │
-    │  index.ts     server.ts    explorer.ts  │
-    │  counter.ts   voting.ts    ratings.ts   │
-    │                                         │
-    └─────────────────────────────────────────┘
-```
-
-### **Data Flow Architecture**
-
-```
-┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
-│ react-showcase  │      │ vue-showcase    │      │ node-showcase   │
-│                 │      │                 │      │                 │
-│ App.tsx         │      │ App.vue         │      │ index.ts        │
-│ FheCounter.tsx  │      │ FheCounter.vue  │      │ counter.ts      │
-│ FheRatings.tsx  │      │ FheRatings.vue  │      │ voting.ts       │
-│ FheVoting.tsx   │      │ FheVoting.vue   │      │ ratings.ts      │
-└────────┬────────┘      └────────┬────────┘      └────────┬────────┘
-         │                        │                        │
-         │ import { useWallet,    │ import { useWalletVue,│ import { FhevmNode
-         │         useFhevm,      │         useFhevmVue } │         } from
-         │         useEncrypt,    │         } from         │         '@fhevm-sdk'
-         │         useDecrypt }   │         '@fhevm-sdk'   │
-         │ from '@fhevm-sdk'      │                        │
-         │                        │                        │
-         └────────────────────────┼────────────────────────┘
-                                  │
-                    ┌─────────────▼─────────────┐
-                    │   @fhevm-sdk/src/          │
-                    │                           │
-                    │   ┌─────────────────────┐ │
-                    │   │  adapters/react.ts  │ │
-                    │   │  adapters/vue.ts     │ │
-                    │   │  adapters/node.ts   │ │
-                    │   └──────────┬──────────┘ │
-                    │              │            │
-                    │   ┌──────────▼──────────┐ │
-                    │   │   core/index.ts     │ │
-                    │   │   core/fhevm.ts     │ │
-                    │   │   core/contracts.ts │ │
-                    │   └──────────┬──────────┘ │
-                    └──────────────┼────────────┘
-                                   │
-                    ┌──────────────▼──────────────┐
-                    │      Zama Relayer SDK       │
-                    │   (@zama-fhe/relayer-sdk)   │
-                    │                             │
-                    │   ┌──────────────────────┐ │
-                    │   │ createInstance()      │ │
-                    │   │ createEncryptedInput │ │
-                    │   │ decryptValue()       │ │
-                    │   │ publicDecrypt()      │ │
-                    │   └──────────────────────┘ │
-                    └─────────────────────────────┘
-```
-
-## 🏗️ **Project Structure**
-
-```
-fhevm-react-template/
-├── packages/
-│   ├── fhevm-sdk/                    # Universal FHEVM SDK Core
-│   │   ├── src/
-│   │   │   ├── core/                 # Core FHEVM functionality
-│   │   │   │   ├── fhevm.ts         # FHEVM client initialization
-│   │   │   │   ├── encryption.ts    # Encryption operations
-│   │   │   │   └── decryption.ts    # Decryption operations
-│   │   │   └── adapters/             # Framework-specific adapters
-│   │   │       ├── react.ts          # React hooks (re-exports)
-│   │   │       ├── useWallet.ts      # Wallet connection hook
-│   │   │       ├── useFhevm.ts       # FHEVM instance hook
-│   │   │       ├── useContract.ts    # Contract interaction hook
-│   │   │       ├── useEncrypt.ts     # Encryption hook
-│   │   │       ├── useDecrypt.ts     # Decryption hook
-│   │   │       ├── useFhevmOperations.ts  # Combined operations hook
-│   │   │       ├── vue.ts            # Vue composables
-│   │   │       └── node.ts           # Node.js class adapter
-│   │   └── dist/                     # Built output
-│   │
-│   ├── react-showcase/               # React Example
-│   │   ├── src/
-│   │   │   ├── App.tsx               # Main app (uses adapters)
-│   │   │   └── components/
-│   │   │       ├── FheCounter.tsx    # Uses useEncrypt, useDecrypt
-│   │   │       ├── FheRatings.tsx    # Uses useEncrypt, useDecrypt
-│   │   │       └── FheVoting.tsx    # Uses useEncrypt
-│   │
-│   ├── nextjs-showcase/              # Next.js Example
-│   │   ├── app/
-│   │   │   └── page.tsx              # Main page (uses adapters)
-│   │   └── components/                # Same as React showcase
-│   │
-│   ├── vue-showcase/                  # Vue Example
-│   │   ├── src/
-│   │   │   ├── App.vue               # Main app (uses composables)
-│   │   │   └── components/
-│   │   │       ├── FheCounter.vue   # Uses useEncryptVue, useDecryptVue
-│   │   │       ├── FheRatings.vue   # Uses useEncryptVue, useDecryptVue
-│   │   │       └── FheVoting.vue    # Uses useEncryptVue
-│   │
-│   ├── node-showcase/                 # Node.js Example
-│   │   ├── src/
-│   │   │   ├── index.ts              # Main entry (uses FhevmNode)
-│   │   │   ├── counter.ts            # Counter demo
-│   │   │   ├── voting.ts             # Voting demo
-│   │   │   └── ratings.ts            # Ratings demo
-│   │
-│   └── hardhat/                       # Smart Contracts
-│       ├── contracts/                 # Solidity contracts
-│       └── deploy/                    # Deployment scripts
-│
-├── pnpm-workspace.yaml                 # Monorepo configuration
-└── README.md                           # This file
-```
-
-## 🔧 **Adapter System**
-
-### **How Adapters Work**
-
-The Universal FHEVM SDK uses a **clean adapter architecture** where:
-
-1. **Core** provides framework-agnostic FHEVM operations
-2. **Adapters** wrap core functionality in framework-specific APIs
-3. **Showcases** demonstrate real-world usage with adapters
-
-### **React/Next.js Adapters**
-
-**Hooks-based API** - Similar to Wagmi pattern:
-
-```typescript
-import { useWallet, useFhevm, useEncrypt, useDecrypt, useContract } from '@fhevm-sdk';
-
-function MyComponent() {
-  // Wallet connection
-  const { address, isConnected, chainId, connect, disconnect } = useWallet();
-  
-  // FHEVM instance
-  const { status, initialize, isInitialized } = useFhevm();
-  
-  // Contract interaction
-  const { contract, isReady } = useContract(contractAddress, abi);
-  
-  // Encryption
-  const { encrypt, isEncrypting, error: encryptError } = useEncrypt();
-  
-  // Decryption (FHEVM 0.9.0)
-  const { decrypt, publicDecrypt, decryptMultiple, isDecrypting, error: decryptError } = useDecrypt();
-  
-  // Usage example
-  const handleIncrement = async () => {
-    const encrypted = await encrypt(contractAddress, address, 1);
-    await contract.increment(encrypted.encryptedData, encrypted.proof);
-  };
-  
-  // Self-relaying decryption example (for voting)
-  const handleTallyReveal = async (sessionId) => {
-    const tx = await contract.requestTallyReveal(sessionId);
-    const receipt = await tx.wait();
-    const event = receipt.logs.find(log => {
-      const parsed = contract.interface.parseLog(log);
-      return parsed?.name === 'TallyRevealRequested';
-    });
-    const { yesVotesHandle, noVotesHandle } = contract.interface.parseLog(event).args;
-    const { cleartexts, decryptionProof, values } = await decryptMultiple(
-      contractAddress,
-      signer,
-      [yesVotesHandle, noVotesHandle]
-    );
-    await contract.resolveTallyCallback(sessionId, cleartexts, decryptionProof);
-  };
-  
-  return (
-    <div>
-      {!isConnected && <button onClick={connect}>Connect Wallet</button>}
-      {isConnected && <button onClick={handleIncrement}>Increment</button>}
-    </div>
-  );
-}
-```
-
-### **Vue Adapters**
-
-**Composables-based API** - Vue 3 Composition API:
-
-```typescript
-<script setup lang="ts">
-import { useWalletVue, useFhevmVue, useEncryptVue, useDecryptVue } from '@fhevm-sdk';
-
-// Wallet connection
-const { address, isConnected, chainId, connect, disconnect } = useWalletVue();
-
-// FHEVM instance
-const { status, initialize, isInitialized } = useFhevmVue();
-
-// Encryption
-const { encrypt, isEncrypting, error: encryptError } = useEncryptVue();
-
-// Decryption (FHEVM 0.9.0)
-const { decrypt, publicDecrypt, decryptMultiple, isDecrypting, error: decryptError } = useDecryptVue();
-
-// Usage example
-const handleIncrement = async () => {
-  const encrypted = await encrypt.value(contractAddress, address.value, 1);
-  await contract.increment(encrypted.encryptedData, encrypted.proof);
-};
-</script>
-
-<template>
-  <div>
-    <button v-if="!isConnected" @click="connect">Connect Wallet</button>
-    <button v-if="isConnected" @click="handleIncrement">Increment</button>
-  </div>
-</template>
-```
-
-### **Node.js Adapter**
-
-**Class-based API** - For server-side operations:
-
-```typescript
-import { FhevmNode } from '@fhevm-sdk';
-
-const fhevm = new FhevmNode({
-  rpcUrl: 'https://sepolia.infura.io/v3/YOUR_KEY',
-  privateKey: 'YOUR_PRIVATE_KEY',
-  chainId: 11155111
-});
-
-await fhevm.initialize();
-
-// Encrypt
-const encrypted = await fhevm.encrypt(contractAddress, walletAddress, 1);
-
-// Decrypt
-const decrypted = await fhevm.decrypt(handle, contractAddress);
-
-// Public decrypt
-const publicDecrypted = await fhevm.publicDecrypt(handle);
-
-// Execute transaction
-const contract = fhevm.createContract(contractAddress, abi);
-await fhevm.executeEncryptedTransaction(contract, 'increment', encrypted);
-```
-
-## 🚀 **Quick Start**
-
-### **Option 1: NPX Packages (Recommended)**
-
-Create a new FHEVM project instantly:
-
-```bash
-# React
-npx create-fhevm-react my-app
-cd my-app
-npm install && npm start
-
-# Next.js
-npx create-fhevm-nextjs my-app
-cd my-app
-npm install && npm run dev
-
-# Vue 
-npx create-fhevm-vue my-app
-cd my-app
-npm install && npm run dev
-```
-
-### **Option 2: Development Environment**
-
-Clone and run the full development environment:
-
-```bash
-# 1. Clone repository
-git clone https://github.com/your-username/fhevm-react-template.git
-cd fhevm-react-template
-
-# 2. Install dependencies
-pnpm install
-
-# 3. Build SDK
-pnpm sdk:build
-
-# 4. Run showcase
-pnpm --filter react-showcase start      # React on :3000
-pnpm --filter nextjs-showcase dev      # Next.js on :3001
-pnpm --filter vue-showcase dev         # Vue on :3003
-pnpm --filter node-showcase explorer   # Interactive CLI mode (recommended)
-pnpm --filter node-showcase start      # HTTP server mode
-pnpm --filter node-showcase cli        # Non-interactive CLI mode
-
-
-```
-
-### **HTTP Server Mode**
-
-Run the following only in the  node-showcase dir  as an HTTP server with API endpoints:
-
-```bash
-# Start the HTTP server
-pnpm start
-
-# Server runs on http://localhost:3001
-# Available endpoints:
-# - GET  /          - List available endpoints
-# - GET  /health    - Health check
-# - GET  /config    - Get FHEVM configuration
-# - POST /counter   - Run counter demo
-# - POST /voting    - Run voting demo
-# - POST /ratings   - Run ratings demo
-# - POST /run-all   - Run all demos
-```
-
-**Test endpoints using PowerShell:**
-```powershell
-# Run counter demo
-Invoke-RestMethod -Uri http://localhost:3001/counter -Method POST
-
-# Run voting demo
-Invoke-RestMethod -Uri http://localhost:3001/voting -Method POST
-
-# Get configuration
-Invoke-RestMethod -Uri http://localhost:3001/config -Method GET
-```
-
-### **Non-Interactive CLI Mode**
-
-Run all demos sequentially without interaction:
-
-```bash
-# Run all demos at once
-pnpm cli
-
-# Output includes:
-# - Counter demo: Increment → Decrement → Decrypt
-# - Voting demo: Create session → Vote
-# - Ratings demo: Submit rating → Public decrypt stats
-```
-
-## 🛠️ **Development**
-
-```bash
-# Interactive CLI mode (recommended for testing)
-pnpm explorer
-
-# HTTP server mode
-pnpm start
-
-# Non-interactive CLI mode
-pnpm cli
-
-# Development mode (watch HTTP server)
-pnpm dev
-
-# Build TypeScript
-pnpm build
-```
-
-## 🎯 **FHEVM Explorer - Interactive Demo Experience**
-
-The **FHEVM Explorer** is an interactive CLI wizard that provides a guided, user-friendly way to explore the Universal FHEVM SDK capabilities. It's the recommended way to experience FHEVM demos step-by-step.
-
-### **What the Explorer Does**
-
-The Explorer offers a beautiful, context-aware interface that guides you through FHEVM operations:
-
-- **🌐 Interactive Menu** - Navigate through different demo options with arrow keys
-- **🔢 Counter Demo** - Experience increment/decrement operations with encrypted values
-  - Interactive prompts for increment/decrement amounts
-  - Real-time transaction feedback
-  - Decryption results display
-- **🗳️ Voting Demo** - Explore encrypted voting systems
-  - Create voting sessions or use existing ones
-  - Choose votes (Yes/No) with encryption
-  - View encrypted results after voting
-- **⭐ Ratings Demo** - Submit encrypted ratings and reviews
-  - Create review cards
-  - Submit encrypted ratings with user input
-  - View public decrypted statistics
-- **🔍 Test Mode** - Verify your setup before running demos
-  - Check environment variables configuration
-  - Verify network connection
-  - Test wallet setup
-  - Validate FHEVM client initialization
-  - Verify contract accessibility
-- **🎯 Run All Demos** - Execute all demos sequentially in one session
-- **📊 Session Summary** - Track all completed demos with timestamps and results
-
-### **Key Features**
-
-- **Beautiful UI** - Color-coded output with loading spinners and progress indicators
-- **Guided Experience** - Step-by-step prompts that walk you through each operation
-- **Real Transactions** - All demos use actual blockchain transactions on Sepolia testnet
-- **Error Handling** - Helpful error messages and recovery suggestions
-- **Session Tracking** - Keep track of all demos you've completed with detailed summaries
-
-### **Example Session Flow**
-
-```
-🌐 Welcome to FHEVM Explorer!
-Universal FHEVM SDK - Interactive Demo Experience
-
-   Explore the world of confidential computing on blockchain
-   Experience encrypted operations with guided demos
-
-✅ FHEVM environment ready!
-   Wallet: 0xb8c81a641A4A4C47d11e5464C77EdcB9737784CC
-   Balance: 0.042681970725989092 ETH
-   Network: Sepolia (11155111)
-
-? Choose your FHEVM demo:
-❯ 🔢 Counter Demo - Increment/Decrement Operations
-  🗳️  Voting Demo - Encrypted Voting System
-  ⭐ Ratings Demo - Review Cards with Encrypted Ratings
-  🔍 Test Mode - Verify Setup Only
-  🎯 Run All Demos
-  ❌ Exit Explorer
-```
-
-### **How to Use**
-
-```bash
-# Navigate to node-showcase
-cd packages/node-showcase
-
-# Start the interactive explorer
-pnpm explorer
-```
-
-The Explorer will:
-1. Initialize your FHEVM environment and verify configuration
-2. Display an interactive menu with all available demos
-3. Guide you through each demo with prompts and feedback
-4. Show real-time transaction status and results
-5. Track your session and provide a summary at the end
-
-This is the perfect tool for developers learning FHEVM or demonstrating the SDK's capabilities to others!
-<<<<<<< Updated upstream
-
-
-=======
->>>>>>> Stashed changes
-
-## 📚 **Showcase Documentation**
-
-Each showcase demonstrates real-world adapter usage:
-
-- **[React Showcase](./packages/react-showcase/README.md)** - React hooks usage
-- **[Next.js Showcase](./packages/nextjs-showcase/README.md)** - Next.js with React hooks
-- **[Vue Showcase](./packages/vue-showcase/README.md)** - Vue composables usage
-- **[Node.js Showcase](./packages/node-showcase/README.md)** - Server-side operations
-  - 🌐 **Interactive CLI Mode** - Guided wizard with prompts (`pnpm explorer`)
-  - 🌐 **HTTP Server Mode** - REST API with endpoints (`pnpm start`)
-  - 🌐 **Non-Interactive CLI Mode** - Sequential execution (`pnpm cli`)
-
-## 🧪 **Testing**
-
-All showcases include comprehensive FHEVM contract tests in their respective `test/` directories:
-
-- **`packages/react-showcase/test/`** - React showcase tests
-- **`packages/nextjs-showcase/test/`** - Next.js showcase tests  
-- **`packages/vue-showcase/test/`** - Vue showcase tests
-
-Each test directory contains:
-- **`FHECounter.test.js`** - Counter contract tests (increment, decrement, edge cases)
-- **`FHERatings.test.js`** - Ratings contract tests (card creation, encrypted ratings, public decryption)
-- **`SimpleVoting.test.js`** - Voting contract tests (session creation, encrypted voting, tally reveal)
-
-### **Running Tests**
-
-```bash
-# Run all showcase tests
-pnpm test:showcases
-
-# Run tests for a specific showcase
-pnpm test:react      # React showcase tests
-pnpm test:nextjs     # Next.js showcase tests
-pnpm test:vue        # Vue showcase tests
-
-# Run from a specific showcase directory
-cd packages/react-showcase && pnpm test
-cd packages/nextjs-showcase && pnpm test
-cd packages/vue-showcase && pnpm test
-
-# Run Hardhat tests (includes all showcase tests)
-pnpm hardhat:test
-```
-
-Tests run in Hardhat's FHEVM mock environment, allowing fast local testing without a live network.
-
-## 🏆 **Key Features**
-
-### **✅ Framework-Agnostic Core**
-- Single core implementation used by all adapters
-- No framework-specific dependencies in core
-- Easy to extend with new adapters
-
-### **✅ Wagmi-like API**
-- Familiar patterns for web3 developers
-- Hooks-based (React) and composables-based (Vue)
-- Clean, intuitive interface
-
-### **✅ TypeScript Support**
-- Full type safety across all adapters
-- Excellent IDE support
-- Comprehensive type definitions
-
-### **✅ Real FHEVM Operations (0.9.0)**
-- EIP-712 signature-based decryption
-- Public decryption support
-- Self-relaying decryption pattern (event-driven)
-- Multiple handle decryption (`decryptMultiple`)
-- Encrypted transaction execution
-- No mocks - all real blockchain interactions
-
-### **✅ Multiple Demo Scenarios (FHEVM 0.9.0)**
-- **Counter Demo:** Increment/decrement with EIP-712 user decryption
-- **Ratings Demo:** Encrypted ratings with public decryption
-- **Voting Demo:** Encrypted voting with self-relaying decryption (event-driven tally reveal)
-
-## 🎯 **Usage Examples**
-
-### **React Component**
-
-```typescript
-import { useWallet, useFhevm, useEncrypt, useDecrypt } from '@fhevm-sdk';
-
-export default function FheCounter() {
-  const { address, isConnected, connect } = useWallet();
-  const { status, initialize } = useFhevm();
-  const { encrypt } = useEncrypt();
-  const { decrypt } = useDecrypt();
-  
-  useEffect(() => {
-    if (isConnected && status === 'idle') {
-      initialize();
-    }
-  }, [isConnected, status, initialize]);
-  
-  const handleIncrement = async () => {
-    const encrypted = await encrypt(contractAddress, address, 1);
-    // Execute transaction...
-  };
-  
-  return <div>...</div>;
-}
-```
-
-### **Vue Component**
-
-```vue
-<script setup lang="ts">
-import { useWalletVue, useFhevmVue, useEncryptVue } from '@fhevm-sdk';
-
-const { address, isConnected, connect } = useWalletVue();
-const { status, initialize } = useFhevmVue();
-const { encrypt } = useEncryptVue();
-
-watch(() => isConnected.value, (newVal) => {
-  if (newVal && status.value === 'idle') {
-    initialize();
-  }
-});
-</script>
-
-<template>
-  <div>...</div>
-</template>
-```
-
-### **Node.js Script**
-
-```typescript
-import { FhevmNode } from '@fhevm-sdk';
-
-async function main() {
-  const fhevm = new FhevmNode({ rpcUrl, privateKey, chainId });
-await fhevm.initialize();
-
-  const encrypted = await fhevm.encrypt(contractAddress, walletAddress, 1);
-  const contract = fhevm.createContract(contractAddress, abi);
-  await fhevm.executeEncryptedTransaction(contract, 'increment', encrypted);
-}
-```
-
-## 📋 **Requirements**
-
-- **Node.js** 18+ 
-- **pnpm** (recommended) or npm
-- **MetaMask** (for frontend examples)
-- **Sepolia ETH** (for transactions)
-
-## 🔗 **Related Documentation**
-
-- [SDK Documentation](./packages/fhevm-sdk/README.md)
-- [React Showcase](./packages/react-showcase/README.md)
-- [Next.js Showcase](./packages/nextjs-showcase/README.md)
-- [Vue Showcase](./packages/vue-showcase/README.md)
-- [Node.js Showcase](./packages/node-showcase/README.md)
-
-## 📝 **License**
-
-MIT License - see LICENSE file for details
-
-## 🤝 **Contributing**
-
-Contributions are welcome! Please see our contributing guidelines for more information.
+[🌐 在线演示](#-在线演示) • [📖 文档](#-文档) • [🚀 快速开始](#-快速开始) • [💻 开发](#-开发) • [📊 功能特性](#-功能特性)
 
 ---
 
-**Built with Privacy for the Zama Universal FHEVM SDK Bounty**
+## 📖 项目简介
+
+**ConfidentialSalary** 是一个创新的去中心化应用（dApp），利用 Zama 的 FHEVM（全同态加密虚拟机）技术，实现了完全隐私保护的薪资管理系统。所有薪资数据在区块链上以加密形式存储，支持在不解密的情况下进行加密数据计算，只有授权用户才能解密查看原始数据。
+
+### 🎯 核心价值
+
+- **🔒 完全隐私保护** - 所有薪资数据在链上加密存储，智能合约无法看到原始数据
+- **📊 加密统计分析** - 在不解密原始数据的情况下进行统计计算（总和、平均值、比较等）
+- **👥 基于角色的权限管理** - 细粒度的访问控制，确保数据安全
+- **🏢 企业级应用** - 解决真实的 HR 管理痛点，符合数据保护法规要求
+- **✅ 合规性** - 符合 GDPR、CCPA 等数据保护法规
+
+---
+
+## ✨ 核心特性
+
+### 🔐 全同态加密保护
+- 所有薪资数据在链上以加密形式存储
+- 支持在不解密的情况下进行加密数据计算
+- 只有授权用户才能解密查看原始数据
+- 零知识保证：完全透明且不可篡改，同时保护数据隐私
+
+### 👥 基于角色的权限管理
+- **Admin（管理员）**: 完全权限，可以管理所有功能和分配角色
+- **HR（人力资源）**: 可以创建部门、管理员工、提交薪资
+- **Manager（经理）**: 可以查看部门数据和员工薪资
+- **Employee（员工）**: 只能查看自己的薪资
+
+### 🏢 完整的组织管理
+- 部门创建和管理（加密预算设置）
+- 员工添加和角色分配
+- 加密预算设置和合规检查
+- 部门间数据隔离
+
+### 📊 隐私保护的统计分析
+- 加密加法：计算部门总薪资（不解密任何员工薪资）
+- 加密平均值：计算平均薪资（不解密原始数据）
+- 加密比较：比较两个薪资大小（不解密原始值）
+- 范围查询：查询薪资在指定范围内的员工数量
+- 预算合规检查：检查部门总薪资是否在预算内（全部加密计算）
+
+### 🎨 现代化 UI/UX
+- 响应式设计，支持各种设备
+- 流畅的动画效果和过渡
+- 直观的用户界面
+- 实时数据可视化（Recharts）
+- 完整的引导流程
+
+---
+
+## 🏗️ 技术架构
+
+### 技术栈
+
+- **前端框架**: React 19 + Next.js 15.2.5
+- **区块链**: Ethereum Sepolia 测试网
+- **加密技术**: Zama FHEVM 0.9.0（全同态加密虚拟机）
+- **智能合约**: Solidity 0.8.24
+- **开发工具**: Hardhat
+- **UI框架**: Tailwind CSS + DaisyUI
+- **状态管理**: React Context API + Zustand
+- **Web3集成**: Wagmi + RainbowKit
+- **数据可视化**: Recharts
+- **包管理**: pnpm (Monorepo)
+
+### 系统架构
+
+```
+┌─────────────────────────────────────────┐
+│         React Frontend (Next.js)        │
+│  - 钱包连接 (RainbowKit)                 │
+│  - FHEVM 初始化                          │
+│  - 加密/解密操作                         │
+│  - 数据可视化                            │
+└──────────────┬──────────────────────────┘
+               │
+┌──────────────▼──────────────────────────┐
+│      FHEVM SDK (中间层)                   │
+│  - 加密数据生成                           │
+│  - 解密请求处理                           │
+│  - Relayer 交互                          │
+└──────────────┬──────────────────────────┘
+               │
+┌──────────────▼──────────────────────────┐
+│    ConfidentialSalary Contract          │
+│  - 加密数据存储                           │
+│  - 权限管理                              │
+│  - 加密计算                              │
+│  - 事件系统                              │
+└──────────────┬──────────────────────────┘
+               │
+┌──────────────▼──────────────────────────┐
+│         Ethereum Sepolia                │
+│         (FHEVM Network)                 │
+└─────────────────────────────────────────┘
+```
+
+---
+
+## 🌐 在线演示
+
+### 🚀 生产环境
+- **Vercel 部署**: [https://salary-privacy.vercel.app](https://salary-privacy.vercel.app)
+- **GitHub 仓库**: [查看源代码](https://github.com/your-username/SalaryPrivacy)
+
+### 📹 演示视频
+- [YouTube 演示视频](#) - 完整功能演示（即将发布）
+
+---
+
+## 🚀 快速开始
+
+### 前置要求
+
+- **Node.js** 18+ 
+- **pnpm** (推荐) 或 npm
+- **MetaMask** 浏览器扩展
+- **Sepolia ETH** (用于测试网交易)
+
+### 安装步骤
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/your-username/SalaryPrivacy.git
+cd SalaryPrivacy
+
+# 2. 安装依赖
+pnpm install
+
+# 3. 构建 SDK
+pnpm sdk:build
+
+# 4. 启动开发服务器
+cd packages/nextjs
+pnpm dev
+```
+
+### 访问应用
+
+1. 打开浏览器访问 `http://localhost:3000`
+2. 点击 "连接钱包" 按钮
+3. 选择 MetaMask 并确认连接
+4. 切换到 Sepolia 测试网
+5. 等待 FHEVM 初始化完成
+
+### 快速体验
+
+1. 在 Dashboard 页面，点击 **"一键生成演示数据"** 按钮
+2. 系统会自动创建：
+   - 4 个部门（技术部、市场部、财务部、人事部）
+   - 7 名员工（不同角色和部门）
+   - 7 条加密薪资记录
+3. 现在可以体验所有功能模块
+
+---
+
+## 📊 功能特性
+
+### 1. 部门管理
+- ✅ 创建部门并设置加密预算
+- ✅ 查看部门列表和详情
+- ✅ 部门员工统计
+- ✅ 预算合规检查
+
+### 2. 员工管理
+- ✅ 添加员工并分配角色
+- ✅ 员工列表展示
+- ✅ 角色和部门分配
+- ✅ 员工信息管理
+
+### 3. 薪资管理
+- ✅ 提交加密薪资（FHE 加密）
+- ✅ 查看加密薪资记录
+- ✅ 员工查看自己的薪资（自动解密）
+- ✅ 加密过程可视化
+
+### 4. 统计分析
+- ✅ 加密加法计算
+- ✅ 加密平均值计算
+- ✅ 加密数据比较
+- ✅ 范围查询
+- ✅ 统计图表展示（Recharts）
+- ✅ 预算合规检查
+
+### 5. 权限管理
+- ✅ 角色权限矩阵展示
+- ✅ 角色分配功能
+- ✅ 权限说明文档
+
+### 6. 技术亮点
+- ✅ FHE 加密过程可视化
+- ✅ 安全证明展示
+- ✅ 合规性说明（GDPR、CCPA）
+- ✅ Zama FHEVM 集成展示
+- ✅ 系统架构图
+
+---
+
+## 🏗️ 项目结构
+
+```
+SalaryPrivacy/
+├── packages/
+│   ├── nextjs/                          # Next.js 前端应用
+│   │   ├── app/
+│   │   │   ├── confidential-salary/    # 主应用模块
+│   │   │   │   ├── _components/        # 组件
+│   │   │   │   │   ├── Dashboard.tsx
+│   │   │   │   │   ├── DepartmentManagement.tsx
+│   │   │   │   │   ├── EmployeeManagement.tsx
+│   │   │   │   │   ├── SalaryManagement.tsx
+│   │   │   │   │   ├── StatisticsAnalysis.tsx
+│   │   │   │   │   ├── PermissionManagement.tsx
+│   │   │   │   │   ├── FHECalculationsDemo.tsx
+│   │   │   │   │   ├── DemoDataGenerator.tsx
+│   │   │   │   │   ├── OnboardingGuide.tsx
+│   │   │   │   │   └── ...
+│   │   │   │   ├── _context/
+│   │   │   │   │   └── DataContext.tsx  # 全局数据管理
+│   │   │   │   └── page.tsx
+│   │   │   ├── page.tsx                 # 首页
+│   │   │   └── layout.tsx
+│   │   ├── hooks/
+│   │   │   └── confidential-salary/
+│   │   │       └── useConfidentialSalary.tsx  # 智能合约交互 Hook
+│   │   └── package.json
+│   │
+│   ├── hardhat/                         # 智能合约
+│   │   ├── contracts/
+│   │   │   └── ConfidentialSalary.sol  # 主合约
+│   │   ├── scripts/
+│   │   │   └── deploy.ts               # 部署脚本
+│   │   ├── test/
+│   │   │   ├── ConfidentialSalary.test.ts
+│   │   │   └── ConfidentialSalary.enhanced.test.ts
+│   │   └── hardhat.config.ts
+│   │
+│   └── fhevm-sdk/                      # FHEVM SDK (workspace)
+│
+├── README.md                            # 本文件
+├── DEPLOYMENT_GUIDE.md                  # 部署指南
+├── DEMO_VIDEO_GUIDE.md                  # 演示视频指南
+└── package.json
+```
+
+---
+
+## 💻 开发
+
+### 本地开发
+
+```bash
+# 启动开发服务器
+cd packages/nextjs
+pnpm dev
+
+# 在另一个终端运行智能合约测试
+cd packages/hardhat
+pnpm test
+```
+
+### 代码规范
+
+```bash
+# 格式化代码
+pnpm format
+
+# 检查代码质量
+pnpm lint
+
+# 类型检查
+pnpm check-types
+```
+
+### 构建生产版本
+
+```bash
+cd packages/nextjs
+pnpm build
+pnpm start
+```
+
+---
+
+## 🔧 智能合约
+
+### 合约功能
+
+`ConfidentialSalary.sol` 智能合约提供以下功能：
+
+- **部门管理**: `createDepartment()`, `getDepartment()`
+- **员工管理**: `addEmployee()`, `getDepartmentEmployees()`
+- **薪资管理**: `submitSalary()`, `getEncryptedSalary()`
+- **加密统计**: 
+  - `getDepartmentTotalSalary()` - 计算部门总薪资
+  - `getDepartmentAverageSalary()` - 计算平均薪资
+  - `compareSalaries()` - 比较两个薪资
+  - `checkBudgetCompliance()` - 预算合规检查
+- **权限管理**: `assignRole()`, `roles()`
+
+### 部署合约
+
+```bash
+cd packages/hardhat
+
+# 配置环境变量
+# 创建 .env 文件
+PRIVATE_KEY=your_private_key
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
+
+# 编译合约
+pnpm compile
+
+# 部署到 Sepolia
+pnpm deploy:sepolia
+```
+
+详细部署指南请参考 [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
+
+---
+
+## 🧪 测试
+
+### 运行测试
+
+```bash
+cd packages/hardhat
+pnpm test
+```
+
+### 测试覆盖
+
+- ✅ 部署和初始化测试
+- ✅ 部门管理测试
+- ✅ 员工管理测试
+- ✅ 薪资管理测试
+- ✅ 权限控制测试
+- ✅ 加密统计计算测试
+- ✅ 边界情况测试
+
+---
+
+## 📚 文档
+
+### 主要文档
+
+- [部署指南](./DEPLOYMENT_GUIDE.md) - 智能合约部署和前端连接
+- [演示视频指南](./DEMO_VIDEO_GUIDE.md) - 视频录制指南
+- [无旁白视频脚本](./VIDEO_SCRIPT_NO_VOICE.md) - 视频脚本
+- [视频录制步骤](./VIDEO_RECORDING_STEP_BY_STEP.md) - 详细录制步骤
+
+### API 文档
+
+#### useConfidentialSalary Hook
+
+```typescript
+import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
+
+const {
+  // 状态
+  fhevmStatus,
+  isPending,
+  isConfirming,
+  isConfirmed,
+  
+  // 功能
+  createDepartment,
+  addEmployee,
+  submitSalary,
+  assignRole,
+  getDepartmentTotalSalary,
+  decryptSalary,
+} = useConfidentialSalary();
+```
+
+详细 API 文档请参考 [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md#前端与智能合约连接)
+
+---
+
+## 🎯 使用场景
+
+### 企业薪资管理
+- 保护员工薪资隐私
+- 支持薪资统计分析
+- 符合数据保护法规
+
+### 隐私保护数据分析
+- 在不解密原始数据的情况下进行分析
+- 支持复杂的统计计算
+- 确保数据隐私和安全
+
+### 合规性要求高的场景
+- GDPR 合规
+- CCPA 合规
+- 其他数据保护法规
+
+---
+
+## 🏆 项目亮点
+
+### 技术亮点
+- ✅ **完整的 FHE 实现** - 使用 Zama FHEVM 0.9.0
+- ✅ **多种加密计算** - 加法、平均值、比较、范围查询
+- ✅ **智能合约集成** - 完整的 Solidity 合约实现
+- ✅ **现代化前端** - Next.js 15 + React 19 + TypeScript
+- ✅ **专业 UI/UX** - 响应式设计 + 动画效果
+
+### 业务亮点
+- ✅ **解决真实问题** - 企业级薪资管理场景
+- ✅ **完整功能** - 从数据录入到统计分析
+- ✅ **权限系统** - 细粒度的角色权限控制
+- ✅ **合规性** - 符合数据保护法规
+
+---
+
+## 🔒 安全特性
+
+- **全同态加密** - 数据全程加密，智能合约无法看到原始值
+- **零知识保证** - 完全透明且不可篡改
+- **权限控制** - 基于角色的访问控制
+- **加密计算** - 在不解密的情况下进行计算
+- **审计日志** - 所有操作都有事件记录
+
+---
+
+## 📈 路线图
+
+### 已完成 ✅
+- [x] 前端 UI/UX 设计和实现
+- [x] 智能合约开发和测试
+- [x] FHEVM 集成
+- [x] 数据可视化
+- [x] 权限管理系统
+- [x] 部署到 Vercel
+
+### 进行中 🚧
+- [ ] 智能合约部署到 Sepolia
+- [ ] 前端与智能合约完整连接
+- [ ] 演示视频录制
+
+### 计划中 📅
+- [ ] 更多 FHE 计算操作
+- [ ] 性能优化
+- [ ] 移动端适配
+- [ ] 多语言支持
+
+---
+
+## 🤝 贡献
+
+欢迎贡献！请遵循以下步骤：
+
+1. Fork 本仓库
+2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 开启 Pull Request
+
+---
+
+## 📝 许可证
+
+本项目采用 MIT 许可证 - 查看 [LICENSE](./LICENSE) 文件了解详情
+
+---
+
+## 🙏 致谢
+
+- [Zama](https://www.zama.ai/) - 提供 FHEVM 技术
+- [FHEVM SDK](https://github.com/zama-ai/fhevm) - FHEVM 开发工具
+- [Next.js](https://nextjs.org/) - React 框架
+- [Hardhat](https://hardhat.org/) - 智能合约开发工具
+
+---
+
+## 📞 联系方式
+
+- **项目地址**: [GitHub](https://github.com/your-username/SalaryPrivacy)
+- **在线演示**: [Vercel](https://salary-privacy.vercel.app)
+- **问题反馈**: [Issues](https://github.com/your-username/SalaryPrivacy/issues)
+
+---
+
+## 🎉 特别说明
+
+本项目是 **Zama Developer Program** 的参赛项目，展示了 FHE 技术在实际业务场景中的应用。项目完全开源，欢迎学习和使用。
+
+**Built with Privacy for the Zama Developer Program** 🔐
+
+---
+
+<div align="center">
+
+**⭐ 如果这个项目对你有帮助，请给个 Star！⭐**
+
+Made with ❤️ using FHEVM
+
+</div>

@@ -10,6 +10,7 @@ import { StatisticsAnalysis } from "./_components/StatisticsAnalysis";
 import { PermissionManagement } from "./_components/PermissionManagement";
 import { OnboardingGuide } from "./_components/OnboardingGuide";
 import { DataProvider } from "./_context/DataContext";
+import { VideoSubtitles } from "./_components/VideoSubtitles";
 import { StatusBadges } from "./_components/StatusBadges";
 import { useState, useEffect } from "react";
 
@@ -205,6 +206,9 @@ export default function ConfidentialSalaryPage() {
           onNavigateToTab={handleNavigateToTab}
         />
       )}
+
+      {/* Video Subtitles - 用于无旁白视频录制 */}
+      <VideoSubtitles />
       </div>
     </DataProvider>
   );

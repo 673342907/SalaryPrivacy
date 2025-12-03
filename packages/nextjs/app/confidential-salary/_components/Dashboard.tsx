@@ -11,6 +11,7 @@ import { ZamaConnection } from "./ZamaConnection";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import Link from "next/link";
 import { notification } from "~~/utils/helper/notification";
+import { VideoRecordingHelper } from "./VideoRecordingHelper";
 
 interface ConfidentialSalaryDashboardProps {
   onStartGuide?: () => void;
@@ -93,6 +94,9 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           </span>
         </div>
       </div>
+
+      {/* Video Recording Helper */}
+      <VideoRecordingHelper />
 
       {/* Demo Data Generator - 更突出 */}
       <div className="bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 backdrop-blur-md rounded-xl shadow-lg p-6 border-2 border-yellow-400/50">
