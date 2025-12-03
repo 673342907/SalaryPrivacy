@@ -17,6 +17,7 @@ interface ConfidentialSalaryDashboardProps {
 
 export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalaryDashboardProps) {
   const { address, chainId: wagmiChainId } = useAccount();
+  const [demoData, setDemoData] = useState<any>(null);
 
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
@@ -32,7 +33,9 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
   
   // 对于真实网络（Sepolia），需要 relayer SDK
   // 对于 mock chain，使用本地 Hardhat 节点
-  const initialMockChains = isMockChain ? { 31337: "http://localhost:8545" } : {};
+  const initialMockChains: Readonly<Record<number, string>> | undefined = isMockChain
+    ? { 31337: "http://localhost:8545" }
+    : undefined;
 
   // 检查 Relayer SDK 是否已加载（用于 Sepolia）
   const [relayerSDKReady, setRelayerSDKReady] = useState(false);
