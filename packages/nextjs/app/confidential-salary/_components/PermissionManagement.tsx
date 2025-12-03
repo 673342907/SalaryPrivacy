@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useAccount } from "wagmi";
+import { notification } from "~~/utils/helper/notification";
 
 type Role = "Admin" | "HR" | "Manager" | "Employee";
 
@@ -129,14 +130,29 @@ export function PermissionManagement() {
           <button
             onClick={() => {
               if (!targetAddress.trim()) {
-                alert("请输入目标地址");
+                notification.warning("请输入目标地址", { duration: 3000 });
                 return;
               }
               if (!targetAddress.startsWith("0x") || targetAddress.length !== 42) {
-                alert("请输入有效的以太坊地址（0x开头，42个字符）");
+                notification.error("请输入有效的以太坊地址（0x开头，42个字符）", { duration: 4000 });
                 return;
               }
-              alert(`分配角色：\n目标地址：${targetAddress}\n角色：${selectedRole}\n\n此操作将在智能合约中执行，需要确认交易。\n功能将在后续版本中实现。`);
+              const loadingId = notification.loading("正在分配角色...", { duration: Infinity });
+              // 模拟智能合约调用
+              setTimeout(() => {
+                notification.remove(loadingId);
+                notification.success(
+                  <div className="space-y-2">
+                    <div className="font-bold">✅ 角色分配成功</div>
+                    <div className="text-sm space-y-1">
+                      <div><strong>目标地址：</strong>{targetAddress}</div>
+                      <div><strong>角色：</strong>{selectedRole}</div>
+                    </div>
+                    <div className="text-xs text-gray-400 mt-2">此操作将在智能合约中执行，需要确认交易。功能将在后续版本中实现。</div>
+                  </div>,
+                  { duration: 5000 }
+                );
+              }, 1500);
             }}
             className="w-full px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
           >

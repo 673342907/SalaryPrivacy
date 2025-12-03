@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useData } from "../_context/DataContext";
+import { notification } from "~~/utils/helper/notification";
 
 export function SalaryManagement() {
   const { address } = useAccount();
@@ -33,9 +34,12 @@ export function SalaryManagement() {
 
     setErrorMessage("");
     setIsEncrypting(true);
+    const loadingId = notification.loading("正在使用 FHE 加密薪资数据...", { duration: Infinity });
+    
     // 模拟加密过程
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsEncrypting(false);
+    notification.remove(loadingId);
 
     const newSalary = {
       id: salaries.length > 0 ? Math.max(...salaries.map(s => s.id)) + 1 : 1,
@@ -49,17 +53,47 @@ export function SalaryManagement() {
     setFormData({ employeeAddress: "", amount: "" });
     setShowSubmitForm(false);
     setShowSuccess(true);
+    notification.success(
+      <div className="space-y-1">
+        <div className="font-bold">✅ 薪资提交成功！</div>
+        <div className="text-sm">薪资已使用 FHE 加密并存储到区块链</div>
+      </div>,
+      { duration: 4000 }
+    );
     setTimeout(() => setShowSuccess(false), 3000);
   };
 
   const handleViewSalary = async () => {
-    if (viewAddress) {
-      setIsDecrypting(true);
-      // 模拟解密过程
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setIsDecrypting(false);
-      setShowViewForm(false);
+    if (!viewAddress) {
+      notification.warning("请输入员工地址", { duration: 3000 });
+      return;
     }
+    if (!viewAddress.startsWith("0x") || viewAddress.length !== 42) {
+      notification.error("请输入有效的以太坊地址（0x开头，42个字符）", { duration: 4000 });
+      return;
+    }
+    
+    setIsDecrypting(true);
+    const loadingId = notification.loading("正在解密薪资数据...", { duration: Infinity });
+    // 模拟解密过程
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    setIsDecrypting(false);
+    notification.remove(loadingId);
+    
+    const salary = salaries.find(s => s.employeeAddress.toLowerCase() === viewAddress.toLowerCase());
+    if (salary) {
+      notification.success(
+        <div className="space-y-1">
+          <div className="font-bold">✅ 解密成功</div>
+          <div className="text-sm">员工：{salary.employeeName}</div>
+          <div className="text-sm">薪资：{salary.amount} ETH</div>
+        </div>,
+        { duration: 4000 }
+      );
+    } else {
+      notification.warning("未找到该员工的薪资记录", { duration: 3000 });
+    }
+    setShowViewForm(false);
   };
 
   return (

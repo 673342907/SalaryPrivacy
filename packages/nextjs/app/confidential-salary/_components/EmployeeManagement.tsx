@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useData } from "../_context/DataContext";
+import { notification } from "~~/utils/helper/notification";
 
 type Role = "Admin" | "HR" | "Manager" | "Employee";
 
@@ -274,7 +275,19 @@ export function EmployeeManagement() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <button
                         onClick={() => {
-                          alert(`编辑员工：\n姓名：${emp.name}\n地址：${emp.address}\n角色：${emp.role}\n部门：${emp.department}\n\n编辑功能将在后续版本中实现。`);
+                          notification.info(
+                            <div className="space-y-2">
+                              <div className="font-bold">编辑员工</div>
+                              <div className="text-sm space-y-1">
+                                <div><strong>姓名：</strong>{emp.name}</div>
+                                <div><strong>地址：</strong>{emp.address}</div>
+                                <div><strong>角色：</strong>{emp.role}</div>
+                                <div><strong>部门：</strong>{emp.department}</div>
+                              </div>
+                              <div className="text-xs text-gray-400 mt-2">编辑功能将在后续版本中实现。</div>
+                            </div>,
+                            { duration: 4000 }
+                          );
                         }}
                         className="text-blue-600 hover:text-blue-900 mr-4 font-medium"
                       >
@@ -282,9 +295,15 @@ export function EmployeeManagement() {
                       </button>
                       <button
                         onClick={() => {
-                          if (confirm(`确定要删除员工 "${emp.name}" 吗？\n此操作将同时删除该员工的所有薪资记录。`)) {
-                            alert("删除功能将在后续版本中实现，届时将支持删除员工及其相关数据。");
-                          }
+                          notification.warning(
+                            <div className="space-y-2">
+                              <div className="font-bold">确认删除</div>
+                              <div className="text-sm">确定要删除员工 &quot;{emp.name}&quot; 吗？</div>
+                              <div className="text-xs text-gray-400">此操作将同时删除该员工的所有薪资记录。</div>
+                              <div className="text-xs text-gray-400 mt-2">删除功能将在后续版本中实现。</div>
+                            </div>,
+                            { duration: 5000 }
+                          );
                         }}
                         className="text-red-600 hover:text-red-900 font-medium"
                       >

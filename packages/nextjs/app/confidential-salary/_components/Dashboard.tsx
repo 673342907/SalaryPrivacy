@@ -10,6 +10,7 @@ import { ComplianceBadge } from "./ComplianceBadge";
 import { ZamaConnection } from "./ZamaConnection";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import Link from "next/link";
+import { notification } from "~~/utils/helper/notification";
 
 interface ConfidentialSalaryDashboardProps {
   onStartGuide?: () => void;
@@ -109,9 +110,31 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
         <DemoDataGenerator 
           onGenerate={(data) => {
             setDemoData(data);
-            // 使用更友好的提示
+            // 使用更友好的Toast提示
             setTimeout(() => {
-              alert(`✅ 演示数据已生成！\n\n📊 已创建：\n- ${data.departments.length} 个部门\n- ${data.employees.length} 名员工\n- ${data.salaries.length} 条薪资记录\n\n💡 现在您可以：\n1. 查看各部门和员工\n2. 查看加密薪资记录\n3. 体验统计分析功能\n\n请前往上方导航栏查看！`);
+              notification.success(
+                <div className="space-y-2">
+                  <div className="font-bold text-lg">✅ 演示数据已生成！</div>
+                  <div className="text-sm">
+                    <div className="font-semibold mb-1">📊 已创建：</div>
+                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <li>{data.departments.length} 个部门</li>
+                      <li>{data.employees.length} 名员工</li>
+                      <li>{data.salaries.length} 条薪资记录</li>
+                    </ul>
+                  </div>
+                  <div className="text-sm mt-2">
+                    <div className="font-semibold">💡 现在您可以：</div>
+                    <ol className="list-decimal list-inside space-y-1 ml-2">
+                      <li>查看各部门和员工</li>
+                      <li>查看加密薪资记录</li>
+                      <li>体验统计分析功能</li>
+                    </ol>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-2">请前往上方导航栏查看！</div>
+                </div>,
+                { duration: 6000 }
+              );
             }, 500);
           }}
         />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useData } from "../_context/DataContext";
+import { notification } from "~~/utils/helper/notification";
 
 export function DepartmentManagement() {
   const { departments, addDepartment } = useData();
@@ -226,7 +227,17 @@ export function DepartmentManagement() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => {
-                        alert(`部门详情：\n名称：${dept.name}\n预算：${dept.budget} ETH（加密存储）\n员工数：${dept.employeeCount}`);
+                        notification.info(
+                          <div className="space-y-2">
+                            <div className="font-bold">部门详情</div>
+                            <div className="text-sm space-y-1">
+                              <div><strong>名称：</strong>{dept.name}</div>
+                              <div><strong>预算：</strong>{dept.budget} ETH（加密存储）</div>
+                              <div><strong>员工数：</strong>{dept.employeeCount}</div>
+                            </div>
+                          </div>,
+                          { duration: 4000 }
+                        );
                       }}
                       className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
                     >
@@ -234,7 +245,13 @@ export function DepartmentManagement() {
                     </button>
                     <button
                       onClick={() => {
-                        alert("编辑功能：\n此功能将在后续版本中实现，届时将支持修改部门名称和预算。");
+                        notification.info(
+                          <div className="space-y-1">
+                            <div className="font-bold">编辑功能</div>
+                            <div className="text-sm">此功能将在后续版本中实现，届时将支持修改部门名称和预算。</div>
+                          </div>,
+                          { duration: 4000 }
+                        );
                       }}
                       className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                     >

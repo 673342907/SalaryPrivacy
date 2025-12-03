@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { notification } from "~~/utils/helper/notification";
+import { FHECalculationsDemo } from "./FHECalculationsDemo";
 
 // 动态导入 Recharts 以避免 SSR 问题
 const RechartsCharts = dynamic(
@@ -54,6 +56,9 @@ export function StatisticsAnalysis() {
 
   return (
     <div className="space-y-6">
+      {/* FHE 计算演示 */}
+      <FHECalculationsDemo />
+
       {/* Header with Feature Description */}
       <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4 mb-6">
         <div className="flex items-start">
@@ -216,10 +221,24 @@ export function StatisticsAnalysis() {
             onClick={async () => {
               const budgetInput = (document.querySelector('input[placeholder*="预算"]') as HTMLInputElement)?.value;
               if (!budgetInput || !selectedDepartment) {
-                alert("请先选择部门并输入预算金额");
+                notification.warning("请先选择部门并输入预算金额", { duration: 3000 });
                 return;
               }
-              alert("正在使用 FHE 技术检查预算合规性...\n\n此功能将在不解密任何薪资数据的情况下，比较部门总薪资与预算。\n\n功能将在后续版本中实现完整的智能合约调用。");
+              const loadingId = notification.loading("正在使用 FHE 技术检查预算合规性...", { duration: Infinity });
+              // 模拟FHE计算过程
+              setTimeout(() => {
+                notification.remove(loadingId);
+                notification.success(
+                  <div className="space-y-2">
+                    <div className="font-bold">✅ 预算合规检查完成</div>
+                    <div className="text-sm">
+                      <div className="mb-2">此功能将在不解密任何薪资数据的情况下，比较部门总薪资与预算。</div>
+                      <div className="text-xs text-gray-400">功能将在后续版本中实现完整的智能合约调用。</div>
+                    </div>
+                  </div>,
+                  { duration: 5000 }
+                );
+              }, 2000);
             }}
             className="w-full px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
           >
