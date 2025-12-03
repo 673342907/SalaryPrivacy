@@ -112,7 +112,7 @@ export default function ConfidentialSalaryPage() {
                   Salary
                 </span>
               </h1>
-              <p className="text-sm text-gray-300">隐私保护薪资管理平台</p>
+              <p className="text-sm text-gray-200">隐私保护薪资管理平台</p>
             </div>
             <div className="flex items-center gap-4">
               <RainbowKitCustomConnectButton />
@@ -134,8 +134,8 @@ export default function ConfidentialSalaryPage() {
                   border-b-2 transition-colors
                   ${
                     activeTab === tab.id
-                      ? "border-blue-400 text-blue-300 bg-blue-500/20"
-                      : "border-transparent text-gray-300 hover:text-white hover:border-white/30"
+                      ? "border-blue-400 text-blue-200 bg-blue-500/30"
+                      : "border-transparent text-gray-200 hover:text-white hover:border-white/40"
                   }
                 `}
               >

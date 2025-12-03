@@ -70,24 +70,24 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600/80 to-indigo-700/80 backdrop-blur-md rounded-xl shadow-lg p-8 text-white border border-white/20">
+      <div className="bg-gradient-to-r from-blue-600/90 to-indigo-700/90 backdrop-blur-md rounded-xl shadow-lg p-8 text-white border border-white/30">
         <h2 className="text-3xl font-bold mb-2">欢迎使用 ConfidentialSalary</h2>
-        <p className="text-blue-100 text-lg mb-4">
+        <p className="text-blue-50 text-lg mb-4">
           基于 FHEVM 的企业级隐私保护薪资管理系统
         </p>
-        <div className="bg-white/10 rounded-lg p-4 mb-4">
-          <p className="text-sm text-blue-50">
-            <strong>💡 使用提示：</strong> 通过顶部导航栏可以访问所有功能模块。每个模块都有详细的功能说明和操作指引。
+        <div className="bg-white/20 rounded-lg p-4 mb-4">
+          <p className="text-sm text-white">
+            <strong className="text-blue-50">💡 使用提示：</strong> 通过顶部导航栏可以访问所有功能模块。每个模块都有详细的功能说明和操作指引。
           </p>
         </div>
         <div className="mt-4 flex items-center gap-2 text-sm flex-wrap">
-          <span className="bg-white/20 px-3 py-1 rounded-full">
+          <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
             🔐 全同态加密保护
           </span>
-          <span className="bg-white/20 px-3 py-1 rounded-full">
+          <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
             👥 角色权限管理
           </span>
-          <span className="bg-white/20 px-3 py-1 rounded-full">
+          <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
             📊 加密统计分析
           </span>
         </div>
@@ -103,7 +103,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
       />
 
       {/* Quick Guide */}
-      <div className="bg-blue-500/10 backdrop-blur-md border border-blue-400/30 rounded-xl p-6">
+      <div className="bg-blue-500/20 backdrop-blur-md border border-blue-400/50 rounded-xl p-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-bold text-white flex items-center">
             <span className="mr-2">📖</span>
@@ -123,37 +123,37 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             <span className="text-2xl mr-3">1️⃣</span>
             <div>
               <strong className="text-white">创建部门</strong>
-              <p className="text-gray-300">在&quot;部门管理&quot;中创建公司部门，设置加密预算</p>
+              <p className="text-gray-200">在&quot;部门管理&quot;中创建公司部门，设置加密预算</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">2️⃣</span>
             <div>
               <strong className="text-white">添加员工</strong>
-              <p className="text-gray-300">在&quot;员工管理&quot;中添加员工，分配角色和部门</p>
+              <p className="text-gray-200">在&quot;员工管理&quot;中添加员工，分配角色和部门</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">3️⃣</span>
             <div>
               <strong className="text-white">提交薪资</strong>
-              <p className="text-gray-300">在&quot;薪资管理&quot;中加密提交员工薪资数据</p>
+              <p className="text-gray-200">在&quot;薪资管理&quot;中加密提交员工薪资数据</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">4️⃣</span>
             <div>
               <strong className="text-white">查看统计</strong>
-              <p className="text-gray-300">在&quot;统计分析&quot;中查看加密数据统计结果</p>
+              <p className="text-gray-200">在&quot;统计分析&quot;中查看加密数据统计结果</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Quick Actions - Fixed */}
-      <div className="bg-white/5 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/10">
+      <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/20">
         <h3 className="text-xl font-bold text-white mb-2">快速操作</h3>
-        <p className="text-sm text-gray-300 mb-4">点击下方按钮快速跳转到对应功能模块</p>
+        <p className="text-sm text-gray-200 mb-4">点击下方按钮快速跳转到对应功能模块</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link href="/confidential-salary#departments">
             <button className="w-full p-4 border-2 border-blue-400/30 rounded-lg hover:border-blue-400/50 hover:bg-blue-500/20 transition-all text-left bg-blue-500/10 backdrop-blur-sm">
@@ -190,12 +190,12 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
       </div>
 
       {/* System Status */}
-      <div className="bg-white/5 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/10">
+      <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/20">
         <h3 className="text-xl font-bold text-white mb-4">系统状态</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="p-4 border-2 border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
+          <div className="p-4 border-2 border-white/20 rounded-lg bg-white/10 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-300">FHEVM 连接</span>
+              <span className="text-sm text-gray-200">FHEVM 连接</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                 fhevmStatus === "ready" 
                   ? "bg-green-100 text-green-800" 
@@ -214,7 +214,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
                   : "⏸️ 未启动"}
               </span>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-300">
               {fhevmStatus === "ready" 
                 ? "FHEVM 实例已就绪" 
                 : fhevmStatus === "error"
@@ -245,21 +245,21 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             )}
           </div>
 
-          <div className="p-4 border-2 border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
+          <div className="p-4 border-2 border-white/20 rounded-lg bg-white/10 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-300">钱包地址</span>
-              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30">
+              <span className="text-sm text-gray-100 font-medium">钱包地址</span>
+              <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/40 text-blue-50 border border-blue-400/60">
                 {address ? "✓ 已连接" : "未连接"}
               </span>
             </div>
-            <p className="text-xs text-gray-400 font-mono break-all">
+            <p className="text-xs text-gray-100 font-mono break-all font-medium">
               {address ? `${address.slice(0, 10)}...${address.slice(-8)}` : "请连接钱包"}
             </p>
           </div>
 
-          <div className="p-4 border-2 border-white/10 rounded-lg bg-white/5 backdrop-blur-sm">
+          <div className="p-4 border-2 border-white/20 rounded-lg bg-white/10 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-300">网络</span>
+              <span className="text-sm text-gray-200">网络</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                 chainId === 11155111 
                   ? "bg-purple-100 text-purple-800" 
@@ -274,7 +274,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
                   : `Chain ${chainId}`}
               </span>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-300">
               {chainId === 11155111 
                 ? "测试网络（需要 Relayer SDK）" 
                 : chainId === 31337
@@ -282,7 +282,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
                 : `Chain ${chainId}（请切换到 Sepolia 或本地网络）`}
             </p>
             {chainId === 11155111 && fhevmStatus === "error" && (
-              <p className="text-xs text-orange-600 mt-1">
+              <p className="text-xs text-orange-400 mt-1 font-medium">
                 ⚠️ Sepolia 需要 Relayer SDK，建议使用本地 Hardhat 节点进行开发
               </p>
             )}
@@ -306,45 +306,45 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
       <TechnicalComparison />
 
       {/* Feature Highlights */}
-      <div className="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 backdrop-blur-md rounded-xl shadow-lg p-6 border border-white/10">
+      <div className="bg-gradient-to-br from-indigo-500/30 to-purple-500/30 backdrop-blur-md rounded-xl shadow-lg p-6 border border-white/20">
         <h3 className="text-xl font-bold text-white mb-4">✨ 核心功能亮点</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">🔐</span>
               <h4 className="font-semibold text-white">全同态加密</h4>
             </div>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-200">
               所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
             </p>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">👥</span>
               <h4 className="font-semibold text-white">角色权限管理</h4>
             </div>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-200">
               基于智能合约的 RBAC 系统，确保数据安全和访问控制
             </p>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">📊</span>
               <h4 className="font-semibold text-white">加密统计分析</h4>
             </div>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-200">
               在不解密原始数据的情况下计算平均值、总和、分布等统计信息
             </p>
           </div>
 
-          <div className="bg-white/5 backdrop-blur-sm rounded-lg p-4 border border-white/10 hover:bg-white/10 transition-all">
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">🏢</span>
               <h4 className="font-semibold text-white">企业级应用</h4>
             </div>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-gray-200">
               完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点
             </p>
           </div>

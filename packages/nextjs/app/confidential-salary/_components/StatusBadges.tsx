@@ -101,7 +101,7 @@ export function StatusBadges() {
 
       {/* Right: Wallet Icon (if connected) */}
       {address && (
-        <div className="flex items-center gap-2 px-4 py-2 rounded-lg backdrop-blur-sm bg-blue-500/20 border border-blue-400/50 text-blue-100">
+        <div className="flex items-center gap-2 px-4 py-2 rounded-lg backdrop-blur-sm bg-blue-500/30 border border-blue-400/60 text-blue-50">
           <span className="text-lg">🦊</span>
           <span className="text-sm font-semibold">Wallet Connected</span>
         </div>

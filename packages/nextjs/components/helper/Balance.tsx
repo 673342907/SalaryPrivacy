@@ -49,7 +49,7 @@ export const Balance = ({ address, className = "" }: BalanceProps) => {
     <div className={`btn btn-sm btn-ghost flex flex-col font-normal items-center hover:bg-transparent ${className}`}>
       <div className="w-full flex items-center justify-center">
         <>
-          <span>{formattedBalance.toFixed(4)}</span>
+          <span className="font-semibold">{formattedBalance.toFixed(4)}</span>
           <span className="text-[0.8em] font-bold ml-1">{targetNetwork.nativeCurrency.symbol}</span>
         </>
       </div>
