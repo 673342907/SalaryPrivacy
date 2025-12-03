@@ -150,16 +150,16 @@ export default function Home() {
               >
                 <div
                   className={`
-                  bg-white/5 backdrop-blur-md rounded-xl shadow-lg p-6 
-                  border-2 border-white/10
-                  hover:border-white/30
-                  hover:bg-white/10
-                  hover:shadow-xl
-                  transition-all duration-300
-                  cursor-pointer
-                  h-full
-                  relative
-                `}
+                    bg-white/5 backdrop-blur-md rounded-xl shadow-lg p-6 
+                    border-2 border-white/10
+                    hover:border-white/30
+                    hover:bg-white/10
+                    hover:shadow-xl
+                    transition-all duration-300
+                    cursor-pointer
+                    h-full
+                    relative
+                  `}
                 >
                   <div className="text-4xl mb-4">{feature.icon}</div>
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-400 transition-colors">
@@ -204,9 +204,7 @@ export default function Home() {
                   🚀 进入 ConfidentialSalary 平台
                 </button>
               </Link>
-              <p className="text-sm text-gray-400">
-                💡 首次进入会自动显示使用引导，帮助您快速了解所有功能
-              </p>
+              <p className="text-sm text-gray-400">💡 首次进入会自动显示使用引导，帮助您快速了解所有功能</p>
             </div>
           )}
         </div>
@@ -244,27 +242,19 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-semibold mb-2">🔐 FHE 加密计算</h3>
-              <p className="text-blue-100 text-sm">
-                在不解密的情况下进行薪资统计和预算比较，真正实现隐私保护
-              </p>
+              <p className="text-blue-100 text-sm">在不解密的情况下进行薪资统计和预算比较，真正实现隐私保护</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">👥 权限控制</h3>
-              <p className="text-blue-100 text-sm">
-                基于智能合约的角色权限系统，确保数据安全和访问控制
-              </p>
+              <p className="text-blue-100 text-sm">基于智能合约的角色权限系统，确保数据安全和访问控制</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">📊 统计分析</h3>
-              <p className="text-blue-100 text-sm">
-                支持部门统计、薪资分布、预算合规检查等复杂分析功能
-              </p>
+              <p className="text-blue-100 text-sm">支持部门统计、薪资分布、预算合规检查等复杂分析功能</p>
             </div>
             <div>
               <h3 className="font-semibold mb-2">🏢 企业级应用</h3>
-              <p className="text-blue-100 text-sm">
-                完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点
-              </p>
+              <p className="text-blue-100 text-sm">完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点</p>
             </div>
           </div>
         </div>
