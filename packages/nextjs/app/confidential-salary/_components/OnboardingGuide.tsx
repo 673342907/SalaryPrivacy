@@ -16,7 +16,7 @@ const steps: Step[] = [
   {
     id: 1,
     title: "快速开始",
-    description: "点击 Dashboard 中的"一键生成演示数据"按钮，系统会自动创建部门、员工和薪资数据，让您立即体验所有功能。",
+    description: "点击 Dashboard 中的&quot;一键生成演示数据&quot;按钮，系统会自动创建部门、员工和薪资数据，让您立即体验所有功能。",
     icon: "🚀",
     action: "返回 Dashboard",
     tab: "dashboard",
