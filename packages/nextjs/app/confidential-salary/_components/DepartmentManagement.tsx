@@ -94,19 +94,50 @@ export function DepartmentManagement() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                部门名称
+                部门名称 <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="例如：技术部、市场部"
+                placeholder="例如：技术部、市场部、财务部"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                autoFocus
               />
+              <div className="mt-1 flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, name: "技术部" })}
+                  className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                >
+                  技术部
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, name: "市场部" })}
+                  className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                >
+                  市场部
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, name: "财务部" })}
+                  className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                >
+                  财务部
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, name: "人事部" })}
+                  className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded hover:bg-blue-200"
+                >
+                  人事部
+                </button>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                部门预算（加密存储）
+                部门预算（ETH，加密存储） <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -115,6 +146,29 @@ export function DepartmentManagement() {
                 placeholder="例如：100000"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
+              <div className="mt-1 flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, budget: "100000" })}
+                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                >
+                  10万
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, budget: "200000" })}
+                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                >
+                  20万
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, budget: "500000" })}
+                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                >
+                  50万
+                </button>
+              </div>
               <p className="text-xs text-gray-500 mt-1">
                 💡 预算将以加密形式存储在区块链上
               </p>
@@ -170,10 +224,20 @@ export function DepartmentManagement() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
+                    <button
+                      onClick={() => {
+                        alert(`部门详情：\n名称：${dept.name}\n预算：${dept.budget} ETH（加密存储）\n员工数：${dept.employeeCount}`);
+                      }}
+                      className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
+                    >
                       查看详情
                     </button>
-                    <button className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
+                    <button
+                      onClick={() => {
+                        alert("编辑功能：\n此功能将在后续版本中实现，届时将支持修改部门名称和预算。");
+                      }}
+                      className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+                    >
                       编辑
                     </button>
                   </div>

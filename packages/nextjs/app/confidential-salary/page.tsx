@@ -30,6 +30,35 @@ export default function ConfidentialSalaryPage() {
     }
   }, [isConnected]);
 
+  // 监听 hash 变化，自动切换 tab
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1); // 移除 # 号
+      if (hash && ["dashboard", "departments", "employees", "salary", "statistics", "permissions"].includes(hash)) {
+        setActiveTab(hash as TabType);
+        // 滚动到对应区域
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
+    };
+
+    // 初始检查 hash
+    handleHashChange();
+
+    // 监听 hash 变化
+    window.addEventListener("hashchange", handleHashChange);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  }, []);
+
   const handleCloseGuide = () => {
     setShowGuide(false);
     if (typeof window !== "undefined") {

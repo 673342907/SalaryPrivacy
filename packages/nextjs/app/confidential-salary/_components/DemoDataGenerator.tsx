@@ -56,45 +56,51 @@ export function DemoDataGenerator({ onGenerate }: DemoDataGeneratorProps) {
   };
 
   return (
-    <div className="bg-gradient-to-r from-indigo-500/80 to-purple-600/80 backdrop-blur-md rounded-xl shadow-lg p-6 text-white border border-white/20">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h3 className="text-xl font-bold mb-1">🚀 快速演示</h3>
-          <p className="text-indigo-100 text-sm">
-            一键生成演示数据，快速体验所有功能
-          </p>
-        </div>
-        <div className="text-4xl">✨</div>
-      </div>
-      
-      <div className="bg-white/10 rounded-lg p-4 mb-4">
-        <p className="text-sm text-white/90 mb-2">
-          <strong>将生成：</strong>
+    <div className="bg-white/10 rounded-lg p-4">
+      <div className="bg-white/10 rounded-lg p-3 mb-4">
+        <p className="text-sm text-white/90 mb-2 font-semibold">
+          ✨ 将自动生成：
         </p>
-        <ul className="text-sm text-white/80 space-y-1">
-          <li>✅ 4 个部门（技术部、市场部、财务部、人事部）</li>
-          <li>✅ 5 名员工（不同角色和部门）</li>
-          <li>✅ 5 条加密薪资记录</li>
-        </ul>
+        <div className="grid grid-cols-3 gap-2 text-xs">
+          <div className="text-center">
+            <div className="text-2xl mb-1">🏢</div>
+            <div className="text-white font-semibold">4 个部门</div>
+            <div className="text-white/70">技术/市场/财务/人事</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl mb-1">👥</div>
+            <div className="text-white font-semibold">5 名员工</div>
+            <div className="text-white/70">不同角色</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl mb-1">💰</div>
+            <div className="text-white font-semibold">5 条薪资</div>
+            <div className="text-white/70">已加密</div>
+          </div>
+        </div>
       </div>
 
       <button
         onClick={handleGenerate}
         disabled={isGenerating}
-        className="w-full px-6 py-3 bg-white text-indigo-600 rounded-lg hover:bg-indigo-50 transition-colors font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        className="w-full px-6 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-lg hover:from-yellow-300 hover:to-orange-400 transition-all font-bold text-lg shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 transform hover:scale-105"
       >
         {isGenerating ? (
           <>
-            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-indigo-600"></div>
-            <span>正在生成演示数据...</span>
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+            <span>正在生成...</span>
           </>
         ) : (
           <>
-            <span>✨</span>
+            <span className="text-2xl">✨</span>
             <span>一键生成演示数据</span>
+            <span className="text-xl">→</span>
           </>
         )}
       </button>
+      <p className="text-xs text-white/70 text-center mt-3">
+        💡 生成后可直接查看所有模块，无需手动创建
+      </p>
     </div>
   );
 }

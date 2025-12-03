@@ -126,7 +126,20 @@ export function PermissionManagement() {
               ))}
             </select>
           </div>
-          <button className="w-full px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold">
+          <button
+            onClick={() => {
+              if (!targetAddress.trim()) {
+                alert("请输入目标地址");
+                return;
+              }
+              if (!targetAddress.startsWith("0x") || targetAddress.length !== 42) {
+                alert("请输入有效的以太坊地址（0x开头，42个字符）");
+                return;
+              }
+              alert(`分配角色：\n目标地址：${targetAddress}\n角色：${selectedRole}\n\n此操作将在智能合约中执行，需要确认交易。\n功能将在后续版本中实现。`);
+            }}
+            className="w-full px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
+          >
             分配角色（仅 Admin）
           </button>
         </div>

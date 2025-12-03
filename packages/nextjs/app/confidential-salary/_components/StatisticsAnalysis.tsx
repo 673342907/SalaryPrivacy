@@ -212,7 +212,17 @@ export function StatisticsAnalysis() {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
             />
           </div>
-          <button className="w-full px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold">
+          <button
+            onClick={async () => {
+              const budgetInput = (document.querySelector('input[placeholder*="预算"]') as HTMLInputElement)?.value;
+              if (!budgetInput || !selectedDepartment) {
+                alert("请先选择部门并输入预算金额");
+                return;
+              }
+              alert("正在使用 FHE 技术检查预算合规性...\n\n此功能将在不解密任何薪资数据的情况下，比较部门总薪资与预算。\n\n功能将在后续版本中实现完整的智能合约调用。");
+            }}
+            className="w-full px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
+          >
             检查预算合规（不解密薪资）
           </button>
         </div>

@@ -8,7 +8,7 @@ type Role = "Admin" | "HR" | "Manager" | "Employee";
 
 export function EmployeeManagement() {
   const { address } = useAccount();
-  const { employees, addEmployee } = useData();
+  const { employees, addEmployee, departments } = useData();
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
     address: "",
@@ -95,22 +95,33 @@ export function EmployeeManagement() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                钱包地址
+                钱包地址 <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                placeholder="0x..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
-              />
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={formData.address}
+                  onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                  placeholder="0x..."
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent font-mono text-sm"
+                />
+                {address && (
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, address })}
+                    className="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 text-xs font-medium whitespace-nowrap"
+                  >
+                    使用我的地址
+                  </button>
+                )}
+              </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 使用当前钱包地址：{address ? `${address.slice(0, 10)}...` : "未连接"}
+                💡 {address ? `当前钱包：${address.slice(0, 10)}...${address.slice(-8)}` : "请先连接钱包"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                员工姓名
+                员工姓名 <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -118,7 +129,31 @@ export function EmployeeManagement() {
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 placeholder="例如：张三"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                autoFocus
               />
+              <div className="mt-1 flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, name: "张三" })}
+                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                >
+                  张三
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, name: "李四" })}
+                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                >
+                  李四
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, name: "王五" })}
+                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                >
+                  王五
+                </button>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -137,15 +172,37 @@ export function EmployeeManagement() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                部门
+                部门 <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.department}
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                placeholder="例如：技术部"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-              />
+              >
+                <option value="">请选择部门</option>
+                {departments.map((dept) => (
+                  <option key={dept.id} value={dept.name}>
+                    {dept.name}
+                  </option>
+                ))}
+              </select>
+              {departments.length === 0 && (
+                <p className="text-xs text-orange-600 mt-1">
+                  ⚠️ 还没有部门，请先前往"部门管理"创建部门
+                </p>
+              )}
+              <div className="mt-1 flex gap-2 flex-wrap">
+                {departments.slice(0, 4).map((dept) => (
+                  <button
+                    key={dept.id}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, department: dept.name })}
+                    className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                  >
+                    {dept.name}
+                  </button>
+                ))}
+              </div>
             </div>
             {errorMessage && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-3">
@@ -215,10 +272,22 @@ export function EmployeeManagement() {
                       {emp.department}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <button className="text-blue-600 hover:text-blue-900 mr-4">
+                      <button
+                        onClick={() => {
+                          alert(`编辑员工：\n姓名：${emp.name}\n地址：${emp.address}\n角色：${emp.role}\n部门：${emp.department}\n\n编辑功能将在后续版本中实现。`);
+                        }}
+                        className="text-blue-600 hover:text-blue-900 mr-4 font-medium"
+                      >
                         编辑
                       </button>
-                      <button className="text-red-600 hover:text-red-900">
+                      <button
+                        onClick={() => {
+                          if (confirm(`确定要删除员工 "${emp.name}" 吗？\n此操作将同时删除该员工的所有薪资记录。`)) {
+                            alert("删除功能将在后续版本中实现，届时将支持删除员工及其相关数据。");
+                          }
+                        }}
+                        className="text-red-600 hover:text-red-900 font-medium"
+                      >
                         删除
                       </button>
                     </td>

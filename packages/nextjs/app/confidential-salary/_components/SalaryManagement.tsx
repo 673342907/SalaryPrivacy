@@ -161,22 +161,33 @@ export function SalaryManagement() {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                员工地址
+                员工地址 <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                value={formData.employeeAddress}
-                onChange={(e) => setFormData({ ...formData, employeeAddress: e.target.value })}
-                placeholder="0x..."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
-              />
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={formData.employeeAddress}
+                  onChange={(e) => setFormData({ ...formData, employeeAddress: e.target.value })}
+                  placeholder="0x..."
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
+                />
+                {address && (
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, employeeAddress: address })}
+                    className="px-3 py-2 bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 text-xs font-medium whitespace-nowrap"
+                  >
+                    使用我的地址
+                  </button>
+                )}
+              </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 使用当前钱包地址：{address ? `${address.slice(0, 10)}...` : "未连接"}
+                💡 {address ? `当前钱包：${address.slice(0, 10)}...${address.slice(-8)}` : "请先连接钱包"}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                薪资金额
+                薪资金额（ETH） <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -184,7 +195,38 @@ export function SalaryManagement() {
                 onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
                 placeholder="例如：10000"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                autoFocus
               />
+              <div className="mt-1 flex gap-2 flex-wrap">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, amount: "10000" })}
+                  className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+                >
+                  1万
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, amount: "20000" })}
+                  className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+                >
+                  2万
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, amount: "30000" })}
+                  className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+                >
+                  3万
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, amount: "50000" })}
+                  className="text-xs px-2 py-1 bg-purple-100 text-purple-700 rounded hover:bg-purple-200"
+                >
+                  5万
+                </button>
+              </div>
               <p className="text-xs text-gray-500 mt-1">
                 💡 金额将以加密形式存储在区块链上
               </p>

@@ -93,58 +93,76 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
         </div>
       </div>
 
-      {/* Demo Data Generator */}
-      <DemoDataGenerator 
-        onGenerate={(data) => {
-          setDemoData(data);
-          // 可以在这里触发其他组件的更新
-          alert(`演示数据已生成！\n- ${data.departments.length} 个部门\n- ${data.employees.length} 名员工\n- ${data.salaries.length} 条薪资记录\n\n请前往对应模块查看！`);
-        }}
-      />
+      {/* Demo Data Generator - 更突出 */}
+      <div className="bg-gradient-to-r from-yellow-500/20 via-orange-500/20 to-red-500/20 backdrop-blur-md rounded-xl shadow-lg p-6 border-2 border-yellow-400/50">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
+              <span>🚀</span>
+              <span>快速开始（推荐）</span>
+            </h3>
+            <p className="text-yellow-100 text-sm">
+              一键生成完整演示数据，立即体验所有功能，无需手动创建
+            </p>
+          </div>
+        </div>
+        <DemoDataGenerator 
+          onGenerate={(data) => {
+            setDemoData(data);
+            // 使用更友好的提示
+            setTimeout(() => {
+              alert(`✅ 演示数据已生成！\n\n📊 已创建：\n- ${data.departments.length} 个部门\n- ${data.employees.length} 名员工\n- ${data.salaries.length} 条薪资记录\n\n💡 现在您可以：\n1. 查看各部门和员工\n2. 查看加密薪资记录\n3. 体验统计分析功能\n\n请前往上方导航栏查看！`);
+            }, 500);
+          }}
+        />
+      </div>
 
-      {/* Quick Guide */}
+      {/* Quick Guide - 简化版 */}
       <div className="bg-blue-500/20 backdrop-blur-md border border-blue-400/50 rounded-xl p-6">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-bold text-white flex items-center">
             <span className="mr-2">📖</span>
-            快速开始指南
+            手动操作指南（可选）
           </h3>
           {onStartGuide && (
             <button
               onClick={onStartGuide}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold shadow-md"
             >
-              🎯 开始引导
+              🎯 详细引导
             </button>
           )}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div className="flex items-start">
-            <span className="text-2xl mr-3">1️⃣</span>
+        <p className="text-sm text-gray-200 mb-4">
+          💡 <strong>提示：</strong>建议先使用"一键生成演示数据"快速体验，如需手动创建可按以下步骤：
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <div className="flex items-start bg-white/5 rounded-lg p-3">
+            <span className="text-xl mr-2">1️⃣</span>
             <div>
               <strong className="text-white">创建部门</strong>
-              <p className="text-gray-200">在&quot;部门管理&quot;中创建公司部门，设置加密预算</p>
+              <p className="text-gray-300 text-xs">部门管理 → 创建部门</p>
             </div>
           </div>
-          <div className="flex items-start">
-            <span className="text-2xl mr-3">2️⃣</span>
+          <div className="flex items-start bg-white/5 rounded-lg p-3">
+            <span className="text-xl mr-2">2️⃣</span>
             <div>
               <strong className="text-white">添加员工</strong>
-              <p className="text-gray-200">在&quot;员工管理&quot;中添加员工，分配角色和部门</p>
+              <p className="text-gray-300 text-xs">员工管理 → 添加员工</p>
             </div>
           </div>
-          <div className="flex items-start">
-            <span className="text-2xl mr-3">3️⃣</span>
+          <div className="flex items-start bg-white/5 rounded-lg p-3">
+            <span className="text-xl mr-2">3️⃣</span>
             <div>
               <strong className="text-white">提交薪资</strong>
-              <p className="text-gray-200">在&quot;薪资管理&quot;中加密提交员工薪资数据</p>
+              <p className="text-gray-300 text-xs">薪资管理 → 提交薪资</p>
             </div>
           </div>
-          <div className="flex items-start">
-            <span className="text-2xl mr-3">4️⃣</span>
+          <div className="flex items-start bg-white/5 rounded-lg p-3">
+            <span className="text-xl mr-2">4️⃣</span>
             <div>
               <strong className="text-white">查看统计</strong>
-              <p className="text-gray-200">在&quot;统计分析&quot;中查看加密数据统计结果</p>
+              <p className="text-gray-300 text-xs">统计分析 → 查看结果</p>
             </div>
           </div>
         </div>
