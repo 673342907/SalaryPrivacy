@@ -52,7 +52,7 @@ export function ComplianceBadge() {
             <h4 className="font-semibold text-gray-900">零知识证明</h4>
           </div>
           <p className="text-xs text-gray-600">
-            使用 FHE 技术，实现"计算而不泄露"
+            使用 FHE 技术，实现&quot;计算而不泄露&quot;
           </p>
           <ul className="text-xs text-gray-600 mt-2 space-y-1">
             <li>✓ 数据全程加密</li>
@@ -76,4 +76,6 @@ export function ComplianceBadge() {
     </div>
   );
 }
+
+
 

@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
  * 在 FHEVM 初始化之前提前加载 SDK，避免初始化时的加载延迟
  */
 export function FHEVMLoader() {
-  const [loadStatus, setLoadStatus] = useState<"loading" | "loaded" | "error">("loading");
-  const [error, setError] = useState<string | null>(null);
+  const [, setLoadStatus] = useState<"loading" | "loaded" | "error">("loading");
+  const [, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // 检查是否已经加载

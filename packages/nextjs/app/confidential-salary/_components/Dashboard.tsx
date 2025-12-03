@@ -17,7 +17,6 @@ interface ConfidentialSalaryDashboardProps {
 
 export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalaryDashboardProps) {
   const { address, chainId: wagmiChainId } = useAccount();
-  const [demoData, setDemoData] = useState<any>(null);
 
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
@@ -58,7 +57,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
     }
   }, [chainId]);
 
-  const { instance: fhevmInstance, status: fhevmStatus, error: fhevmError } = useFhevm({
+  const { status: fhevmStatus, error: fhevmError } = useFhevm({
     provider,
     chainId,
     initialMockChains,
@@ -121,28 +120,28 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             <span className="text-2xl mr-3">1️⃣</span>
             <div>
               <strong className="text-white">创建部门</strong>
-              <p className="text-gray-300">在"部门管理"中创建公司部门，设置加密预算</p>
+              <p className="text-gray-300">在&quot;部门管理&quot;中创建公司部门，设置加密预算</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">2️⃣</span>
             <div>
               <strong className="text-white">添加员工</strong>
-              <p className="text-gray-300">在"员工管理"中添加员工，分配角色和部门</p>
+              <p className="text-gray-300">在&quot;员工管理&quot;中添加员工，分配角色和部门</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">3️⃣</span>
             <div>
               <strong className="text-white">提交薪资</strong>
-              <p className="text-gray-300">在"薪资管理"中加密提交员工薪资数据</p>
+              <p className="text-gray-300">在&quot;薪资管理&quot;中加密提交员工薪资数据</p>
             </div>
           </div>
           <div className="flex items-start">
             <span className="text-2xl mr-3">4️⃣</span>
             <div>
               <strong className="text-white">查看统计</strong>
-              <p className="text-gray-300">在"统计分析"中查看加密数据统计结果</p>
+              <p className="text-gray-300">在&quot;统计分析&quot;中查看加密数据统计结果</p>
             </div>
           </div>
         </div>

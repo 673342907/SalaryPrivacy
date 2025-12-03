@@ -8,7 +8,7 @@ type Role = "Admin" | "HR" | "Manager" | "Employee";
 
 export function EmployeeManagement() {
   const { address } = useAccount();
-  const { employees, setEmployees, addEmployee } = useData();
+  const { employees, addEmployee } = useData();
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
     address: "",
@@ -171,7 +171,7 @@ export function EmployeeManagement() {
           <div className="p-12 text-center">
             <div className="text-6xl mb-4">👥</div>
             <p className="text-gray-600 mb-2">还没有添加员工</p>
-            <p className="text-sm text-gray-500">点击"添加员工"按钮开始</p>
+            <p className="text-sm text-gray-500">点击&quot;添加员工&quot;按钮开始</p>
           </div>
         ) : (
           <div className="overflow-x-auto">

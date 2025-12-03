@@ -117,10 +117,12 @@ export function SecurityProof() {
       <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
         <p className="text-sm text-blue-900">
           <strong>💡 关键点：</strong> FHE 技术确保数据在加密状态下进行计算，
-          即使智能合约也无法看到原始数据，实现了真正的"计算而不泄露"。
+          即使智能合约也无法看到原始数据，实现了真正的&quot;计算而不泄露&quot;。
         </p>
       </div>
     </div>
   );
 }
+
+
 

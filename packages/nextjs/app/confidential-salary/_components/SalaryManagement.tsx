@@ -6,7 +6,7 @@ import { useData } from "../_context/DataContext";
 
 export function SalaryManagement() {
   const { address } = useAccount();
-  const { salaries, setSalaries, addSalary } = useData();
+  const { salaries, addSalary } = useData();
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [showViewForm, setShowViewForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -302,7 +302,7 @@ export function SalaryManagement() {
           <div className="p-12 text-center">
             <div className="text-6xl mb-4">💰</div>
             <p className="text-gray-600 mb-2">还没有提交薪资</p>
-            <p className="text-sm text-gray-500">点击"提交薪资"按钮开始</p>
+            <p className="text-sm text-gray-500">点击&quot;提交薪资&quot;按钮开始</p>
           </div>
         ) : (
           <div className="overflow-x-auto">

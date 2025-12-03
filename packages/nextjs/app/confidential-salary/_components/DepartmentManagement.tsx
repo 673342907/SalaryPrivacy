@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useData } from "../_context/DataContext";
 
 export function DepartmentManagement() {
-  const { departments, setDepartments, addDepartment } = useData();
+  const { departments, addDepartment } = useData();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", budget: "" });
 
@@ -67,7 +67,7 @@ export function DepartmentManagement() {
               <strong>功能说明：</strong>创建和管理公司部门，为每个部门设置加密预算。部门预算将用于后续的薪资管理和预算合规检查。
             </p>
             <p className="text-sm text-gray-600">
-              💡 <strong>使用提示：</strong>点击"创建部门"按钮，输入部门名称和预算金额（单位：ETH），预算将以加密形式存储在区块链上。
+              💡 <strong>使用提示：</strong>点击&quot;创建部门&quot;按钮，输入部门名称和预算金额（单位：ETH），预算将以加密形式存储在区块链上。
             </p>
           </div>
         </div>

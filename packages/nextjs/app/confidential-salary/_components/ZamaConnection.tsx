@@ -11,7 +11,7 @@ export function ZamaConnection() {
         <div className="text-5xl">🔬</div>
         <div>
           <h3 className="text-2xl font-bold mb-1">基于 Zama FHEVM 技术</h3>
-          <p className="text-indigo-100">Powered by Zama's Fully Homomorphic Encryption Virtual Machine</p>
+          <p className="text-indigo-100">Powered by Zama&apos;s Fully Homomorphic Encryption Virtual Machine</p>
         </div>
       </div>
 
@@ -81,4 +81,6 @@ export function ZamaConnection() {
     </div>
   );
 }
+
+
 

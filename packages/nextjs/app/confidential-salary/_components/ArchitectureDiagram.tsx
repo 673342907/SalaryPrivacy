@@ -104,7 +104,7 @@ export function ArchitectureDiagram() {
             <div className="mt-4 bg-white rounded-lg p-4">
               <p className="text-sm text-gray-700">
                 <strong>关键特性：</strong> FHEVM 是 Zama 开发的全同态加密虚拟机，
-                允许在加密数据上直接进行计算，实现了"计算而不泄露"的隐私保护。
+                允许在加密数据上直接进行计算，实现了&quot;计算而不泄露&quot;的隐私保护。
               </p>
             </div>
           </div>
@@ -189,4 +189,6 @@ export function ArchitectureDiagram() {
     </div>
   );
 }
+
+
 
