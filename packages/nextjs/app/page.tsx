@@ -3,39 +3,42 @@
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { RainbowKitCustomConnectButton } from "~~/components/helper/RainbowKitCustomConnectButton";
+import { useLocale } from "~~/contexts/LocaleContext";
 
 export default function Home() {
+  const { t } = useLocale();
   const { isConnected } = useAccount();
 
+  // 使用国际化翻译，确保所有字段都有值
   const features = [
     {
       icon: "🏢",
-      title: "部门管理",
-      description: "创建和管理公司部门，设置加密预算",
+      title: t.home.feature1 || "部门管理",
+      description: t.home.feature1Description || "创建和管理公司部门，设置加密预算",
       color: "blue",
     },
     {
       icon: "👥",
-      title: "员工管理",
-      description: "添加员工、分配角色和部门",
+      title: t.home.feature2 || "员工管理",
+      description: t.home.feature2Description || "添加员工、分配角色和部门",
       color: "green",
     },
     {
       icon: "💰",
-      title: "薪资管理",
-      description: "加密提交薪资，只有授权用户可解密查看",
+      title: t.home.feature3 || "薪资管理",
+      description: t.home.feature3Description || "加密提交薪资，只有授权用户可解密查看",
       color: "purple",
     },
     {
       icon: "📊",
-      title: "统计分析",
-      description: "在不解密原始数据的情况下进行统计计算",
+      title: t.home.feature4 || "统计分析",
+      description: t.home.feature4Description || "在不解密原始数据的情况下进行统计计算",
       color: "orange",
     },
     {
       icon: "🔐",
-      title: "权限管理",
-      description: "基于角色的访问控制：Admin、HR、Manager、Employee",
+      title: t.home.feature2 || "权限管理",
+      description: t.home.feature2Description || "基于角色的访问控制：Admin、HR、Manager、Employee",
       color: "red",
     },
     {
@@ -44,7 +47,7 @@ export default function Home() {
       description: "一键创建演示数据，快速体验所有功能",
       color: "indigo",
     },
-  ];
+  ].filter(f => f && f.title && f.description); // 过滤掉无效项
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
@@ -73,13 +76,13 @@ export default function Home() {
             Revive Privacy
           </p>
           <p className="text-lg text-gray-200 max-w-2xl mx-auto mb-6">
-            基于 FHEVM 的企业级隐私保护薪资管理系统
+            {t.home.description}
             <br />
-            <span className="text-sm text-gray-300">所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算</span>
+            <span className="text-sm text-gray-300">{t.home.subDescription}</span>
           </p>
           <div className="bg-yellow-500/20 border border-yellow-400/50 rounded-xl p-4 max-w-2xl mx-auto mb-6 backdrop-blur-sm">
             <p className="text-sm text-yellow-50 font-medium">
-              <strong className="text-yellow-100">🎯 快速开始：</strong> 连接钱包后，您可以体验完整的薪资管理功能，包括部门管理、员工管理、加密薪资提交、统计分析等。
+              <strong className="text-yellow-100">🎯 {t.locale === "en" ? "Quick Start:" : "快速开始："}</strong> {t.locale === "en" ? "After connecting your wallet, you can experience complete salary management features, including department management, employee management, encrypted salary submission, statistical analysis, etc." : "连接钱包后，您可以体验完整的薪资管理功能，包括部门管理、员工管理、加密薪资提交、统计分析等。"}
             </p>
           </div>
         </div>
@@ -87,14 +90,14 @@ export default function Home() {
         {/* Core Features */}
         <div className="bg-white/10 backdrop-blur-md rounded-2xl shadow-xl p-8 mb-12 border border-white/20">
           <h2 className="text-2xl font-bold text-white mb-6 text-center">
-            ✨ 核心特性
+            ✨ {t.home.coreFeatures}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="p-6 border-2 border-blue-400/50 rounded-xl bg-blue-500/20 backdrop-blur-sm hover:bg-blue-500/30 transition-all">
               <div className="text-3xl mb-3">🔒</div>
-              <h3 className="font-semibold text-white mb-2">全同态加密保护</h3>
+              <h3 className="font-semibold text-white mb-2">{t.home.feature1}</h3>
               <p className="text-sm text-gray-100">
-                所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
+                {t.locale === "en" ? "All salary data is stored encrypted on-chain, supporting statistical calculations without decryption" : "所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算"}
               </p>
             </div>
             <div className="p-6 border-2 border-green-400/50 rounded-xl bg-green-500/20 backdrop-blur-sm hover:bg-green-500/30 transition-all">
@@ -106,7 +109,7 @@ export default function Home() {
             </div>
             <div className="p-6 border-2 border-purple-400/50 rounded-xl bg-purple-500/20 backdrop-blur-sm hover:bg-purple-500/30 transition-all">
               <div className="text-3xl mb-3">📊</div>
-              <h3 className="font-semibold text-white mb-2">加密统计分析</h3>
+              <h3 className="font-semibold text-white mb-2">{t.home.feature3}</h3>
               <p className="text-sm text-gray-100">
                 在不解密原始数据的情况下计算平均值、总和、分布等统计信息
               </p>
@@ -156,7 +159,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-gray-200 mb-4">{feature.description}</p>
+                  <p className="text-sm text-gray-200 mb-4">{feature?.description || ""}</p>
                   <div className="text-xs text-blue-300 font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
                     点击进入 →
                   </div>
@@ -195,7 +198,7 @@ export default function Home() {
                   🚀 进入 ConfidentialSalary 平台
                 </button>
               </Link>
-              <p className="text-sm text-gray-300">💡 首次进入会自动显示使用引导，帮助您快速了解所有功能</p>
+              <p className="text-sm text-gray-300">💡 {t.home.firstTimeTip}</p>
             </div>
           )}
         </div>

@@ -12,12 +12,14 @@ import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import Link from "next/link";
 import { notification } from "~~/utils/helper/notification";
 import { VideoRecordingHelper } from "./VideoRecordingHelper";
+import { useLocale } from "~~/contexts/LocaleContext";
 
 interface ConfidentialSalaryDashboardProps {
   onStartGuide?: () => void;
 }
 
 export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalaryDashboardProps) {
+  const { t } = useLocale();
   const { address, chainId: wagmiChainId } = useAccount();
   const [demoData, setDemoData] = useState<any>(null);
 
@@ -62,35 +64,43 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
     }
   }, [chainId]);
 
+  // 只有在条件满足时才启用 FHEVM，避免初始化错误
+  const shouldEnableFhevm = useMemo(() => {
+    if (!provider) return false;
+    if (!address) return false;
+    if (isMockChain) return true; // Mock chain 总是可以启用
+    return relayerSDKReady; // Sepolia 需要 SDK 就绪
+  }, [provider, address, isMockChain, relayerSDKReady]);
+
   const { status: fhevmStatus, error: fhevmError } = useFhevm({
     provider,
     chainId,
     initialMockChains,
-    enabled: !!provider && !!address && (isMockChain || relayerSDKReady), // 只有在钱包连接且 SDK 就绪时才启用
+    enabled: shouldEnableFhevm, // 只有在条件满足时才启用
   });
 
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-600/90 to-indigo-700/90 backdrop-blur-md rounded-xl shadow-lg p-8 text-white border border-white/30">
-        <h2 className="text-3xl font-bold mb-2">欢迎使用 ConfidentialSalary</h2>
+        <h2 className="text-3xl font-bold mb-2">{t.dashboard.welcome}</h2>
         <p className="text-blue-50 text-lg mb-4">
-          基于 FHEVM 的企业级隐私保护薪资管理系统
+          {t.dashboard.description}
         </p>
         <div className="bg-white/20 rounded-lg p-4 mb-4">
           <p className="text-sm text-white">
-            <strong className="text-blue-50">💡 使用提示：</strong> 通过顶部导航栏可以访问所有功能模块。每个模块都有详细的功能说明和操作指引。
+            <strong className="text-blue-50">💡 {t.locale === "en" ? "Tip:" : "使用提示："}</strong> {t.dashboard.tip}
           </p>
         </div>
         <div className="mt-4 flex items-center gap-2 text-sm flex-wrap">
           <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
-            🔐 全同态加密保护
+            🔐 {t.dashboard.features.encryption}
           </span>
           <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
-            👥 角色权限管理
+            👥 {t.dashboard.features.permissions}
           </span>
           <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
-            📊 加密统计分析
+            📊 {t.dashboard.features.statistics}
           </span>
         </div>
       </div>
@@ -107,7 +117,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
               <span>快速开始（推荐）</span>
             </h3>
             <p className="text-yellow-100 text-sm">
-              一键生成完整演示数据，立即体验所有功能，无需手动创建
+              {t.locale === "en" ? "Generate complete demo data with one click, experience all features immediately, no manual creation needed" : "一键生成完整演示数据，立即体验所有功能，无需手动创建"}
             </p>
           </div>
         </div>
@@ -118,24 +128,24 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             setTimeout(() => {
               notification.success(
                 <div className="space-y-2">
-                  <div className="font-bold text-lg">✅ 演示数据已生成！</div>
+                  <div className="font-bold text-lg">✅ {t.locale === "en" ? "Demo Data Generated!" : "演示数据已生成！"}</div>
                   <div className="text-sm">
-                    <div className="font-semibold mb-1">📊 已创建：</div>
+                    <div className="font-semibold mb-1">📊 {t.locale === "en" ? "Created:" : "已创建："}</div>
                     <ul className="list-disc list-inside space-y-1 ml-2">
-                      <li>{data.departments.length} 个部门</li>
-                      <li>{data.employees.length} 名员工</li>
-                      <li>{data.salaries.length} 条薪资记录</li>
+                      <li>{t.locale === "en" ? `${data.departments.length} departments` : `${data.departments.length} 个部门`}</li>
+                      <li>{t.locale === "en" ? `${data.employees.length} employees` : `${data.employees.length} 名员工`}</li>
+                      <li>{t.locale === "en" ? `${data.salaries.length} salary records` : `${data.salaries.length} 条薪资记录`}</li>
                     </ul>
                   </div>
                   <div className="text-sm mt-2">
-                    <div className="font-semibold">💡 现在您可以：</div>
+                    <div className="font-semibold">💡 {t.locale === "en" ? "Now You Can:" : "现在您可以："}</div>
                     <ol className="list-decimal list-inside space-y-1 ml-2">
-                      <li>查看各部门和员工</li>
-                      <li>查看加密薪资记录</li>
-                      <li>体验统计分析功能</li>
+                      <li>{t.locale === "en" ? "View departments and employees" : "查看各部门和员工"}</li>
+                      <li>{t.locale === "en" ? "View encrypted salary records" : "查看加密薪资记录"}</li>
+                      <li>{t.locale === "en" ? "Experience statistical analysis features" : "体验统计分析功能"}</li>
                     </ol>
                   </div>
-                  <div className="text-xs text-gray-400 mt-2">请前往上方导航栏查看！</div>
+                  <div className="text-xs text-gray-400 mt-2">{t.locale === "en" ? "Please go to the top navigation bar to view!" : "请前往上方导航栏查看！"}</div>
                 </div>,
                 { duration: 6000 }
               );
@@ -149,47 +159,47 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-lg font-bold text-white flex items-center">
             <span className="mr-2">📖</span>
-            手动操作指南（可选）
+            {t.locale === "en" ? "Manual Operation Guide (Optional)" : "手动操作指南（可选）"}
           </h3>
           {onStartGuide && (
             <button
               onClick={onStartGuide}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold shadow-md"
             >
-              🎯 详细引导
+              {t.locale === "en" ? "🎯 Detailed Guide" : "🎯 详细引导"}
             </button>
           )}
         </div>
         <p className="text-sm text-gray-200 mb-4">
-          💡 <strong>提示：</strong>建议先使用"一键生成演示数据"快速体验，如需手动创建可按以下步骤：
+          💡 <strong>{t.locale === "en" ? "Tip:" : "提示："}</strong> {t.locale === "en" ? "It is recommended to use 'Generate Demo Data' for quick experience first. If you need to create manually, follow these steps:" : "建议先使用\"一键生成演示数据\"快速体验，如需手动创建可按以下步骤："}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           <div className="flex items-start bg-white/5 rounded-lg p-3">
             <span className="text-xl mr-2">1️⃣</span>
             <div>
-              <strong className="text-white">创建部门</strong>
-              <p className="text-gray-300 text-xs">部门管理 → 创建部门</p>
+              <strong className="text-white">{t.locale === "en" ? "Create Department" : "创建部门"}</strong>
+              <p className="text-gray-300 text-xs">{t.locale === "en" ? "Department Management → Create Department" : "部门管理 → 创建部门"}</p>
             </div>
           </div>
           <div className="flex items-start bg-white/5 rounded-lg p-3">
             <span className="text-xl mr-2">2️⃣</span>
             <div>
-              <strong className="text-white">添加员工</strong>
-              <p className="text-gray-300 text-xs">员工管理 → 添加员工</p>
+              <strong className="text-white">{t.locale === "en" ? "Add Employee" : "添加员工"}</strong>
+              <p className="text-gray-300 text-xs">{t.locale === "en" ? "Employee Management → Add Employee" : "员工管理 → 添加员工"}</p>
             </div>
           </div>
           <div className="flex items-start bg-white/5 rounded-lg p-3">
             <span className="text-xl mr-2">3️⃣</span>
             <div>
-              <strong className="text-white">提交薪资</strong>
-              <p className="text-gray-300 text-xs">薪资管理 → 提交薪资</p>
+              <strong className="text-white">{t.locale === "en" ? "Submit Salary" : "提交薪资"}</strong>
+              <p className="text-gray-300 text-xs">{t.locale === "en" ? "Salary Management → Submit Salary" : "薪资管理 → 提交薪资"}</p>
             </div>
           </div>
           <div className="flex items-start bg-white/5 rounded-lg p-3">
             <span className="text-xl mr-2">4️⃣</span>
             <div>
-              <strong className="text-white">查看统计</strong>
-              <p className="text-gray-300 text-xs">统计分析 → 查看结果</p>
+              <strong className="text-white">{t.locale === "en" ? "View Statistics" : "查看统计"}</strong>
+              <p className="text-gray-300 text-xs">{t.locale === "en" ? "Statistical Analysis → View Results" : "统计分析 → 查看结果"}</p>
             </div>
           </div>
         </div>
@@ -197,38 +207,38 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
 
       {/* Quick Actions - Fixed */}
       <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/20">
-        <h3 className="text-xl font-bold text-white mb-2">快速操作</h3>
-        <p className="text-sm text-gray-200 mb-4">点击下方按钮快速跳转到对应功能模块</p>
+        <h3 className="text-xl font-bold text-white mb-2">{t.locale === "en" ? "Quick Actions" : "快速操作"}</h3>
+        <p className="text-sm text-gray-200 mb-4">{t.locale === "en" ? "Click the buttons below to quickly jump to corresponding functional modules" : "点击下方按钮快速跳转到对应功能模块"}</p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link href="/confidential-salary#departments">
             <button className="w-full p-4 border-2 border-blue-400/30 rounded-lg hover:border-blue-400/50 hover:bg-blue-500/20 transition-all text-left bg-blue-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">➕</div>
-              <div className="font-semibold text-white">创建部门</div>
-              <div className="text-sm text-gray-300">添加新部门并设置预算</div>
+              <div className="font-semibold text-white">{t.locale === "en" ? "Create Department" : "创建部门"}</div>
+              <div className="text-sm text-gray-300">{t.locale === "en" ? "Add new department and set budget" : "添加新部门并设置预算"}</div>
             </button>
           </Link>
 
           <Link href="/confidential-salary#employees">
             <button className="w-full p-4 border-2 border-green-400/30 rounded-lg hover:border-green-400/50 hover:bg-green-500/20 transition-all text-left bg-green-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">👤</div>
-              <div className="font-semibold text-white">添加员工</div>
-              <div className="text-sm text-gray-300">注册新员工并分配角色</div>
+              <div className="font-semibold text-white">{t.locale === "en" ? "Add Employee" : "添加员工"}</div>
+              <div className="text-sm text-gray-300">{t.locale === "en" ? "Register new employee and assign role" : "注册新员工并分配角色"}</div>
             </button>
           </Link>
 
           <Link href="/confidential-salary#salary">
             <button className="w-full p-4 border-2 border-purple-400/30 rounded-lg hover:border-purple-400/50 hover:bg-purple-500/20 transition-all text-left bg-purple-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">💵</div>
-              <div className="font-semibold text-white">提交薪资</div>
-              <div className="text-sm text-gray-300">使用FHE加密提交薪资</div>
+              <div className="font-semibold text-white">{t.locale === "en" ? "Submit Salary" : "提交薪资"}</div>
+              <div className="text-sm text-gray-300">{t.locale === "en" ? "Submit salary using FHE encryption" : "使用FHE加密提交薪资"}</div>
             </button>
           </Link>
 
           <Link href="/confidential-salary#statistics">
             <button className="w-full p-4 border-2 border-orange-400/30 rounded-lg hover:border-orange-400/50 hover:bg-orange-500/20 transition-all text-left bg-orange-500/10 backdrop-blur-sm">
               <div className="text-2xl mb-2">📊</div>
-              <div className="font-semibold text-white">查看统计</div>
-              <div className="text-sm text-gray-300">加密数据统计分析</div>
+              <div className="font-semibold text-white">{t.locale === "en" ? "View Statistics" : "查看统计"}</div>
+              <div className="text-sm text-gray-300">{t.locale === "en" ? "Encrypted data statistical analysis" : "加密数据统计分析"}</div>
             </button>
           </Link>
         </div>
@@ -282,7 +292,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
                     <ul className="list-disc list-inside mt-1 space-y-1">
                       <li>使用本地 Hardhat 节点（Chain ID: 31337）</li>
                       <li>或确保已加载 FHEVM Relayer SDK</li>
-                      <li>当前网络: {chainId === 31337 ? "本地开发" : `Sepolia (${chainId})`}</li>
+                      <li>{t.locale === "en" ? "Current Network:" : "当前网络:"} {chainId === 31337 ? (t.locale === "en" ? "Local Development" : "本地开发") : `Sepolia (${chainId})`}</li>
                     </ul>
                   </div>
                 )}
@@ -298,7 +308,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
               </span>
             </div>
             <p className="text-xs text-gray-100 font-mono break-all font-medium">
-              {address ? `${address.slice(0, 10)}...${address.slice(-8)}` : "请连接钱包"}
+              {address ? `${address.slice(0, 10)}...${address.slice(-8)}` : (t.locale === "en" ? "Please connect wallet" : "请连接钱包")}
             </p>
           </div>
 
@@ -367,7 +377,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">👥</span>
-              <h4 className="font-semibold text-white">角色权限管理</h4>
+              <h4 className="font-semibold text-white">{t.locale === "en" ? "Role Permission Management" : "角色权限管理"}</h4>
             </div>
             <p className="text-sm text-gray-200">
               基于智能合约的 RBAC 系统，确保数据安全和访问控制
@@ -390,7 +400,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
               <h4 className="font-semibold text-white">企业级应用</h4>
             </div>
             <p className="text-sm text-gray-200">
-              完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点
+              {t.locale === "en" ? "Complete organization management, employee management, salary management features, solving real HR pain points" : "完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点"}
             </p>
           </div>
         </div>

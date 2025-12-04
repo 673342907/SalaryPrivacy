@@ -65,11 +65,16 @@ export function useConfidentialSalary() {
   const isMockChain = chainId === 31337;
   const initialMockChains = isMockChain ? { 31337: "http://localhost:8545" } : undefined;
 
+  // 只有在条件满足时才启用 FHEVM，避免初始化错误
+  const shouldEnableFhevm = useMemo(() => {
+    return !!provider && !!address;
+  }, [provider, address]);
+
   const { instance: fhevmInstance, status: fhevmStatus } = useFhevm({
     provider,
     chainId: chainId || 11155111,
     initialMockChains,
-    enabled: !!provider && !!address,
+    enabled: shouldEnableFhevm,
   });
 
   // Wagmi + ethers 互操作

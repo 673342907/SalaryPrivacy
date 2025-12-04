@@ -5,6 +5,7 @@ import { useAccount } from "wagmi";
 import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
 import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
+import { useLocale } from "~~/contexts/LocaleContext";
 
 type Role = "Admin" | "HR" | "Manager" | "Employee";
 
@@ -17,6 +18,7 @@ const roleToNumber: Record<Role, number> = {
 };
 
 export function EmployeeManagement() {
+  const { t } = useLocale();
   const { address } = useAccount();
   const { employees, addEmployee, departments } = useData();
   const { addEmployee: addEmployeeToContract, hasContract, isPending, fhevmStatus } = useConfidentialSalary();
@@ -35,22 +37,21 @@ export function EmployeeManagement() {
   const handleAddEmployee = async () => {
     // 验证输入
     if (!formData.address.trim() || !formData.address.startsWith("0x") || formData.address.length !== 42) {
-      setErrorMessage("请输入有效的以太坊地址（0x开头，42个字符）");
+      setErrorMessage(t.employee.errors.addressInvalid);
       return;
     }
     if (!formData.name.trim()) {
-      setErrorMessage("请输入员工姓名");
+      setErrorMessage(t.employee.errors.nameRequired);
       return;
     }
     if (!formData.department) {
-      setErrorMessage("请选择部门");
+      setErrorMessage(t.employee.errors.departmentRequired);
       return;
     }
 
-    // 查找部门ID
     const department = departments.find(d => d.name === formData.department);
     if (!department) {
-      setErrorMessage("部门不存在");
+      setErrorMessage(t.employee.errors.departmentNotFound);
       return;
     }
 
@@ -71,7 +72,7 @@ export function EmployeeManagement() {
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
       } catch (error: any) {
-        setErrorMessage(error.message || "添加员工失败");
+        setErrorMessage(error.message || t.employee.errors.addFailed);
       }
     } else {
       // 使用本地数据（演示模式）
@@ -80,7 +81,7 @@ export function EmployeeManagement() {
         address: formData.address,
         name: formData.name,
         role: formData.role,
-        department: formData.department || "未分配",
+        department: formData.department || t.common.unassigned,
       };
       addEmployee(newEmployee);
       setFormData({ address: "", name: "", role: "Employee", department: "" });
@@ -105,8 +106,8 @@ export function EmployeeManagement() {
           <div className="flex items-center gap-3">
             <span className="text-2xl">✅</span>
             <div>
-              <p className="font-semibold text-green-900">员工添加成功！</p>
-              <p className="text-sm text-green-700">员工已添加到系统中，角色权限已设置</p>
+              <p className="font-semibold text-green-900">{t.employee.success}</p>
+              <p className="text-sm text-green-700">{t.employee.successMessage}</p>
             </div>
           </div>
           <button
@@ -151,25 +152,25 @@ export function EmployeeManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">员工管理</h2>
-          <p className="text-gray-600 mt-1">添加员工、分配角色和部门</p>
+          <h2 className="text-2xl font-bold text-gray-900">{t.employee.title}</h2>
+          <p className="text-gray-600 mt-1">{t.employee.subtitle}</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-md"
         >
-          {showAddForm ? "取消" : "+ 添加员工"}
+          {showAddForm ? t.employee.cancel : `+ ${t.employee.add}`}
         </button>
       </div>
 
       {/* Add Employee Form */}
       {showAddForm && (
         <div className="bg-white rounded-lg shadow-md p-6 border-2 border-green-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">添加新员工</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.locale === "en" ? "Add New Employee" : "添加新员工"}</h3>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                钱包地址 <span className="text-red-500">*</span>
+                {t.employee.address} <span className="text-red-500">*</span>
               </label>
               <div className="flex gap-2">
                 <input
@@ -185,23 +186,23 @@ export function EmployeeManagement() {
                     onClick={() => setFormData({ ...formData, address })}
                     className="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 text-xs font-medium whitespace-nowrap"
                   >
-                    使用我的地址
+                    {t.employee.useMyAddress}
                   </button>
                 )}
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 {address ? `当前钱包：${address.slice(0, 10)}...${address.slice(-8)}` : "请先连接钱包"}
+                💡 {address ? t.employee.currentWallet.replace("{address}", `${address.slice(0, 10)}...${address.slice(-8)}`) : t.employee.connectWallet}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                员工姓名 <span className="text-red-500">*</span>
+                {t.employee.name} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="例如：张三"
+                placeholder={t.locale === "en" ? "e.g., John" : "例如：张三"}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 autoFocus
               />
@@ -238,22 +239,22 @@ export function EmployeeManagement() {
                 onChange={(e) => setFormData({ ...formData, role: e.target.value as Role })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               >
-                <option value="Employee">Employee - 员工</option>
-                <option value="Manager">Manager - 经理</option>
-                <option value="HR">HR - 人力资源</option>
-                <option value="Admin">Admin - 管理员</option>
+                <option value="Employee">{t.employee.roleOptions.employee}</option>
+                <option value="Manager">{t.employee.roleOptions.manager}</option>
+                <option value="HR">{t.employee.roleOptions.hr}</option>
+                <option value="Admin">{t.employee.roleOptions.admin}</option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                部门 <span className="text-red-500">*</span>
+                {t.employee.department} <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.department}
                 onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
               >
-                <option value="">请选择部门</option>
+                <option value="">{t.employee.selectDepartment}</option>
                 {departments.map((dept) => (
                   <option key={dept.id} value={dept.name}>
                     {dept.name}
@@ -262,7 +263,7 @@ export function EmployeeManagement() {
               </select>
               {departments.length === 0 && (
                 <p className="text-xs text-orange-600 mt-1">
-                  ⚠️ 还没有部门，请先前往"部门管理"创建部门
+                  ⚠️ {t.employee.noDepartments}
                 </p>
               )}
               <div className="mt-1 flex gap-2 flex-wrap">
@@ -289,10 +290,10 @@ export function EmployeeManagement() {
               className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isPending 
-                ? "⏳ 处理中..." 
-                : useBlockchain 
-                  ? "👤 添加员工（区块链存储）" 
-                  : "👤 添加员工（演示模式）"}
+                ? t.employee.processing
+                : useBlockchain
+                  ? t.employee.addBlockchain
+                  : t.employee.addDemo}
             </button>
           </div>
         </div>
@@ -301,13 +302,13 @@ export function EmployeeManagement() {
       {/* Employees List */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">员工列表</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{t.employee.list}</h3>
         </div>
         {employees.length === 0 ? (
           <div className="p-12 text-center">
             <div className="text-6xl mb-4">👥</div>
-            <p className="text-gray-600 mb-2">还没有添加员工</p>
-            <p className="text-sm text-gray-500">点击&quot;添加员工&quot;按钮开始</p>
+            <p className="text-gray-600 mb-2">{t.employee.noEmployees}</p>
+            <p className="text-sm text-gray-500">{t.employee.noEmployeesTip}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -369,23 +370,23 @@ export function EmployeeManagement() {
                         }}
                         className="text-blue-600 hover:text-blue-900 mr-4 font-medium"
                       >
-                        编辑
+                        {t.common.edit}
                       </button>
                       <button
                         onClick={() => {
                           notification.warning(
                             <div className="space-y-2">
-                              <div className="font-bold">确认删除</div>
-                              <div className="text-sm">确定要删除员工 &quot;{emp.name}&quot; 吗？</div>
-                              <div className="text-xs text-gray-400">此操作将同时删除该员工的所有薪资记录。</div>
-                              <div className="text-xs text-gray-400 mt-2">删除功能将在后续版本中实现。</div>
+                              <div className="font-bold">{t.employee.confirmDelete}</div>
+                              <div className="text-sm">{t.employee.deleteConfirm.replace("{name}", emp.name)}</div>
+                              <div className="text-xs text-gray-400">{t.employee.deleteWarning}</div>
+                              <div className="text-xs text-gray-400 mt-2">{t.employee.deleteFeatureDesc}</div>
                             </div>,
                             { duration: 5000 }
                           );
                         }}
                         className="text-red-600 hover:text-red-900 font-medium"
                       >
-                        删除
+                        {t.common.delete}
                       </button>
                     </td>
                   </tr>
@@ -398,7 +399,7 @@ export function EmployeeManagement() {
 
       {/* Role Permissions Info */}
       <div className="bg-white rounded-lg shadow-md p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">角色权限说明</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.employee.rolePermissions}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-4 border border-gray-200 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
@@ -407,7 +408,7 @@ export function EmployeeManagement() {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              完全权限：可以管理所有功能、分配角色、创建部门、提交薪资
+              {t.employee.adminDesc}
             </p>
           </div>
           <div className="p-4 border border-gray-200 rounded-lg">
@@ -417,7 +418,7 @@ export function EmployeeManagement() {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              可以创建部门、管理员工、提交薪资、查看部门统计
+              {t.employee.hrDesc}
             </p>
           </div>
           <div className="p-4 border border-gray-200 rounded-lg">
@@ -427,7 +428,7 @@ export function EmployeeManagement() {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              可以查看部门数据和员工薪资、查看部门统计
+              {t.employee.managerDesc}
             </p>
           </div>
           <div className="p-4 border border-gray-200 rounded-lg">
@@ -437,7 +438,7 @@ export function EmployeeManagement() {
               </span>
             </div>
             <p className="text-sm text-gray-600">
-              只能查看自己的薪资（自动解密）
+              {t.employee.employeeDesc}
             </p>
           </div>
         </div>

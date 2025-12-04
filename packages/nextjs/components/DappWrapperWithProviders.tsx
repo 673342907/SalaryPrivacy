@@ -27,6 +27,32 @@ export const DappWrapperWithProviders = ({ children }: { children: React.ReactNo
 
   useEffect(() => {
     setMounted(true);
+    
+    // 抑制 Talisman 扩展错误
+    const originalError = console.error;
+    console.error = (...args: any[]) => {
+      const errorMessage = args[0]?.toString() || "";
+      if (errorMessage.includes("Talisman extension has not been configured")) {
+        // 忽略 Talisman 错误
+        return;
+      }
+      originalError.apply(console, args);
+    };
+
+    // 全局错误处理，忽略 Talisman 相关错误
+    const handleError = (event: ErrorEvent) => {
+      if (event.message?.includes("Talisman extension has not been configured")) {
+        event.preventDefault();
+        return false;
+      }
+    };
+
+    window.addEventListener("error", handleError);
+
+    return () => {
+      console.error = originalError;
+      window.removeEventListener("error", handleError);
+    };
   }, []);
 
   return (

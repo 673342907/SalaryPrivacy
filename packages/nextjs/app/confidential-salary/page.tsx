@@ -12,12 +12,16 @@ import { OnboardingGuide } from "./_components/OnboardingGuide";
 import { DataProvider } from "./_context/DataContext";
 import { VideoSubtitles } from "./_components/VideoSubtitles";
 import { StatusBadges } from "./_components/StatusBadges";
+import { OptimizationsShowcase } from "./_components/OptimizationsShowcase";
+import { LanguageSwitcher } from "~~/components/LanguageSwitcher";
+import { useLocale } from "~~/contexts/LocaleContext";
 import { useState, useEffect } from "react";
 
-type TabType = "dashboard" | "departments" | "employees" | "salary" | "statistics" | "permissions";
+type TabType = "dashboard" | "departments" | "employees" | "salary" | "statistics" | "permissions" | "optimizations";
 
 export default function ConfidentialSalaryPage() {
   const { isConnected } = useAccount();
+  const { t } = useLocale();
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [showGuide, setShowGuide] = useState(false);
 
@@ -35,10 +39,10 @@ export default function ConfidentialSalaryPage() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const handleHashChange = () => {
-      const hash = window.location.hash.slice(1); // 移除 # 号
-      if (hash && ["dashboard", "departments", "employees", "salary", "statistics", "permissions"].includes(hash)) {
-        setActiveTab(hash as TabType);
+      const handleHashChange = () => {
+        const hash = window.location.hash.slice(1); // 移除 # 号
+        if (hash && ["dashboard", "departments", "employees", "salary", "statistics", "permissions", "optimizations"].includes(hash)) {
+          setActiveTab(hash as TabType);
         // 滚动到对应区域
         setTimeout(() => {
           const element = document.getElementById(hash);
@@ -88,8 +92,8 @@ export default function ConfidentialSalaryPage() {
               🔐
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">ConfidentialSalary</h1>
-            <p className="text-gray-600 mb-1">隐私保护薪资管理平台</p>
-            <p className="text-sm text-gray-500">基于 FHEVM 的企业级隐私保护薪资管理系统</p>
+            <p className="text-gray-600 mb-1">{t.dashboard.subtitle}</p>
+            <p className="text-sm text-gray-500">{t.dashboard.description}</p>
           </div>
           
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
@@ -107,7 +111,7 @@ export default function ConfidentialSalaryPage() {
           </div>
 
           <p className="text-xs text-gray-500">
-            请连接钱包以开始使用 ConfidentialSalary
+            {t.home.connectToStart}
           </p>
         </div>
       </div>
@@ -115,12 +119,13 @@ export default function ConfidentialSalaryPage() {
   }
 
   const tabs: { id: TabType; label: string; icon: string }[] = [
-    { id: "dashboard", label: "仪表板", icon: "📊" },
-    { id: "departments", label: "部门管理", icon: "🏢" },
-    { id: "employees", label: "员工管理", icon: "👥" },
-    { id: "salary", label: "薪资管理", icon: "💰" },
-    { id: "statistics", label: "统计分析", icon: "📈" },
-    { id: "permissions", label: "权限管理", icon: "🔐" },
+    { id: "dashboard", label: t.nav.dashboard, icon: "📊" },
+    { id: "departments", label: t.nav.departments, icon: "🏢" },
+    { id: "employees", label: t.nav.employees, icon: "👥" },
+    { id: "salary", label: t.nav.salary, icon: "💰" },
+    { id: "statistics", label: t.nav.statistics, icon: "📈" },
+    { id: "permissions", label: t.nav.permissions, icon: "🔐" },
+    { id: "optimizations", label: t.nav.optimizations, icon: "🎯" },
   ];
 
   return (
@@ -142,9 +147,10 @@ export default function ConfidentialSalaryPage() {
                   Salary
                 </span>
               </h1>
-              <p className="text-sm text-gray-200">隐私保护薪资管理平台</p>
+              <p className="text-sm text-gray-200">{t.dashboard.subtitle}</p>
             </div>
             <div className="flex items-center gap-4">
+              <LanguageSwitcher />
               <RainbowKitCustomConnectButton />
             </div>
           </div>
@@ -196,6 +202,9 @@ export default function ConfidentialSalaryPage() {
         </div>
         <div id="permissions">
           {activeTab === "permissions" && <PermissionManagement />}
+        </div>
+        <div id="optimizations">
+          {activeTab === "optimizations" && <OptimizationsShowcase />}
         </div>
       </main>
 

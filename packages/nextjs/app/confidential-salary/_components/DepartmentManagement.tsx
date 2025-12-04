@@ -5,32 +5,32 @@ import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
 import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
 import { useAccount } from "wagmi";
+import { useLocale } from "~~/contexts/LocaleContext";
 
 export function DepartmentManagement() {
+  const { t } = useLocale();
   const { departments, addDepartment } = useData();
   const { address } = useAccount();
   const { createDepartment, hasContract, isPending, fhevmStatus } = useConfidentialSalary();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", budget: "" });
-  const [useBlockchain, setUseBlockchain] = useState(false); // 是否使用区块链
+  const [useBlockchain, setUseBlockchain] = useState(false);
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleCreateDepartment = async () => {
-    // 验证输入
     if (!formData.name.trim()) {
-      setErrorMessage("请输入部门名称");
+      setErrorMessage(t.department.errors.nameRequired);
       return;
     }
     if (!formData.budget || parseFloat(formData.budget) <= 0) {
-      setErrorMessage("请输入有效的预算金额（大于0）");
+      setErrorMessage(t.department.errors.budgetRequired);
       return;
     }
 
     setErrorMessage("");
 
-    // 如果使用区块链且合约已部署
     if (useBlockchain && hasContract && address) {
       try {
         await createDepartment(formData.name, parseFloat(formData.budget));
@@ -39,7 +39,7 @@ export function DepartmentManagement() {
         setShowSuccess(true);
         setTimeout(() => setShowSuccess(false), 3000);
       } catch (error: any) {
-        setErrorMessage(error.message || "创建部门失败");
+        setErrorMessage(error.message || t.department.errors.createFailed);
       }
     } else {
       // 使用本地数据（演示模式）
@@ -65,8 +65,8 @@ export function DepartmentManagement() {
           <div className="flex items-center gap-3">
             <span className="text-2xl">✅</span>
             <div>
-              <p className="font-semibold text-green-900">部门创建成功！</p>
-              <p className="text-sm text-green-700">部门已添加到列表中，预算已加密存储</p>
+              <p className="font-semibold text-green-900">{t.department.success}</p>
+              <p className="text-sm text-green-700">{t.department.successMessage}</p>
             </div>
           </div>
           <button
@@ -83,12 +83,12 @@ export function DepartmentManagement() {
         <div className="flex items-start">
           <span className="text-3xl mr-3">🏢</span>
           <div className="flex-1">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">部门管理</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">{t.department.title}</h2>
             <p className="text-gray-700 mb-2">
-              <strong>功能说明：</strong>创建和管理公司部门，为每个部门设置加密预算。部门预算将用于后续的薪资管理和预算合规检查。
+              <strong>{t.locale === "en" ? "Description:" : "功能说明："}</strong> {t.department.subtitle}
             </p>
             <p className="text-sm text-gray-600">
-              💡 <strong>使用提示：</strong>点击&quot;创建部门&quot;按钮，输入部门名称和预算金额（单位：ETH），预算将以加密形式存储在区块链上。
+              💡 <strong>{t.locale === "en" ? "Tip:" : "使用提示："}</strong> {t.department.tip}
             </p>
           </div>
         </div>
@@ -96,15 +96,15 @@ export function DepartmentManagement() {
 
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-xl font-semibold text-gray-900">部门列表</h3>
-          <p className="text-sm text-gray-600">当前共有 {departments.length} 个部门</p>
+          <h3 className="text-xl font-semibold text-gray-900">{t.department.list}</h3>
+          <p className="text-sm text-gray-600">{t.department.currentCount.replace("{count}", departments.length.toString())}</p>
         </div>
         <button
           onClick={() => setShowCreateForm(!showCreateForm)}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md flex items-center gap-2"
         >
           <span>{showCreateForm ? "✕" : "+"}</span>
-          {showCreateForm ? "取消创建" : "创建部门"}
+          {showCreateForm ? t.department.cancelCreate : t.department.create}
         </button>
       </div>
 
@@ -132,7 +132,7 @@ export function DepartmentManagement() {
           </div>
           {useBlockchain && fhevmStatus !== "ready" && (
             <div className="mt-2 text-sm text-yellow-700">
-              ⚠️ FHEVM 状态: {fhevmStatus}，请等待初始化完成
+              ⚠️ {t.department.fhevmStatus.replace("{status}", fhevmStatus)}
             </div>
           )}
         </div>
@@ -141,17 +141,17 @@ export function DepartmentManagement() {
       {/* Create Department Form */}
       {showCreateForm && (
         <div className="bg-white rounded-lg shadow-md p-6 border-2 border-blue-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">创建新部门</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.locale === "en" ? "Create New Department" : "创建新部门"}</h3>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                部门名称 <span className="text-red-500">*</span>
+                {t.department.name} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="例如：技术部、市场部、财务部"
+                placeholder={t.department.placeholder}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 autoFocus
               />
@@ -188,13 +188,13 @@ export function DepartmentManagement() {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                部门预算（ETH，加密存储） <span className="text-red-500">*</span>
+                {t.department.budget} <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
                 value={formData.budget}
                 onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                placeholder="例如：100000"
+                placeholder={t.locale === "en" ? "e.g., 100000" : "例如：100000"}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <div className="mt-1 flex gap-2 flex-wrap">
@@ -221,7 +221,7 @@ export function DepartmentManagement() {
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 预算将以加密形式存储在区块链上
+                💡 {t.department.budgetEncrypted}
               </p>
             </div>
             {errorMessage && (
@@ -235,10 +235,10 @@ export function DepartmentManagement() {
               className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
               {isPending 
-                ? "⏳ 处理中..." 
-                : useBlockchain 
-                  ? "🔐 创建部门（区块链存储）" 
-                  : "🔐 创建部门（演示模式）"}
+                ? t.department.processing
+                : useBlockchain
+                  ? t.department.createBlockchain
+                  : t.department.createDemo}
             </button>
           </div>
         </div>
@@ -247,13 +247,13 @@ export function DepartmentManagement() {
       {/* Departments List */}
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">部门列表</h3>
+          <h3 className="text-lg font-semibold text-gray-900">{t.department.list}</h3>
         </div>
         {departments.length === 0 ? (
           <div className="p-12 text-center">
             <div className="text-6xl mb-4">🏢</div>
-            <p className="text-gray-600 mb-2">还没有创建部门</p>
-            <p className="text-sm text-gray-500">点击&quot;创建部门&quot;按钮开始</p>
+            <p className="text-gray-600 mb-2">{t.department.noDepartments}</p>
+            <p className="text-sm text-gray-500">{t.department.noDepartmentsTip}</p>
           </div>
         ) : (
           <div className="divide-y divide-gray-200">
@@ -266,13 +266,13 @@ export function DepartmentManagement() {
                     </h4>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
-                        <span className="text-gray-600">预算：</span>
+                        <span className="text-gray-600">{t.department.budgetLabel}</span>
                         <span className="font-semibold text-gray-900 ml-2">
                           🔒 {dept.budget} (加密)
                         </span>
                       </div>
                       <div>
-                        <span className="text-gray-600">员工数：</span>
+                        <span className="text-gray-600">{t.department.employeeCountLabel}</span>
                         <span className="font-semibold text-gray-900 ml-2">
                           {dept.employeeCount}
                         </span>
@@ -296,21 +296,21 @@ export function DepartmentManagement() {
                       }}
                       className="px-4 py-2 text-sm bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
                     >
-                      查看详情
+                      {t.department.viewDetails}
                     </button>
                     <button
                       onClick={() => {
                         notification.info(
                           <div className="space-y-1">
-                            <div className="font-bold">编辑功能</div>
-                            <div className="text-sm">此功能将在后续版本中实现，届时将支持修改部门名称和预算。</div>
+                            <div className="font-bold">{t.department.editFeature}</div>
+                            <div className="text-sm">{t.department.editFeatureDesc}</div>
                           </div>,
                           { duration: 4000 }
                         );
                       }}
                       className="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                     >
-                      编辑
+                      {t.department.edit}
                     </button>
                   </div>
                 </div>

@@ -7,6 +7,8 @@
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.24-orange.svg)](https://soliditylang.org)
 [![Next.js](https://img.shields.io/badge/Next.js-15.2.5-black.svg)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org)
+[![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/673342907/SalaryPrivacy/actions)
+[![Coverage](https://img.shields.io/badge/coverage-80%25+-green.svg)](./packages/hardhat/coverage)
 
 > 🏆 **Zama Developer Program 参赛项目** - 展示 FHE 技术在实际业务场景中的应用
 
@@ -123,6 +125,35 @@
 - [YouTube 演示视频](#) - 完整功能演示（即将发布）
 
 ---
+
+## 📦 示例合约
+
+项目包含 6 个独立的 FHEVM 示例合约：
+
+1. **FHEAccessControl** - 访问控制示例（FHE.allow, FHE.allowTransient）
+2. **FHEInputProof** - 输入证明说明
+3. **FHEAntipatterns** - 反模式示例（常见错误）
+4. **FHEBlindAuction** - 盲拍卖示例（高级应用）
+5. **FHEArithmetic** - 算术运算示例（加减乘除）
+6. **FHEComparison** - 比较操作示例（等于、大于、小于等）
+
+所有示例都包含：
+- ✅ 完整的文档注释
+- ✅ 测试文件
+- ✅ 使用示例
+- ✅ 章节标签
+
+## 🛠️ 脚手架工具
+
+项目包含 `create-fhevm-example` CLI 工具，可以快速创建新的示例项目：
+
+```bash
+# 创建新示例
+npx create-fhevm-example example my-example
+
+# 创建新分类
+npx create-fhevm-example category advanced
+```
 
 ## 🚀 快速开始
 
@@ -260,6 +291,45 @@ SalaryPrivacy/
 ```
 
 ---
+
+## 🧪 测试
+
+### 运行测试
+
+```bash
+# 运行所有测试
+pnpm hardhat:test
+
+# 运行覆盖率
+pnpm hardhat:coverage
+
+# 检查代码质量
+pnpm hardhat:lint
+```
+
+### 测试覆盖
+
+项目包含 3 个测试文件：
+- `ConfidentialSalary.test.ts` - 基础测试
+- `ConfidentialSalary.enhanced.test.ts` - 增强测试
+- `ConfidentialSalary.comprehensive.test.ts` - 全面测试
+
+测试覆盖：
+- ✅ 正常功能测试
+- ✅ 错误处理测试
+- ✅ 权限控制测试
+- ✅ 反模式验证
+- ✅ 边界情况测试
+- ✅ 加密计算测试
+
+## 📊 CI/CD
+
+项目配置了 GitHub Actions 自动化：
+
+- ✅ 自动测试
+- ✅ 代码质量检查
+- ✅ 文档生成
+- ✅ 自动部署
 
 ## 💻 开发
 

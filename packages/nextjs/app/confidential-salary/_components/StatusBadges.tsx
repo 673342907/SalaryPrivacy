@@ -50,11 +50,19 @@ export function StatusBadges() {
     }
   }, [chainId]);
 
+  // 只有在条件满足时才启用 FHEVM，避免初始化错误
+  const shouldEnableFhevm = useMemo(() => {
+    if (!provider) return false;
+    if (!address) return false;
+    if (isMockChain) return true; // Mock chain 总是可以启用
+    return relayerSDKReady; // Sepolia 需要 SDK 就绪
+  }, [provider, address, isMockChain, relayerSDKReady]);
+
   const { status: fhevmStatus } = useFhevm({
     provider,
     chainId,
     initialMockChains,
-    enabled: !!provider && !!address && (isMockChain || relayerSDKReady),
+    enabled: shouldEnableFhevm,
   });
 
   return (

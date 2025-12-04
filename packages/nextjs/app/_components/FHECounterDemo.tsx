@@ -31,6 +31,11 @@ export const FHECounterDemo = () => {
 
   const initialMockChains = { 31337: "http://localhost:8545" };
 
+  // 只有在 provider 存在时才启用 FHEVM
+  const shouldEnableFhevm = useMemo(() => {
+    return !!provider;
+  }, [provider]);
+
   const {
     instance: fhevmInstance,
     status: fhevmStatus,
@@ -39,7 +44,7 @@ export const FHECounterDemo = () => {
     provider,
     chainId,
     initialMockChains,
-    enabled: true, // use enabled to dynamically create the instance on-demand
+    enabled: shouldEnableFhevm, // 只有在 provider 存在时才启用
   });
 
   //////////////////////////////////////////////////////////////////////////////
