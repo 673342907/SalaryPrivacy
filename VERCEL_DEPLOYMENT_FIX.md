@@ -1,171 +1,166 @@
-# Vercel 部署失败修复指南
+# 🔧 Vercel 部署失败 - 完整解决方案
 
-## 🔍 常见部署失败原因
+## 🚨 常见问题诊断
 
-### 1. Root Directory 未设置
+### 问题 1: 构建命令失败
+**症状：**
+- 构建日志显示 "Command failed"
+- 依赖安装失败
+- 找不到模块
 
-**问题：** Vercel 无法找到 Next.js 项目
+**解决方案：**
 
-**解决：**
-1. 进入 Vercel Dashboard
-2. 选择项目 → Settings → General
-3. 找到 **Root Directory** 设置
-4. 设置为：`packages/nextjs`
-5. 保存并重新部署
+#### 方案 A: 优化 vercel.json 配置
 
-### 2. 依赖安装失败
+更新 `packages/nextjs/vercel.json`：
 
-**问题：** 这是一个 monorepo 项目，需要从根目录安装依赖
-
-**解决：** 已更新 `vercel.json` 配置：
 ```json
 {
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "cd ../.. && pnpm install --no-frozen-lockfile && cd packages/nextjs && pnpm run build",
   "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
-  "buildCommand": "cd ../.. && pnpm install --no-frozen-lockfile && cd packages/nextjs && pnpm run build"
+  "outputDirectory": ".next"
 }
 ```
 
-### 3. 缺少环境变量
+**注意：** 不要在 vercel.json 中设置 `rootDirectory`，应该在 Vercel Dashboard 中设置。
 
-**问题：** 生产环境缺少必需的环境变量
+#### 方案 B: 在 Vercel Dashboard 中配置
 
-**必需的环境变量：**
-- `NEXT_PUBLIC_ALCHEMY_API_KEY` - **必需**（生产环境）
-- `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` - 推荐设置
-- `NEXT_PUBLIC_CONTRACT_ADDRESS` - 如果已部署合约
+1. **访问 Vercel Dashboard**
+   - 进入项目 Settings → General
 
-**设置步骤：**
-1. Vercel Dashboard → 项目 → Settings → Environment Variables
-2. 添加以下变量：
+2. **设置 Root Directory**
+   - **Root Directory**: `packages/nextjs`
+   - 确保没有前导或尾随空格
 
-| 变量名 | 值 | 环境 |
-|--------|-----|------|
-| `NEXT_PUBLIC_ALCHEMY_API_KEY` | 你的 Alchemy API Key | Production, Preview, Development |
-| `NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID` | 你的 WalletConnect Project ID | Production, Preview, Development |
-| `NEXT_PUBLIC_CONTRACT_ADDRESS` | 合约地址（如果已部署） | Production, Preview, Development |
+3. **Build & Development Settings**
+   - **Framework Preset**: `Next.js`
+   - **Build Command**: 留空（使用 vercel.json 中的配置）
+   - **Install Command**: 留空（使用 vercel.json 中的配置）
+   - **Output Directory**: 留空（Next.js 自动处理）
+   - **Node.js Version**: `20.x`
 
-### 4. 构建命令错误
+### 问题 2: 环境变量缺失
+**症状：**
+- 运行时错误
+- API 调用失败
 
-**问题：** 构建命令在错误的目录执行
+**解决方案：**
+在 Vercel Dashboard → Settings → Environment Variables 中添加：
 
-**解决：** 已更新 `vercel.json`，确保：
-1. 从根目录安装依赖
-2. 切换到 `packages/nextjs` 目录
-3. 执行构建命令
-
-### 5. TypeScript/ESLint 错误
-
-**问题：** 构建时 TypeScript 或 ESLint 错误
-
-**临时解决：** 在环境变量中添加：
 ```
-NEXT_PUBLIC_IGNORE_BUILD_ERROR=true
+NEXT_PUBLIC_IGNORE_BUILD_ERROR=false
+NODE_ENV=production
 ```
 
-**注意：** 这只是临时方案，应该修复实际的错误
+### 问题 3: 依赖安装失败
+**症状：**
+- `pnpm install` 失败
+- 找不到 workspace 依赖
 
-## 🛠️ 完整修复步骤
+**解决方案：**
 
-### 步骤 1: 更新 Vercel 配置
+#### 更新 vercel.json 的 installCommand：
 
-已更新 `packages/nextjs/vercel.json`，确保包含：
-- 正确的 `installCommand`
-- 正确的 `buildCommand`
-- `rootDirectory` 设置
+```json
+{
+  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile --shamefully-hoist"
+}
+```
 
-### 步骤 2: 设置 Root Directory
+### 问题 4: 构建超时
+**症状：**
+- 构建时间过长
+- 超时错误
 
-1. 登录 Vercel Dashboard
-2. 选择项目
-3. Settings → General
-4. **Root Directory**: 设置为 `packages/nextjs`
-5. 保存
+**解决方案：**
+1. 优化构建命令
+2. 使用构建缓存
+3. 减少不必要的依赖
 
-### 步骤 3: 配置环境变量
+## ✅ 推荐配置
 
-1. Settings → Environment Variables
-2. 添加必需的环境变量（见上方表格）
-3. 确保选择正确的环境（Production, Preview, Development）
+### 1. packages/nextjs/vercel.json
 
-### 步骤 4: 重新部署
+```json
+{
+  "version": 2,
+  "framework": "nextjs",
+  "buildCommand": "cd ../.. && pnpm install --no-frozen-lockfile && cd packages/nextjs && pnpm run build",
+  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile --shamefully-hoist",
+  "outputDirectory": ".next"
+}
+```
 
-**方法 1: 通过 Dashboard**
-1. Deployments 标签页
-2. 找到最新的部署
-3. 点击 "..." → Redeploy
+### 2. Vercel Dashboard 设置
 
-**方法 2: 通过 CLI**
+- **Root Directory**: `packages/nextjs`
+- **Framework Preset**: `Next.js`
+- **Build Command**: (留空，使用 vercel.json)
+- **Install Command**: (留空，使用 vercel.json)
+- **Output Directory**: (留空)
+- **Node.js Version**: `20.x`
+
+### 3. 环境变量
+
+在 Vercel Dashboard → Settings → Environment Variables 中添加：
+
+```
+NEXT_PUBLIC_IGNORE_BUILD_ERROR=false
+NODE_ENV=production
+```
+
+## 🔄 重新部署步骤
+
+1. **更新配置**
+   - 更新 `packages/nextjs/vercel.json`
+   - 提交并推送到 GitHub
+
+2. **清除缓存**
+   - Vercel Dashboard → Deployments
+   - 点击最新部署的 "..." → "Redeploy"
+   - **取消勾选** "Use existing Build Cache"
+   - 点击 "Redeploy"
+
+3. **检查构建日志**
+   - 查看构建日志中的错误信息
+   - 根据错误信息调整配置
+
+## 📝 调试命令
+
+### 本地测试构建
+
 ```bash
+# 从项目根目录
+cd packages/nextjs
+pnpm install
+pnpm run build
+```
+
+### 使用 Vercel CLI 部署
+
+```bash
+# 从 packages/nextjs 目录
 cd packages/nextjs
 vercel --prod
 ```
 
-**方法 3: 推送新提交**
-```bash
-git commit --allow-empty -m "触发 Vercel 重新部署"
-git push origin main
-```
+## 🆘 如果仍然失败
 
-## 📋 验证清单
+1. **查看构建日志**
+   - 在 Vercel Dashboard 中查看详细的构建日志
+   - 找到具体的错误信息
 
-部署前检查：
+2. **检查依赖**
+   - 确保所有依赖都在 `package.json` 中
+   - 检查 workspace 依赖是否正确配置
 
-- [ ] Root Directory 设置为 `packages/nextjs`
-- [ ] `vercel.json` 已更新
-- [ ] 环境变量已配置
-- [ ] `NEXT_PUBLIC_ALCHEMY_API_KEY` 已设置
-- [ ] 代码已推送到 GitHub
+3. **简化配置**
+   - 暂时移除复杂的构建步骤
+   - 逐步添加功能
 
-## 🔧 调试技巧
-
-### 查看构建日志
-
-1. Vercel Dashboard → Deployments
-2. 点击失败的部署
-3. 查看 Build Logs
-4. 查找错误信息
-
-### 常见错误信息
-
-**错误：** `Cannot find module '@fhevm-sdk'`
-**原因：** 依赖未正确安装
-**解决：** 确保 `installCommand` 从根目录安装
-
-**错误：** `NEXT_PUBLIC_ALCHEMY_API_KEY is required in production`
-**原因：** 缺少环境变量
-**解决：** 在 Vercel 中设置环境变量
-
-**错误：** `Type error: ...`
-**原因：** TypeScript 错误
-**解决：** 修复代码错误，或临时设置 `NEXT_PUBLIC_IGNORE_BUILD_ERROR=true`
-
-## 🚀 快速修复命令
-
-如果使用 Vercel CLI：
-
-```bash
-# 1. 进入 Next.js 目录
-cd packages/nextjs
-
-# 2. 登录 Vercel（如果未登录）
-vercel login
-
-# 3. 链接项目（如果未链接）
-vercel link
-
-# 4. 部署到生产环境
-vercel --prod
-```
-
-## 📞 获取帮助
-
-如果问题仍然存在：
-
-1. 查看 Vercel 构建日志获取详细错误信息
-2. 检查 GitHub Actions（如果配置了）
-3. 查看 Vercel 文档：https://vercel.com/docs
-
----
-
-**最后更新：** 2024-12-03
-
+4. **联系支持**
+   - 如果问题持续，联系 Vercel 支持
+   - 提供构建日志和配置信息
