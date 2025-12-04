@@ -4,12 +4,22 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
+import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
 
 type Role = "Admin" | "HR" | "Manager" | "Employee";
+
+// 角色映射到合约中的数字
+const roleToNumber: Record<Role, number> = {
+  Employee: 0,
+  Manager: 1,
+  HR: 2,
+  Admin: 3,
+};
 
 export function EmployeeManagement() {
   const { address } = useAccount();
   const { employees, addEmployee, departments } = useData();
+  const { addEmployee: addEmployeeToContract, hasContract, isPending, fhevmStatus } = useConfidentialSalary();
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
     address: "",
@@ -17,11 +27,12 @@ export function EmployeeManagement() {
     role: "Employee" as Role,
     department: "",
   });
+  const [useBlockchain, setUseBlockchain] = useState(false); // 是否使用区块链
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAddEmployee = () => {
+  const handleAddEmployee = async () => {
     // 验证输入
     if (!formData.address.trim() || !formData.address.startsWith("0x") || formData.address.length !== 42) {
       setErrorMessage("请输入有效的以太坊地址（0x开头，42个字符）");
@@ -31,20 +42,52 @@ export function EmployeeManagement() {
       setErrorMessage("请输入员工姓名");
       return;
     }
+    if (!formData.department) {
+      setErrorMessage("请选择部门");
+      return;
+    }
+
+    // 查找部门ID
+    const department = departments.find(d => d.name === formData.department);
+    if (!department) {
+      setErrorMessage("部门不存在");
+      return;
+    }
 
     setErrorMessage("");
-    const newEmployee = {
-      id: employees.length > 0 ? Math.max(...employees.map(e => e.id)) + 1 : 1,
-      address: formData.address,
-      name: formData.name,
-      role: formData.role,
-      department: formData.department || "未分配",
-    };
-    addEmployee(newEmployee);
-    setFormData({ address: "", name: "", role: "Employee", department: "" });
-    setShowAddForm(false);
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
+
+    // 如果使用区块链且合约已部署
+    if (useBlockchain && hasContract && address) {
+      try {
+        const roleNumber = roleToNumber[formData.role];
+        await addEmployeeToContract(
+          formData.address,
+          formData.name,
+          roleNumber,
+          department.id
+        );
+        setFormData({ address: "", name: "", role: "Employee", department: "" });
+        setShowAddForm(false);
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
+      } catch (error: any) {
+        setErrorMessage(error.message || "添加员工失败");
+      }
+    } else {
+      // 使用本地数据（演示模式）
+      const newEmployee = {
+        id: employees.length > 0 ? Math.max(...employees.map(e => e.id)) + 1 : 1,
+        address: formData.address,
+        name: formData.name,
+        role: formData.role,
+        department: formData.department || "未分配",
+      };
+      addEmployee(newEmployee);
+      setFormData({ address: "", name: "", role: "Employee", department: "" });
+      setShowAddForm(false);
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
   };
 
   const roleColors: Record<Role, string> = {
@@ -72,6 +115,36 @@ export function EmployeeManagement() {
           >
             ✕
           </button>
+        </div>
+      )}
+
+      {/* Blockchain Mode Toggle */}
+      {hasContract && address && (
+        <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-semibold text-yellow-900 mb-1">🔗 区块链模式</h4>
+              <p className="text-sm text-yellow-800">
+                {useBlockchain 
+                  ? "数据将存储在区块链上（需要支付 Gas 费用）" 
+                  : "当前为演示模式，数据仅存储在本地"}
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={useBlockchain}
+                onChange={(e) => setUseBlockchain(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-600"></div>
+            </label>
+          </div>
+          {useBlockchain && fhevmStatus !== "ready" && (
+            <div className="mt-2 text-sm text-yellow-700">
+              ⚠️ FHEVM 状态: {fhevmStatus}，请等待初始化完成
+            </div>
+          )}
         </div>
       )}
 
@@ -212,9 +285,14 @@ export function EmployeeManagement() {
             )}
             <button
               onClick={handleAddEmployee}
-              className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105"
+              disabled={isPending || (useBlockchain && fhevmStatus !== "ready")}
+              className="w-full px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              👤 添加员工
+              {isPending 
+                ? "⏳ 处理中..." 
+                : useBlockchain 
+                  ? "👤 添加员工（区块链存储）" 
+                  : "👤 添加员工（演示模式）"}
             </button>
           </div>
         </div>

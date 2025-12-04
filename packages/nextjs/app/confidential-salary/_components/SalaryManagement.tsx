@@ -1,13 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useAccount } from "wagmi";
 import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
+import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
+import { useFHEDecrypt } from "@fhevm-sdk";
+import { ethers } from "ethers";
 
 export function SalaryManagement() {
   const { address } = useAccount();
   const { salaries, addSalary } = useData();
+  const { 
+    submitSalary, 
+    getEncryptedSalary, 
+    hasContract, 
+    isPending, 
+    fhevmStatus,
+    contractAddress,
+    fhevmInstance,
+    ethersSigner,
+    fhevmDecryptionSignatureStorage,
+    chainId,
+  } = useConfidentialSalary();
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [showViewForm, setShowViewForm] = useState(false);
   const [formData, setFormData] = useState({
@@ -15,11 +30,35 @@ export function SalaryManagement() {
     amount: "",
   });
   const [viewAddress, setViewAddress] = useState("");
+  const [encryptedSalaryHandle, setEncryptedSalaryHandle] = useState<string | null>(null);
+  const [useBlockchain, setUseBlockchain] = useState(false); // 是否使用区块链
   const [isEncrypting, setIsEncrypting] = useState(false);
   const [isDecrypting, setIsDecrypting] = useState(false);
 
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  // 准备解密请求
+  const decryptRequests = useMemo(() => {
+    if (!encryptedSalaryHandle || !contractAddress || encryptedSalaryHandle === ethers.ZeroHash) {
+      return undefined;
+    }
+    return [{ handle: encryptedSalaryHandle, contractAddress } as const];
+  }, [encryptedSalaryHandle, contractAddress]);
+
+  // 使用 FHE 解密 Hook
+  const {
+    canDecrypt,
+    decrypt,
+    isDecrypting: isDecryptingFromHook,
+    results: decryptResults,
+  } = useFHEDecrypt({
+    instance: fhevmInstance,
+    ethersSigner: ethersSigner as any,
+    fhevmDecryptionSignatureStorage,
+    chainId,
+    requests: decryptRequests,
+  });
 
   const handleSubmitSalary = async () => {
     // 验证输入
@@ -33,34 +72,59 @@ export function SalaryManagement() {
     }
 
     setErrorMessage("");
-    setIsEncrypting(true);
-    const loadingId = notification.loading("正在使用 FHE 加密薪资数据...", { duration: Infinity });
-    
-    // 模拟加密过程
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsEncrypting(false);
-    notification.remove(loadingId);
 
-    const newSalary = {
-      id: salaries.length > 0 ? Math.max(...salaries.map(s => s.id)) + 1 : 1,
-      employeeAddress: formData.employeeAddress,
-      employeeName: `员工 ${salaries.length + 1}`,
-      amount: formData.amount,
-      encrypted: true,
-      submittedAt: new Date().toLocaleString('zh-CN'),
-    };
-    addSalary(newSalary);
-    setFormData({ employeeAddress: "", amount: "" });
-    setShowSubmitForm(false);
-    setShowSuccess(true);
-    notification.success(
-      <div className="space-y-1">
-        <div className="font-bold">✅ 薪资提交成功！</div>
-        <div className="text-sm">薪资已使用 FHE 加密并存储到区块链</div>
-      </div>,
-      { duration: 4000 }
-    );
-    setTimeout(() => setShowSuccess(false), 3000);
+    // 如果使用区块链且合约已部署
+    if (useBlockchain && hasContract && address) {
+      try {
+        setIsEncrypting(true);
+        await submitSalary(formData.employeeAddress, parseFloat(formData.amount));
+        setFormData({ employeeAddress: "", amount: "" });
+        setShowSubmitForm(false);
+        setShowSuccess(true);
+        setIsEncrypting(false);
+        notification.success(
+          <div className="space-y-1">
+            <div className="font-bold">✅ 薪资提交成功！</div>
+            <div className="text-sm">薪资已使用 FHE 加密并存储到区块链</div>
+          </div>,
+          { duration: 4000 }
+        );
+        setTimeout(() => setShowSuccess(false), 3000);
+      } catch (error: any) {
+        setIsEncrypting(false);
+        setErrorMessage(error.message || "提交薪资失败");
+      }
+    } else {
+      // 使用本地数据（演示模式）
+      setIsEncrypting(true);
+      const loadingId = notification.loading("正在使用 FHE 加密薪资数据...", { duration: Infinity });
+      
+      // 模拟加密过程
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setIsEncrypting(false);
+      notification.remove(loadingId);
+
+      const newSalary = {
+        id: salaries.length > 0 ? Math.max(...salaries.map(s => s.id)) + 1 : 1,
+        employeeAddress: formData.employeeAddress,
+        employeeName: `员工 ${salaries.length + 1}`,
+        amount: formData.amount,
+        encrypted: true,
+        submittedAt: new Date().toLocaleString('zh-CN'),
+      };
+      addSalary(newSalary);
+      setFormData({ employeeAddress: "", amount: "" });
+      setShowSubmitForm(false);
+      setShowSuccess(true);
+      notification.success(
+        <div className="space-y-1">
+          <div className="font-bold">✅ 薪资提交成功！</div>
+          <div className="text-sm">薪资已使用 FHE 加密并存储到区块链</div>
+        </div>,
+        { duration: 4000 }
+      );
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
   };
 
   const handleViewSalary = async () => {
@@ -72,29 +136,78 @@ export function SalaryManagement() {
       notification.error("请输入有效的以太坊地址（0x开头，42个字符）", { duration: 4000 });
       return;
     }
+
+    // 如果使用区块链且合约已部署
+    if (useBlockchain && hasContract && address) {
+      try {
+        setIsDecrypting(true);
+        const loadingId = notification.loading("正在获取加密薪资...", { duration: Infinity });
+        
+        // 获取加密薪资
+        const encryptedHandle = await getEncryptedSalary(viewAddress);
+        notification.remove(loadingId);
+        
+        if (!encryptedHandle) {
+          setIsDecrypting(false);
+          notification.warning("未找到该员工的薪资记录", { duration: 3000 });
+          return;
+        }
+
+        // 设置要解密的 handle
+        setEncryptedSalaryHandle(encryptedHandle);
+        
+        // 触发解密
+        if (canDecrypt && decrypt) {
+          await decrypt();
+        }
+        
+        setIsDecrypting(false);
+      } catch (error: any) {
+        setIsDecrypting(false);
+        notification.error(`查看薪资失败: ${error.message}`, { duration: 5000 });
+      }
+    } else {
+      // 使用本地数据（演示模式）
+      setIsDecrypting(true);
+      const loadingId = notification.loading("正在解密薪资数据...", { duration: Infinity });
+      // 模拟解密过程
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setIsDecrypting(false);
+      notification.remove(loadingId);
+      
+      const salary = salaries.find(s => s.employeeAddress.toLowerCase() === viewAddress.toLowerCase());
+      if (salary) {
+        notification.success(
+          <div className="space-y-1">
+            <div className="font-bold">✅ 解密成功</div>
+            <div className="text-sm">员工：{salary.employeeName}</div>
+            <div className="text-sm">薪资：{salary.amount} ETH</div>
+          </div>,
+          { duration: 4000 }
+        );
+      } else {
+        notification.warning("未找到该员工的薪资记录", { duration: 3000 });
+      }
+    }
     
-    setIsDecrypting(true);
-    const loadingId = notification.loading("正在解密薪资数据...", { duration: Infinity });
-    // 模拟解密过程
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsDecrypting(false);
-    notification.remove(loadingId);
-    
-    const salary = salaries.find(s => s.employeeAddress.toLowerCase() === viewAddress.toLowerCase());
-    if (salary) {
+    setShowViewForm(false);
+  };
+
+  // 显示解密结果
+  if (encryptedSalaryHandle && decryptResults[encryptedSalaryHandle] !== undefined) {
+    const decryptedValue = decryptResults[encryptedSalaryHandle];
+    if (typeof decryptedValue !== "undefined") {
       notification.success(
         <div className="space-y-1">
           <div className="font-bold">✅ 解密成功</div>
-          <div className="text-sm">员工：{salary.employeeName}</div>
-          <div className="text-sm">薪资：{salary.amount} ETH</div>
+          <div className="text-sm">员工地址：{viewAddress.slice(0, 10)}...{viewAddress.slice(-8)}</div>
+          <div className="text-sm">薪资：{Number(decryptedValue)} ETH</div>
         </div>,
-        { duration: 4000 }
+        { duration: 5000 }
       );
-    } else {
-      notification.warning("未找到该员工的薪资记录", { duration: 3000 });
+      setEncryptedSalaryHandle(null);
     }
-    setShowViewForm(false);
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -164,6 +277,36 @@ export function SalaryManagement() {
           </div>
         </div>
       </div>
+
+      {/* Blockchain Mode Toggle */}
+      {hasContract && address && (
+        <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h4 className="font-semibold text-yellow-900 mb-1">🔗 区块链模式</h4>
+              <p className="text-sm text-yellow-800">
+                {useBlockchain 
+                  ? "数据将存储在区块链上（需要支付 Gas 费用）" 
+                  : "当前为演示模式，数据仅存储在本地"}
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={useBlockchain}
+                onChange={(e) => setUseBlockchain(e.target.checked)}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-600"></div>
+            </label>
+          </div>
+          {useBlockchain && fhevmStatus !== "ready" && (
+            <div className="mt-2 text-sm text-yellow-700">
+              ⚠️ FHEVM 状态: {fhevmStatus}，请等待初始化完成
+            </div>
+          )}
+        </div>
+      )}
 
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -316,10 +459,14 @@ export function SalaryManagement() {
 
             <button
               onClick={handleSubmitSalary}
-              disabled={isEncrypting || !formData.employeeAddress || !formData.amount}
+              disabled={isEncrypting || isPending || !formData.employeeAddress || !formData.amount || (useBlockchain && fhevmStatus !== "ready")}
               className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {isEncrypting ? "🔐 加密中..." : "🔐 提交加密薪资"}
+              {isEncrypting || isPending 
+                ? "🔐 加密中..." 
+                : useBlockchain 
+                  ? "🔐 提交加密薪资（区块链存储）" 
+                  : "🔐 提交加密薪资（演示模式）"}
             </button>
           </div>
         </div>
@@ -360,10 +507,14 @@ export function SalaryManagement() {
 
             <button
               onClick={handleViewSalary}
-              disabled={isDecrypting || !viewAddress}
+              disabled={isDecrypting || isDecryptingFromHook || !viewAddress || (useBlockchain && fhevmStatus !== "ready")}
               className="w-full px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isDecrypting ? "解密中..." : "查看薪资（自动解密）"}
+              {isDecrypting || isDecryptingFromHook 
+                ? "解密中..." 
+                : useBlockchain 
+                  ? "查看薪资（区块链，自动解密）" 
+                  : "查看薪资（演示模式）"}
             </button>
           </div>
         </div>
