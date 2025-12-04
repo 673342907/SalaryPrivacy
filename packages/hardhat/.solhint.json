@@ -1,0 +1,16 @@
+{
+  "extends": "solhint:recommended",
+  "rules": {
+    "avoid-suicide": "error",
+    "avoid-sha3": "warn",
+    "no-console": "off",
+    "no-empty-blocks": "warn",
+    "no-unused-vars": "warn",
+    "compiler-version": ["error", "^0.8.24"],
+    "func-name-mixedcase": "warn",
+    "modifier-name-mixedcase": "warn",
+    "private-vars-leading-underscore": "warn",
+    "use-forbidden-name": "warn"
+  }
+}
+

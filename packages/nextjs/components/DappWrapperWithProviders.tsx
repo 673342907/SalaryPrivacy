@@ -30,28 +30,56 @@ export const DappWrapperWithProviders = ({ children }: { children: React.ReactNo
     
     // 抑制 Talisman 扩展错误
     const originalError = console.error;
+    const originalWarn = console.warn;
+    
     console.error = (...args: any[]) => {
       const errorMessage = args[0]?.toString() || "";
-      if (errorMessage.includes("Talisman extension has not been configured")) {
+      if (errorMessage.includes("Talisman extension has not been configured") ||
+          errorMessage.includes("Talisman") && errorMessage.includes("onboarding")) {
         // 忽略 Talisman 错误
         return;
       }
       originalError.apply(console, args);
     };
 
+    console.warn = (...args: any[]) => {
+      const warnMessage = args[0]?.toString() || "";
+      if (warnMessage.includes("Talisman extension has not been configured") ||
+          warnMessage.includes("Talisman") && warnMessage.includes("onboarding")) {
+        // 忽略 Talisman 警告
+        return;
+      }
+      originalWarn.apply(console, args);
+    };
+
     // 全局错误处理，忽略 Talisman 相关错误
     const handleError = (event: ErrorEvent) => {
-      if (event.message?.includes("Talisman extension has not been configured")) {
+      if (event.message?.includes("Talisman extension has not been configured") ||
+          (event.message?.includes("Talisman") && event.message?.includes("onboarding"))) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+    };
+
+    // 处理未捕获的 Promise 拒绝
+    const handleUnhandledRejection = (event: PromiseRejectionEvent) => {
+      const errorMessage = event.reason?.message || event.reason?.toString() || "";
+      if (errorMessage.includes("Talisman extension has not been configured") ||
+          (errorMessage.includes("Talisman") && errorMessage.includes("onboarding"))) {
         event.preventDefault();
         return false;
       }
     };
 
     window.addEventListener("error", handleError);
+    window.addEventListener("unhandledrejection", handleUnhandledRejection);
 
     return () => {
       console.error = originalError;
+      console.warn = originalWarn;
       window.removeEventListener("error", handleError);
+      window.removeEventListener("unhandledrejection", handleUnhandledRejection);
     };
   }, []);
 

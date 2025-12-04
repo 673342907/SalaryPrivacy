@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useLocale } from "~~/contexts/LocaleContext";
 
 type Step = {
   id: number;
@@ -12,46 +13,47 @@ type Step = {
   animation?: string;
 };
 
-const steps: Step[] = [
-  {
-    id: 1,
-    title: "快速开始",
-    description: "点击 Dashboard 中的&quot;一键生成演示数据&quot;按钮，系统会自动创建部门、员工和薪资数据，让您立即体验所有功能。",
-    icon: "🚀",
-    action: "返回 Dashboard",
-    tab: "dashboard",
-    animation: "数据生成动画",
-  },
-  {
-    id: 2,
-    title: "查看数据",
-    description: "生成数据后，您可以浏览各部门、员工和薪资记录，所有数据都已加密存储。",
-    icon: "👀",
-    action: "浏览数据",
-    tab: "departments",
-    animation: "数据浏览动画",
-  },
-  {
-    id: 3,
-    title: "体验功能",
-    description: "尝试统计分析功能，查看如何在不解密原始数据的情况下进行统计计算。",
-    icon: "📊",
-    action: "前往统计分析",
-    tab: "statistics",
-    animation: "统计计算动画",
-  },
-];
-
 interface OnboardingGuideProps {
   onClose: () => void;
   onNavigateToTab?: (tab: string) => void;
 }
 
 export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuideProps) {
+  const { t } = useLocale();
   const [currentStep, setCurrentStep] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [animationPhase, setAnimationPhase] = useState(0);
+
+  const steps: Step[] = useMemo(() => [
+    {
+      id: 1,
+      title: t.locale === "en" ? "Quick Start" : "快速开始",
+      description: t.locale === "en" ? "Click the \"Generate Demo Data\" button in Dashboard, the system will automatically create departments, employees, and salary data, allowing you to experience all features immediately." : "点击 Dashboard 中的\"一键生成演示数据\"按钮，系统会自动创建部门、员工和薪资数据，让您立即体验所有功能。",
+      icon: "🚀",
+      action: t.locale === "en" ? "Back to Dashboard" : "返回 Dashboard",
+      tab: "dashboard",
+      animation: t.locale === "en" ? "Data generation animation" : "数据生成动画",
+    },
+    {
+      id: 2,
+      title: t.locale === "en" ? "View Data" : "查看数据",
+      description: t.locale === "en" ? "After generating data, you can browse departments, employees, and salary records. All data is encrypted and stored." : "生成数据后，您可以浏览各部门、员工和薪资记录，所有数据都已加密存储。",
+      icon: "👀",
+      action: t.locale === "en" ? "Browse Data" : "浏览数据",
+      tab: "departments",
+      animation: t.locale === "en" ? "Data browsing animation" : "数据浏览动画",
+    },
+    {
+      id: 3,
+      title: t.locale === "en" ? "Experience Features" : "体验功能",
+      description: t.locale === "en" ? "Try the statistical analysis feature to see how statistical calculations are performed without decrypting raw data." : "尝试统计分析功能，查看如何在不解密原始数据的情况下进行统计计算。",
+      icon: "📊",
+      action: t.locale === "en" ? "Go to Statistical Analysis" : "前往统计分析",
+      tab: "statistics",
+      animation: t.locale === "en" ? "Statistical computation animation" : "统计计算动画",
+    },
+  ], [t.locale]);
 
   const currentStepData = steps[currentStep];
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -85,7 +87,7 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
     }, 5000); // 每个步骤显示5秒
 
     return () => clearTimeout(timer);
-  }, [currentStep, isAutoPlaying, isCompleted]);
+  }, [currentStep, isAutoPlaying, isCompleted, steps.length]);
 
   const handleNext = () => {
     setIsAutoPlaying(false);
@@ -137,19 +139,19 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
                 <div className="flex items-center gap-2 mb-2">
                   <div className={`w-2 h-2 rounded-full ${animationPhase >= 1 ? 'bg-green-500' : 'bg-gray-300'} transition-all duration-300`}></div>
                   <span className={animationPhase >= 1 ? 'text-green-700 font-semibold' : 'text-gray-500'}>
-                    {animationPhase >= 1 ? '✓' : '○'} 输入部门名称
+                    {animationPhase >= 1 ? '✓' : '○'} {t.locale === "en" ? "Enter department name" : "输入部门名称"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-2">
                   <div className={`w-2 h-2 rounded-full ${animationPhase >= 2 ? 'bg-green-500' : 'bg-gray-300'} transition-all duration-300`}></div>
                   <span className={animationPhase >= 2 ? 'text-green-700 font-semibold' : 'text-gray-500'}>
-                    {animationPhase >= 2 ? '✓' : '○'} 设置加密预算
+                    {animationPhase >= 2 ? '✓' : '○'} {t.locale === "en" ? "Set encrypted budget" : "设置加密预算"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className={`w-2 h-2 rounded-full ${animationPhase >= 3 ? 'bg-green-500' : 'bg-gray-300'} transition-all duration-300`}></div>
                   <span className={animationPhase >= 3 ? 'text-green-700 font-semibold' : 'text-gray-500'}>
-                    {animationPhase >= 3 ? '✓' : '○'} 部门创建完成
+                    {animationPhase >= 3 ? '✓' : '○'} {t.locale === "en" ? "Department created" : "部门创建完成"}
                   </span>
                 </div>
               </div>
@@ -182,10 +184,10 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-2xl animate-bounce">👥</span>
                   <span className="font-semibold text-gray-700">
-                    {animationPhase === 0 && "准备添加员工..."}
-                    {animationPhase === 1 && "正在添加员工 1..."}
-                    {animationPhase === 2 && "正在添加员工 2..."}
-                    {animationPhase === 3 && "✓ 3名员工已添加"}
+                    {animationPhase === 0 && (t.locale === "en" ? "Preparing to add employees..." : "准备添加员工...")}
+                    {animationPhase === 1 && (t.locale === "en" ? "Adding employee 1..." : "正在添加员工 1...")}
+                    {animationPhase === 2 && (t.locale === "en" ? "Adding employee 2..." : "正在添加员工 2...")}
+                    {animationPhase === 3 && (t.locale === "en" ? "✓ 3 employees added" : "✓ 3名员工已添加")}
                   </span>
                 </div>
               </div>
@@ -218,69 +220,11 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
                   )}
                 </div>
                 <div className="mt-4 text-sm text-gray-600">
-                  {animationPhase === 0 && "原始薪资数据"}
-                  {animationPhase === 1 && "正在加密..."}
-                  {animationPhase === 2 && "加密完成"}
-                  {animationPhase === 3 && "✓ 已存储到区块链"}
+                  {animationPhase === 0 && (t.locale === "en" ? "Original salary data" : "原始薪资数据")}
+                  {animationPhase === 1 && (t.locale === "en" ? "Encrypting..." : "正在加密...")}
+                  {animationPhase === 2 && (t.locale === "en" ? "Encryption complete" : "加密完成")}
+                  {animationPhase === 3 && (t.locale === "en" ? "✓ Stored to blockchain" : "✓ 已存储到区块链")}
                 </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 4: // 统计分析
-        return (
-          <div className="relative h-64 bg-gradient-to-br from-orange-50 to-red-100 rounded-xl overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-full px-8">
-                <div className="flex items-end justify-center gap-2 h-32">
-                  {[0, 1, 2, 3].map((i) => (
-                    <div
-                      key={i}
-                      className={`bg-gradient-to-t from-orange-500 to-red-500 rounded-t-lg transition-all duration-500 ${
-                        animationPhase > i ? 'w-12 h-full' : 'w-12 h-0'
-                      }`}
-                      style={{ transitionDelay: `${i * 200}ms` }}
-                    >
-                      <div className="text-white text-xs font-semibold p-2 text-center">
-                        {animationPhase > i ? (i + 1) * 25 : ''}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 text-center text-sm text-gray-700">
-                  {animationPhase === 0 && "准备统计..."}
-                  {animationPhase === 1 && "正在计算（不解密数据）..."}
-                  {animationPhase === 2 && "统计计算中..."}
-                  {animationPhase === 3 && "✓ 统计完成"}
-                </div>
-              </div>
-            </div>
-          </div>
-        );
-
-      case 5: // 权限管理
-        return (
-          <div className="relative h-64 bg-gradient-to-br from-red-50 to-pink-100 rounded-xl overflow-hidden">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="grid grid-cols-2 gap-4">
-                {['Admin', 'HR', 'Manager', 'Employee'].map((role, i) => (
-                  <div
-                    key={role}
-                    className={`bg-white rounded-lg p-4 shadow-md transition-all duration-500 ${
-                      animationPhase > i
-                        ? 'scale-100 opacity-100 translate-y-0'
-                        : 'scale-50 opacity-0 translate-y-4'
-                    }`}
-                    style={{ transitionDelay: `${i * 150}ms` }}
-                  >
-                    <div className="text-2xl mb-2">🔐</div>
-                    <div className="text-sm font-semibold text-gray-700">{role}</div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {animationPhase > i ? '权限已设置' : '...'}
-                    </div>
-                  </div>
-                ))}
               </div>
             </div>
           </div>
@@ -296,15 +240,15 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fadeIn">
         <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-scaleIn">
           <div className="text-6xl mb-4 animate-bounce">🎉</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 animate-fadeInUp">引导完成！</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 animate-fadeInUp">{t.locale === "en" ? "Guide Complete!" : "引导完成！"}</h2>
           <p className="text-gray-600 mb-6 animate-fadeInUp animation-delay-100">
-            您已经了解了 ConfidentialSalary 的所有核心功能。现在可以开始使用系统了！
+            {t.locale === "en" ? "You have learned all the core features of ConfidentialSalary. You can now start using the system!" : "您已经了解了 ConfidentialSalary 的所有核心功能。现在可以开始使用系统了！"}
           </p>
           <button
             onClick={onClose}
             className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg transform hover:scale-105 animate-fadeInUp animation-delay-200"
           >
-            开始使用
+            {t.locale === "en" ? "Start Using" : "开始使用"}
           </button>
         </div>
       </div>
@@ -317,12 +261,12 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-2xl p-6 text-white">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold animate-fadeInLeft">欢迎使用 ConfidentialSalary</h2>
+            <h2 className="text-2xl font-bold animate-fadeInLeft">{t.locale === "en" ? "Welcome to ConfidentialSalary" : "欢迎使用 ConfidentialSalary"}</h2>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePause}
                 className="text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
-                title={isAutoPlaying ? "暂停" : "播放"}
+                title={isAutoPlaying ? (t.locale === "en" ? "Pause" : "暂停") : (t.locale === "en" ? "Play" : "播放")}
               >
                 {isAutoPlaying ? "⏸️" : "▶️"}
               </button>
@@ -343,7 +287,7 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
             </div>
           </div>
           <p className="text-sm text-blue-100 mt-2 animate-fadeIn">
-            步骤 {currentStep + 1} / {steps.length} {isAutoPlaying && "（自动播放中...）"}
+            {t.locale === "en" ? `Step ${currentStep + 1} / ${steps.length}` : `步骤 ${currentStep + 1} / ${steps.length}`} {isAutoPlaying && (t.locale === "en" ? "(Auto-playing...)" : "（自动播放中...）")}
           </p>
         </div>
 
@@ -406,21 +350,21 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
           >
             <span className="inline-flex items-center gap-1">
               <span className="transition-transform duration-300 hover:-translate-x-1">←</span>
-              上一步
+              {t.locale === "en" ? "Previous" : "上一步"}
             </span>
           </button>
           <button
             onClick={handleSkip}
             className="px-6 py-2 text-gray-600 hover:text-gray-800 font-semibold transition-all duration-300 hover:scale-105"
           >
-            跳过引导
+            {t.locale === "en" ? "Skip Guide" : "跳过引导"}
           </button>
           <button
             onClick={handleNext}
             className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-lg"
           >
             <span className="inline-flex items-center gap-1">
-              {currentStep === steps.length - 1 ? "完成" : "下一步"}
+              {currentStep === steps.length - 1 ? (t.locale === "en" ? "Complete" : "完成") : (t.locale === "en" ? "Next" : "下一步")}
               {currentStep !== steps.length - 1 && (
                 <span className="transition-transform duration-300 hover:translate-x-1">→</span>
               )}

@@ -6,7 +6,7 @@ import { TFHE } from "@fhevm/solidity/TFHE.sol";
 
 /**
  * @title FHEAccessControl
- * @author Zama Bounty Program
+ * @author ConfidentialSalary Team
  * @notice 演示 FHE 访问控制：FHE.allow() 和 FHE.allowTransient()
  * @dev 这是一个独立的示例，演示如何正确使用 FHE 访问控制
  * 

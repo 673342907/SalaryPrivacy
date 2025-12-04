@@ -6,7 +6,7 @@ import { TFHE } from "@fhevm/solidity/TFHE.sol";
 
 /**
  * @title FHEInputProof
- * @author Zama Bounty Program
+ * @author ConfidentialSalary Team
  * @notice 演示输入证明（Input Proof）的概念和使用
  * @dev 这是一个独立的示例，解释什么是输入证明以及为什么需要它们
  * 

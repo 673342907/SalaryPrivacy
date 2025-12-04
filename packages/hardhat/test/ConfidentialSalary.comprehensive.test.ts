@@ -5,7 +5,7 @@ import { loadFixture } from "@nomicfoundation/hardhat-toolbox/network-helpers";
 
 /**
  * @file ConfidentialSalary.comprehensive.test.ts
- * @author Zama Bounty Program
+ * @author ConfidentialSalary Team
  * @description 全面的测试套件，包括正常用例、反模式测试、错误处理测试
  * 
  * @custom:chapter testing

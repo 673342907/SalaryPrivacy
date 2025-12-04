@@ -5,13 +5,23 @@
   "scripts": {
     "compile": "hardhat compile",
     "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
+    "coverage": "hardhat coverage",
+    "lint": "solhint 'contracts/**/*.sol'",
+    "lint:fix": "solhint 'contracts/**/*.sol' --fix",
+    "format": "prettier --write 'contracts/**/*.sol'",
+    "format:check": "prettier --check 'contracts/**/*.sol'",
+    "check-types": "tsc --noEmit",
+    "deploy:localhost": "hardhat run scripts/deploy.ts --network hardhat",
     "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
     "verify": "hardhat verify --network sepolia"
   },
   "devDependencies": {
     "@fhevm/hardhat-plugin": "^0.3.0-0",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "hardhat": "^2.19.0"
+    "hardhat": "^2.19.0",
+    "solidity-coverage": "^0.8.5",
+    "solhint": "^4.0.0"
   },
   "dependencies": {
     "@fhevm/solidity": "^0.9.0"

@@ -14,10 +14,10 @@ const RechartsCharts = dynamic(
     loading: () => (
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg shadow-md p-6">
-          <div className="h-[300px] flex items-center justify-center text-gray-500">{t.locale === "en" ? "Loading chart..." : "加载图表中..."}</div>
+          <div className="h-[300px] flex items-center justify-center text-gray-500">Loading chart...</div>
         </div>
         <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg shadow-md p-6">
-          <div className="h-[300px] flex items-center justify-center text-gray-500">{t.locale === "en" ? "Loading chart..." : "加载图表中..."}</div>
+          <div className="h-[300px] flex items-center justify-center text-gray-500">Loading chart...</div>
         </div>
       </div>
     )
@@ -114,7 +114,7 @@ export function StatisticsAnalysis() {
         <div className="flex gap-4 items-end">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              部门
+              {t.statistics.selectDepartment}
             </label>
             <select
               value={selectedDepartment}
@@ -145,22 +145,22 @@ export function StatisticsAnalysis() {
           <div className="flex items-center gap-4 mb-4">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
             <div>
-              <p className="font-semibold text-orange-900 text-lg">正在计算统计（不解密原始数据）</p>
+              <p className="font-semibold text-orange-900 text-lg">{t.locale === "en" ? "Calculating statistics (without decrypting raw data)" : "正在计算统计（不解密原始数据）"}</p>
               <p className="text-sm text-orange-700 mt-1">
-                步骤：🔐 加密数据 → ➕ 加密加法 → 📊 加密统计 → ✅ 解密统计结果
+                {t.locale === "en" ? "Steps: 🔐 Encrypted Data → ➕ Encrypted Addition → 📊 Encrypted Statistics → ✅ Decrypt Statistics Result" : "步骤：🔐 加密数据 → ➕ 加密加法 → 📊 加密统计 → ✅ 解密统计结果"}
               </p>
             </div>
           </div>
           <div className="bg-white rounded-lg p-4 mt-4">
             <p className="text-sm text-gray-700">
-              <strong>同态计算过程：</strong>
+              <strong>{t.locale === "en" ? "Homomorphic Computation Process:" : "同态计算过程："}</strong>
             </p>
             <ul className="text-sm text-gray-600 mt-2 space-y-1 ml-4">
-              <li>1. 读取所有员工的加密薪资数据</li>
-              <li>2. 在不解密的情况下进行加密数据相加（同态加法）</li>
-              <li>3. 计算平均值（加密数据除法）</li>
-              <li>4. 统计员工数量</li>
-              <li>5. 解密统计结果（只解密统计值，不解密原始数据）</li>
+              <li>1. {t.locale === "en" ? "Read all employees' encrypted salary data" : "读取所有员工的加密薪资数据"}</li>
+              <li>2. {t.locale === "en" ? "Perform encrypted data addition without decryption (homomorphic addition)" : "在不解密的情况下进行加密数据相加（同态加法）"}</li>
+              <li>3. {t.locale === "en" ? "Calculate average (encrypted data division)" : "计算平均值（加密数据除法）"}</li>
+              <li>4. {t.locale === "en" ? "Count employees" : "统计员工数量"}</li>
+              <li>5. {t.locale === "en" ? "Decrypt statistics result (only decrypt statistics value, not raw data)" : "解密统计结果（只解密统计值，不解密原始数据）"}</li>
             </ul>
           </div>
         </div>
@@ -220,7 +220,7 @@ export function StatisticsAnalysis() {
           </div>
           <button
             onClick={async () => {
-              const budgetInput = (document.querySelector('input[placeholder*="预算"]') as HTMLInputElement)?.value;
+              const budgetInput = (document.querySelector(`input[placeholder*="${t.locale === "en" ? "e.g." : "例如"}"]`) as HTMLInputElement)?.value;
               if (!budgetInput || !selectedDepartment) {
                 notification.warning(t.statistics.warning, { duration: 3000 });
                 return;
@@ -231,10 +231,10 @@ export function StatisticsAnalysis() {
                 notification.remove(loadingId);
                 notification.success(
                   <div className="space-y-2">
-                    <div className="font-bold">✅ 预算合规检查完成</div>
+                    <div className="font-bold">✅ {t.locale === "en" ? "Budget Compliance Check Complete" : "预算合规检查完成"}</div>
                     <div className="text-sm">
-                      <div className="mb-2">此功能将在不解密任何薪资数据的情况下，比较部门总薪资与预算。</div>
-                      <div className="text-xs text-gray-400">功能将在后续版本中实现完整的智能合约调用。</div>
+                      <div className="mb-2">{t.locale === "en" ? "This function will compare the department's total salary with the budget without decrypting any salary data." : "此功能将在不解密任何薪资数据的情况下，比较部门总薪资与预算。"}</div>
+                      <div className="text-xs text-gray-400">{t.locale === "en" ? "This feature will implement full smart contract calls in future versions." : "功能将在后续版本中实现完整的智能合约调用。"}</div>
                     </div>
                   </div>,
                   { duration: 5000 }
@@ -243,14 +243,14 @@ export function StatisticsAnalysis() {
             }}
             className="w-full px-6 py-3 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors font-semibold"
           >
-            检查预算合规（不解密薪资）
+            {t.locale === "en" ? "Check Budget Compliance (No Salary Decryption)" : "检查预算合规（不解密薪资）"}
           </button>
         </div>
       </div>
 
       {/* FHE Statistics Explanation */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
-        <h4 className="font-semibold text-blue-900 mb-3">🔐 全同态加密统计原理</h4>
+        <h4 className="font-semibold text-blue-900 mb-3">🔐 {t.locale === "en" ? "Fully Homomorphic Encryption Statistics Principle" : "全同态加密统计原理"}</h4>
         <div className="space-y-3 text-sm text-blue-800">
           <div className="bg-white rounded-lg p-3">
             <p className="font-semibold mb-1">{t.locale === "en" ? "Traditional Method (Requires Decryption):" : "传统方式（需要解密）："}</p>

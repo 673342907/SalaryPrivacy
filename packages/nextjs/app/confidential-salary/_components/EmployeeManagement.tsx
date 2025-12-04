@@ -124,11 +124,11 @@ export function EmployeeManagement() {
         <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 mb-4">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-semibold text-yellow-900 mb-1">🔗 区块链模式</h4>
+              <h4 className="font-semibold text-yellow-900 mb-1">🔗 {t.employee.blockchainMode}</h4>
               <p className="text-sm text-yellow-800">
                 {useBlockchain 
-                  ? "数据将存储在区块链上（需要支付 Gas 费用）" 
-                  : "当前为演示模式，数据仅存储在本地"}
+                  ? t.employee.blockchainTip
+                  : t.employee.demoMode}
               </p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -143,7 +143,7 @@ export function EmployeeManagement() {
           </div>
           {useBlockchain && fhevmStatus !== "ready" && (
             <div className="mt-2 text-sm text-yellow-700">
-              ⚠️ FHEVM 状态: {fhevmStatus}，请等待初始化完成
+              ⚠️ {t.employee.fhevmStatus.replace("{status}", fhevmStatus)}
             </div>
           )}
         </div>
@@ -152,8 +152,8 @@ export function EmployeeManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{t.employee.title}</h2>
-          <p className="text-gray-600 mt-1">{t.employee.subtitle}</p>
+          <h2 className="text-2xl font-bold text-white">{t.employee.title}</h2>
+          <p className="text-gray-200 mt-1">{t.employee.subtitle}</p>
         </div>
         <button
           onClick={() => setShowAddForm(!showAddForm)}
@@ -207,32 +207,60 @@ export function EmployeeManagement() {
                 autoFocus
               />
               <div className="mt-1 flex gap-2 flex-wrap">
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, name: "张三" })}
-                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
-                >
-                  张三
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, name: "李四" })}
-                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
-                >
-                  李四
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, name: "王五" })}
-                  className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
-                >
-                  王五
-                </button>
+                {t.locale === "en" ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, name: "John" })}
+                      className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                    >
+                      John
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, name: "Jane" })}
+                      className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                    >
+                      Jane
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, name: "Bob" })}
+                      className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                    >
+                      Bob
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, name: "张三" })}
+                      className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                    >
+                      张三
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, name: "李四" })}
+                      className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                    >
+                      李四
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, name: "王五" })}
+                      className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded hover:bg-green-200"
+                    >
+                      王五
+                    </button>
+                  </>
+                )}
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                角色
+                {t.employee.role} <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.role}
@@ -316,19 +344,19 @@ export function EmployeeManagement() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    姓名
+                    {t.locale === "en" ? "Name" : "姓名"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    地址
+                    {t.locale === "en" ? "Address" : "地址"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    角色
+                    {t.locale === "en" ? "Role" : "角色"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    部门
+                    {t.locale === "en" ? "Department" : "部门"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    操作
+                    {t.locale === "en" ? "Actions" : "操作"}
                   </th>
                 </tr>
               </thead>
@@ -356,14 +384,14 @@ export function EmployeeManagement() {
                         onClick={() => {
                           notification.info(
                             <div className="space-y-2">
-                              <div className="font-bold">编辑员工</div>
+                              <div className="font-bold">{t.locale === "en" ? "Edit Employee" : "编辑员工"}</div>
                               <div className="text-sm space-y-1">
-                                <div><strong>姓名：</strong>{emp.name}</div>
-                                <div><strong>地址：</strong>{emp.address}</div>
-                                <div><strong>角色：</strong>{emp.role}</div>
-                                <div><strong>部门：</strong>{emp.department}</div>
+                                <div><strong>{t.locale === "en" ? "Name:" : "姓名："}</strong>{emp.name}</div>
+                                <div><strong>{t.locale === "en" ? "Address:" : "地址："}</strong>{emp.address}</div>
+                                <div><strong>{t.locale === "en" ? "Role:" : "角色："}</strong>{emp.role}</div>
+                                <div><strong>{t.locale === "en" ? "Department:" : "部门："}</strong>{emp.department}</div>
                               </div>
-                              <div className="text-xs text-gray-400 mt-2">编辑功能将在后续版本中实现。</div>
+                              <div className="text-xs text-gray-400 mt-2">{t.locale === "en" ? "Edit functionality will be implemented in future versions." : "编辑功能将在后续版本中实现。"}</div>
                             </div>,
                             { duration: 4000 }
                           );

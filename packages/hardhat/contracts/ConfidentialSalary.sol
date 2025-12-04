@@ -6,7 +6,7 @@ import { TFHE } from "@fhevm/solidity/TFHE.sol";
 
 /**
  * @title ConfidentialSalary
- * @author Zama Bounty Program
+ * @author ConfidentialSalary Team
  * @notice 基于FHEVM的隐私保护薪资管理系统
  * @dev 这是一个完整的FHEVM应用示例，演示了加密数据存储、访问控制、加密计算等核心概念
  * 

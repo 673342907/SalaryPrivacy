@@ -1,0 +1,36 @@
+{
+  "name": "create-fhevm-example",
+  "version": "1.0.0",
+  "description": "CLI tool to create FHEVM example projects",
+  "type": "module",
+  "bin": {
+    "create-fhevm-example": "./bin/cli.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx bin/cli.ts"
+  },
+  "keywords": [
+    "fhevm",
+    "fhe",
+    "hardhat",
+    "scaffold",
+    "template"
+  ],
+  "author": "ConfidentialSalary Team",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "fs-extra": "^11.2.0",
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.15"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/inquirer": "^9.0.7",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
+

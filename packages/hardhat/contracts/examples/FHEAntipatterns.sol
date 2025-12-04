@@ -6,7 +6,7 @@ import { TFHE } from "@fhevm/solidity/TFHE.sol";
 
 /**
  * @title FHEAntipatterns
- * @author Zama Bounty Program
+ * @author ConfidentialSalary Team
  * @notice 演示 FHEVM 的常见反模式和错误用法
  * @dev 这个合约展示了常见的错误，帮助开发者避免这些陷阱
  * 

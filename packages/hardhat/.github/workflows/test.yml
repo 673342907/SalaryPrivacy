@@ -1,0 +1,52 @@
+name: Test and Coverage
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+      
+      - name: Install pnpm
+        run: npm install -g pnpm
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Compile contracts
+        run: pnpm hardhat:compile
+        working-directory: .
+      
+      - name: Run tests
+        run: pnpm hardhat:test
+        working-directory: .
+      
+      - name: Generate coverage report
+        run: pnpm hardhat:coverage
+        working-directory: .
+        continue-on-error: true
+      
+      - name: Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./packages/hardhat/coverage/coverage.json
+          flags: hardhat
+          name: hardhat-coverage
+        continue-on-error: true
+

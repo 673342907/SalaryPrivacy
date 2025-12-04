@@ -236,19 +236,16 @@ export function SalaryManagement() {
         <div className="flex items-start gap-4">
           <div className="text-4xl">💼</div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">真实应用场景</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">{t.locale === "en" ? "Real-World Use Case" : "真实应用场景"}</h3>
             <p className="text-gray-700 mb-3">
-              <strong>问题：</strong> 传统薪资管理系统存在严重的隐私泄露风险。
-              即使使用加密存储，在进行统计分析时也需要解密所有数据，导致隐私暴露。
+              <strong>{t.locale === "en" ? "Problem:" : "问题："}</strong> {t.locale === "en" ? "Traditional salary management systems have serious privacy leakage risks. Even with encrypted storage, all data needs to be decrypted for statistical analysis, leading to privacy exposure." : "传统薪资管理系统存在严重的隐私泄露风险。即使使用加密存储，在进行统计分析时也需要解密所有数据，导致隐私暴露。"}
             </p>
             <p className="text-gray-700 mb-3">
-              <strong>解决方案：</strong> 使用 FHE 技术，薪资数据全程加密存储，
-              在不解密的情况下进行统计计算，既保护了隐私，又支持数据分析。
+              <strong>{t.locale === "en" ? "Solution:" : "解决方案："}</strong> {t.locale === "en" ? "Using FHE technology, salary data is fully encrypted and stored, allowing statistical calculations without decryption, protecting privacy while supporting data analysis." : "使用 FHE 技术，薪资数据全程加密存储，在不解密的情况下进行统计计算，既保护了隐私，又支持数据分析。"}
             </p>
             <div className="bg-white rounded-lg p-3 mt-3">
               <p className="text-sm text-gray-700">
-                <strong>✅ 实际价值：</strong> 企业可以安全地管理薪资数据，
-                进行预算分析和合规检查，同时完全保护员工隐私，符合 GDPR、CCPA 等数据保护法规。
+                <strong>✅ {t.locale === "en" ? "Actual Value:" : "实际价值："}</strong> {t.locale === "en" ? "Enterprises can securely manage salary data, perform budget analysis and compliance checks, while fully protecting employee privacy, complying with data protection regulations like GDPR, CCPA." : "企业可以安全地管理薪资数据，进行预算分析和合规检查，同时完全保护员工隐私，符合 GDPR、CCPA 等数据保护法规。"}
               </p>
             </div>
           </div>
@@ -311,8 +308,8 @@ export function SalaryManagement() {
 
       <div className="flex items-center justify-between mb-4">
         <div>
-          <h3 className="text-xl font-semibold text-gray-900">{t.locale === "en" ? "Salary Records" : "薪资记录"}</h3>
-          <p className="text-sm text-gray-600">{t.locale === "en" ? `Currently ${salaries.length} encrypted salary records` : `当前共有 ${salaries.length} 条加密薪资记录`}</p>
+          <h3 className="text-xl font-semibold text-white">{t.locale === "en" ? "Salary Records" : "薪资记录"}</h3>
+          <p className="text-sm text-gray-200">{t.locale === "en" ? `Currently ${salaries.length} encrypted salary records` : `当前共有 ${salaries.length} 条加密薪资记录`}</p>
         </div>
         <div className="flex gap-3">
           <button
@@ -406,7 +403,7 @@ export function SalaryManagement() {
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 金额将以加密形式存储在区块链上
+                💡 {t.locale === "en" ? "Amount will be stored encrypted on the blockchain" : "金额将以加密形式存储在区块链上"}
               </p>
             </div>
 
@@ -538,19 +535,19 @@ export function SalaryManagement() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    员工
+                    {t.locale === "en" ? "Employee" : "员工"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    地址
+                    {t.locale === "en" ? "Address" : "地址"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    薪资
+                    {t.locale === "en" ? "Salary" : "薪资"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    状态
+                    {t.locale === "en" ? "Status" : "状态"}
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    提交时间
+                    {t.locale === "en" ? "Submission Time" : "提交时间"}
                   </th>
                 </tr>
               </thead>
@@ -567,14 +564,14 @@ export function SalaryManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-semibold text-gray-900">
-                        {salary.encrypted ? "🔒 已加密" : `$${salary.amount}`}
+                        {salary.encrypted ? (t.locale === "en" ? "🔒 Encrypted" : "🔒 已加密") : `$${salary.amount}`}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                         salary.encrypted ? "bg-purple-100 text-purple-800" : "bg-green-100 text-green-800"
                       }`}>
-                        {salary.encrypted ? "加密" : "已解密"}
+                        {salary.encrypted ? (t.locale === "en" ? "Encrypted" : "加密") : (t.locale === "en" ? "Decrypted" : "已解密")}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
@@ -590,7 +587,7 @@ export function SalaryManagement() {
 
       {/* Info Card */}
       <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-        <h4 className="font-semibold text-purple-900 mb-2">💡 FHE 加密特性</h4>
+        <h4 className="font-semibold text-purple-900 mb-2">💡 {t.locale === "en" ? "FHE Encryption Features" : "FHE 加密特性"}</h4>
         <ul className="text-sm text-purple-800 space-y-1">
           <li>• {t.salary.feature1}</li>
           <li>• {t.salary.feature2}</li>

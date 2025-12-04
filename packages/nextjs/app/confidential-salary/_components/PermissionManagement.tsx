@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useAccount } from "wagmi";
 import { notification } from "~~/utils/helper/notification";
+import { useLocale } from "~~/contexts/LocaleContext";
 
 type Role = "Admin" | "HR" | "Manager" | "Employee";
 
@@ -93,8 +94,8 @@ export function PermissionManagement() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900">{t.permissions.title}</h2>
-          <p className="text-gray-600 mt-1">{t.permissions.subtitle}</p>
+          <h2 className="text-2xl font-bold text-white">{t.permissions.title}</h2>
+          <p className="text-gray-200 mt-1">{t.permissions.subtitle}</p>
         </div>
       </div>
 
@@ -152,11 +153,11 @@ export function PermissionManagement() {
           <button
             onClick={() => {
               if (!targetAddress.trim()) {
-                notification.warning("请输入目标地址", { duration: 3000 });
+                notification.warning(t.permissions.errors.addressRequired, { duration: 3000 });
                 return;
               }
               if (!targetAddress.startsWith("0x") || targetAddress.length !== 42) {
-                notification.error("请输入有效的以太坊地址（0x开头，42个字符）", { duration: 4000 });
+                notification.error(t.permissions.errors.addressInvalid, { duration: 4000 });
                 return;
               }
               const loadingId = notification.loading(t.locale === "en" ? "Assigning role..." : "正在分配角色...", { duration: Infinity });
@@ -165,12 +166,12 @@ export function PermissionManagement() {
                 notification.remove(loadingId);
                 notification.success(
                   <div className="space-y-2">
-                    <div className="font-bold">✅ 角色分配成功</div>
+                    <div className="font-bold">✅ {t.permissions.roleAssigned}</div>
                     <div className="text-sm space-y-1">
-                      <div><strong>目标地址：</strong>{targetAddress}</div>
-                      <div><strong>角色：</strong>{selectedRole}</div>
+                      <div><strong>{t.locale === "en" ? "Target Address:" : "目标地址："}</strong>{targetAddress}</div>
+                      <div><strong>{t.locale === "en" ? "Role:" : "角色："}</strong>{selectedRole}</div>
                     </div>
-                    <div className="text-xs text-gray-400 mt-2">此操作将在智能合约中执行，需要确认交易。功能将在后续版本中实现。</div>
+                    <div className="text-xs text-gray-400 mt-2">{t.permissions.featureNote}</div>
                   </div>,
                   { duration: 5000 }
                 );
@@ -178,7 +179,7 @@ export function PermissionManagement() {
             }}
             className="w-full px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-semibold"
           >
-            分配角色（仅 Admin）
+            {t.locale === "en" ? "Assign Role (Admin Only)" : "分配角色（仅 Admin）"}
           </button>
         </div>
       </div>
@@ -307,7 +308,7 @@ export function PermissionManagement() {
             </div>
             <p className="text-sm text-gray-700 mb-4">{role.description}</p>
             <div>
-              <p className="text-sm font-semibold text-gray-900 mb-2">权限列表：</p>
+              <p className="text-sm font-semibold text-gray-900 mb-2">{t.locale === "en" ? "Permission List:" : "权限列表："}</p>
               <ul className="text-sm text-gray-600 space-y-1">
                 {role.permissions.map((permission, index) => (
                   <li key={index} className="flex items-start gap-2">

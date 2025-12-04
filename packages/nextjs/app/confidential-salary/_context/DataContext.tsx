@@ -42,12 +42,15 @@ interface DataContextType {
 const DataContext = createContext<DataContextType | undefined>(undefined);
 
 export function DataProvider({ children }: { children: ReactNode }) {
+  // 始终从空数组开始，避免 hydration 错误
   const [departments, setDepartments] = useState<Department[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [salaries, setSalaries] = useState<Salary[]>([]);
+  const [mounted, setMounted] = useState(false);
 
-  // 从 localStorage 加载数据
+  // 在客户端挂载后从 localStorage 加载数据
   useEffect(() => {
+    setMounted(true);
     if (typeof window !== "undefined") {
       const savedDepartments = localStorage.getItem("confidentialSalary_departments");
       const savedEmployees = localStorage.getItem("confidentialSalary_employees");

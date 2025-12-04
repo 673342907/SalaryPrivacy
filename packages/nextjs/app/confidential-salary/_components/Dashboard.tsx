@@ -89,18 +89,18 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
         </p>
         <div className="bg-white/20 rounded-lg p-4 mb-4">
           <p className="text-sm text-white">
-            <strong className="text-blue-50">💡 {t.locale === "en" ? "Tip:" : "使用提示："}</strong> {t.dashboard.tip}
+            <strong className="text-blue-50">💡 {t.locale === "en" ? "Tip:" : "使用提示："}</strong> {t.dashboard?.tip || (t.locale === "en" ? "Access all functional modules through the top navigation bar. Each module has detailed function descriptions and operation guides" : "通过顶部导航栏可以访问所有功能模块。每个模块都有详细的功能说明和操作指引")}
           </p>
         </div>
         <div className="mt-4 flex items-center gap-2 text-sm flex-wrap">
           <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
-            🔐 {t.dashboard.features.encryption}
+            🔐 {t.dashboard?.features?.encryption || (t.locale === "en" ? "Fully Homomorphic Encryption Protection" : "全同态加密保护")}
           </span>
           <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
-            👥 {t.dashboard.features.permissions}
+            👥 {t.dashboard?.features?.permissions || (t.locale === "en" ? "Role-Based Permission Management" : "基于角色的权限管理")}
           </span>
           <span className="bg-white/30 px-3 py-1 rounded-full text-white font-medium">
-            📊 {t.dashboard.features.statistics}
+            📊 {t.dashboard?.features?.statistics || (t.locale === "en" ? "Encrypted Statistical Analysis" : "加密统计分析")}
           </span>
         </div>
       </div>
@@ -114,7 +114,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           <div>
             <h3 className="text-2xl font-bold text-white mb-2 flex items-center gap-2">
               <span>🚀</span>
-              <span>快速开始（推荐）</span>
+              <span>{t.locale === "en" ? "Quick Start (Recommended)" : "快速开始（推荐）"}</span>
             </h3>
             <p className="text-yellow-100 text-sm">
               {t.locale === "en" ? "Generate complete demo data with one click, experience all features immediately, no manual creation needed" : "一键生成完整演示数据，立即体验所有功能，无需手动创建"}
@@ -246,11 +246,11 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
 
       {/* System Status */}
       <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/20">
-        <h3 className="text-xl font-bold text-white mb-4">系统状态</h3>
+        <h3 className="text-xl font-bold text-white mb-4">{t.locale === "en" ? "System Status" : "系统状态"}</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="p-4 border-2 border-white/20 rounded-lg bg-white/10 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-200">FHEVM 连接</span>
+              <span className="text-sm text-gray-200">{t.locale === "en" ? "FHEVM Connection" : "FHEVM 连接"}</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                 fhevmStatus === "ready" 
                   ? "bg-green-100 text-green-800" 
@@ -261,37 +261,37 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
                   : "bg-gray-100 text-gray-800"
               }`}>
                 {fhevmStatus === "ready" 
-                  ? "✓ 已连接" 
+                  ? (t.locale === "en" ? "✓ Connected" : "✓ 已连接")
                   : fhevmStatus === "error"
-                  ? "❌ 错误"
+                  ? (t.locale === "en" ? "❌ Error" : "❌ 错误")
                   : fhevmStatus === "loading"
-                  ? "⏳ 连接中"
-                  : "⏸️ 未启动"}
+                  ? (t.locale === "en" ? "⏳ Connecting" : "⏳ 连接中")
+                  : (t.locale === "en" ? "⏸️ Not Started" : "⏸️ 未启动")}
               </span>
             </div>
             <p className="text-xs text-gray-300">
               {fhevmStatus === "ready" 
-                ? "FHEVM 实例已就绪" 
+                ? (t.locale === "en" ? "FHEVM instance ready" : "FHEVM 实例已就绪")
                 : fhevmStatus === "error"
-                ? fhevmError?.message || "FHEVM 初始化失败"
+                ? fhevmError?.message || (t.locale === "en" ? "FHEVM initialization failed" : "FHEVM 初始化失败")
                 : fhevmStatus === "loading"
-                ? "正在初始化 FHEVM..."
+                ? (t.locale === "en" ? "Initializing FHEVM..." : "正在初始化 FHEVM...")
                 : !address
-                ? "请先连接钱包"
+                ? (t.locale === "en" ? "Please connect wallet first" : "请先连接钱包")
                 : !provider
-                ? "等待钱包提供者..."
-                : "等待初始化..."}
+                ? (t.locale === "en" ? "Waiting for wallet provider..." : "等待钱包提供者...")
+                : (t.locale === "en" ? "Waiting for initialization..." : "等待初始化...")}
             </p>
             {fhevmError && (
               <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs">
-                <p className="text-red-800 font-semibold mb-1">错误详情:</p>
+                <p className="text-red-800 font-semibold mb-1">{t.locale === "en" ? "Error Details:" : "错误详情:"}</p>
                 <p className="text-red-600">{fhevmError.message}</p>
                 {fhevmError.message.includes("relayerSDK") && (
                   <div className="mt-2 text-red-700">
-                    <p className="font-semibold">💡 解决方案：</p>
+                    <p className="font-semibold">💡 {t.locale === "en" ? "Solution:" : "解决方案："}</p>
                     <ul className="list-disc list-inside mt-1 space-y-1">
-                      <li>使用本地 Hardhat 节点（Chain ID: 31337）</li>
-                      <li>或确保已加载 FHEVM Relayer SDK</li>
+                      <li>{t.locale === "en" ? "Use local Hardhat node (Chain ID: 31337)" : "使用本地 Hardhat 节点（Chain ID: 31337）"}</li>
+                      <li>{t.locale === "en" ? "Or ensure FHEVM Relayer SDK is loaded" : "或确保已加载 FHEVM Relayer SDK"}</li>
                       <li>{t.locale === "en" ? "Current Network:" : "当前网络:"} {chainId === 31337 ? (t.locale === "en" ? "Local Development" : "本地开发") : `Sepolia (${chainId})`}</li>
                     </ul>
                   </div>
@@ -302,9 +302,9 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
 
           <div className="p-4 border-2 border-white/20 rounded-lg bg-white/10 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-100 font-medium">钱包地址</span>
+              <span className="text-sm text-gray-100 font-medium">{t.locale === "en" ? "Wallet Address" : "钱包地址"}</span>
               <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/40 text-blue-50 border border-blue-400/60">
-                {address ? "✓ 已连接" : "未连接"}
+                {address ? (t.locale === "en" ? "✓ Connected" : "✓ 已连接") : (t.locale === "en" ? "Not Connected" : "未连接")}
               </span>
             </div>
             <p className="text-xs text-gray-100 font-mono break-all font-medium">
@@ -314,7 +314,7 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
 
           <div className="p-4 border-2 border-white/20 rounded-lg bg-white/10 backdrop-blur-sm">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-gray-200">网络</span>
+              <span className="text-sm text-gray-200">{t.locale === "en" ? "Network" : "网络"}</span>
               <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
                 chainId === 11155111 
                   ? "bg-purple-100 text-purple-800" 
@@ -331,14 +331,14 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
             </div>
             <p className="text-xs text-gray-300">
               {chainId === 11155111 
-                ? "测试网络（需要 Relayer SDK）" 
+                ? (t.locale === "en" ? "Test Network (Requires Relayer SDK)" : "测试网络（需要 Relayer SDK）")
                 : chainId === 31337
-                ? "本地开发网络（Hardhat）"
-                : `Chain ${chainId}（请切换到 Sepolia 或本地网络）`}
+                ? (t.locale === "en" ? "Local Development Network (Hardhat)" : "本地开发网络（Hardhat）")
+                : (t.locale === "en" ? `Chain ${chainId} (Please switch to Sepolia or local network)` : `Chain ${chainId}（请切换到 Sepolia 或本地网络）`)}
             </p>
             {chainId === 11155111 && fhevmStatus === "error" && (
               <p className="text-xs text-orange-400 mt-1 font-medium">
-                ⚠️ Sepolia 需要 Relayer SDK，建议使用本地 Hardhat 节点进行开发
+                ⚠️ {t.locale === "en" ? "Sepolia requires Relayer SDK, recommend using local Hardhat node for development" : "Sepolia 需要 Relayer SDK，建议使用本地 Hardhat 节点进行开发"}
               </p>
             )}
           </div>
@@ -362,15 +362,15 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
 
       {/* Feature Highlights */}
       <div className="bg-gradient-to-br from-indigo-500/30 to-purple-500/30 backdrop-blur-md rounded-xl shadow-lg p-6 border border-white/20">
-        <h3 className="text-xl font-bold text-white mb-4">✨ 核心功能亮点</h3>
+        <h3 className="text-xl font-bold text-white mb-4">✨ {t.locale === "en" ? "Core Feature Highlights" : "核心功能亮点"}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">🔐</span>
-              <h4 className="font-semibold text-white">全同态加密</h4>
+              <h4 className="font-semibold text-white">{t.locale === "en" ? "Fully Homomorphic Encryption" : "全同态加密"}</h4>
             </div>
             <p className="text-sm text-gray-200">
-              所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算
+              {t.locale === "en" ? "All salary data is stored encrypted on-chain, supporting statistical calculations without decryption" : "所有薪资数据在链上加密存储，支持在不解密的情况下进行统计计算"}
             </p>
           </div>
 
@@ -380,24 +380,24 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
               <h4 className="font-semibold text-white">{t.locale === "en" ? "Role Permission Management" : "角色权限管理"}</h4>
             </div>
             <p className="text-sm text-gray-200">
-              基于智能合约的 RBAC 系统，确保数据安全和访问控制
+              {t.locale === "en" ? "Smart contract-based RBAC system, ensuring data security and access control" : "基于智能合约的 RBAC 系统，确保数据安全和访问控制"}
             </p>
           </div>
 
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">📊</span>
-              <h4 className="font-semibold text-white">加密统计分析</h4>
+              <h4 className="font-semibold text-white">{t.locale === "en" ? "Encrypted Statistical Analysis" : "加密统计分析"}</h4>
             </div>
             <p className="text-sm text-gray-200">
-              在不解密原始数据的情况下计算平均值、总和、分布等统计信息
+              {t.locale === "en" ? "Calculate average, sum, distribution and other statistics without decrypting raw data" : "在不解密原始数据的情况下计算平均值、总和、分布等统计信息"}
             </p>
           </div>
 
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20 hover:bg-white/15 transition-all">
             <div className="flex items-center gap-3 mb-2">
               <span className="text-2xl">🏢</span>
-              <h4 className="font-semibold text-white">企业级应用</h4>
+              <h4 className="font-semibold text-white">{t.locale === "en" ? "Enterprise Application" : "企业级应用"}</h4>
             </div>
             <p className="text-sm text-gray-200">
               {t.locale === "en" ? "Complete organization management, employee management, salary management features, solving real HR pain points" : "完整的组织管理、员工管理、薪资管理功能，解决真实 HR 痛点"}

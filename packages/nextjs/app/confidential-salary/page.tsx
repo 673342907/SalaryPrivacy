@@ -24,25 +24,30 @@ export default function ConfidentialSalaryPage() {
   const { t } = useLocale();
   const [activeTab, setActiveTab] = useState<TabType>("dashboard");
   const [showGuide, setShowGuide] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // 确保只在客户端执行
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // 检查是否已经完成过引导
   useEffect(() => {
-    if (typeof window !== "undefined" && isConnected) {
-      const hasSeenGuide = localStorage.getItem("confidentialSalary_hasSeenGuide");
-      if (!hasSeenGuide) {
-        setShowGuide(true);
-      }
+    if (!mounted || !isConnected) return;
+    const hasSeenGuide = localStorage.getItem("confidentialSalary_hasSeenGuide");
+    if (!hasSeenGuide) {
+      setShowGuide(true);
     }
-  }, [isConnected]);
+  }, [isConnected, mounted]);
 
   // 监听 hash 变化，自动切换 tab
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (!mounted || typeof window === "undefined") return;
 
-      const handleHashChange = () => {
-        const hash = window.location.hash.slice(1); // 移除 # 号
-        if (hash && ["dashboard", "departments", "employees", "salary", "statistics", "permissions", "optimizations"].includes(hash)) {
-          setActiveTab(hash as TabType);
+    const handleHashChange = () => {
+      const hash = window.location.hash.slice(1); // 移除 # 号
+      if (hash && ["dashboard", "departments", "employees", "salary", "statistics", "permissions", "optimizations"].includes(hash)) {
+        setActiveTab(hash as TabType);
         // 滚动到对应区域
         setTimeout(() => {
           const element = document.getElementById(hash);
@@ -62,11 +67,11 @@ export default function ConfidentialSalaryPage() {
     return () => {
       window.removeEventListener("hashchange", handleHashChange);
     };
-  }, []);
+  }, [mounted]);
 
   const handleCloseGuide = () => {
     setShowGuide(false);
-    if (typeof window !== "undefined") {
+    if (mounted && typeof window !== "undefined") {
       localStorage.setItem("confidentialSalary_hasSeenGuide", "true");
     }
   };
@@ -83,6 +88,18 @@ export default function ConfidentialSalaryPage() {
     }, 100);
   };
 
+  // 在客户端挂载之前显示加载状态，避免 hydration 错误
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p>{t.locale === "en" ? "Loading..." : "加载中..."}</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!isConnected) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
@@ -92,17 +109,17 @@ export default function ConfidentialSalaryPage() {
               🔐
             </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">ConfidentialSalary</h1>
-            <p className="text-gray-600 mb-1">{t.dashboard.subtitle}</p>
-            <p className="text-sm text-gray-500">{t.dashboard.description}</p>
+            <p className="text-gray-600 mb-1">{t.dashboard?.subtitle || (t.locale === "en" ? "Privacy-Preserving Salary Management Platform" : "隐私保护薪资管理平台")}</p>
+            <p className="text-sm text-gray-500">{t.dashboard?.description || (t.locale === "en" ? "Enterprise-grade privacy-preserving salary management system based on FHEVM" : "基于 FHEVM 的企业级隐私保护薪资管理系统")}</p>
           </div>
           
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-            <h3 className="font-semibold text-gray-900 mb-2">✨ 核心特性</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">✨ {t.locale === "en" ? "Core Features" : "核心特性"}</h3>
             <ul className="text-left text-sm text-gray-700 space-y-1">
-              <li>🔒 全同态加密保护 - 薪资数据全程加密</li>
-              <li>👥 基于角色的权限管理</li>
-              <li>📊 加密统计分析 - 不解密原始数据</li>
-              <li>🏢 完整的组织管理</li>
+              <li>🔒 {t.locale === "en" ? "Fully Homomorphic Encryption Protection - All salary data is encrypted" : "全同态加密保护 - 薪资数据全程加密"}</li>
+              <li>👥 {t.locale === "en" ? "Role-Based Permission Management" : "基于角色的权限管理"}</li>
+              <li>📊 {t.locale === "en" ? "Encrypted Statistical Analysis - No raw data decryption" : "加密统计分析 - 不解密原始数据"}</li>
+              <li>🏢 {t.locale === "en" ? "Complete Organization Management" : "完整的组织管理"}</li>
             </ul>
           </div>
 
@@ -111,7 +128,7 @@ export default function ConfidentialSalaryPage() {
           </div>
 
           <p className="text-xs text-gray-500">
-            {t.home.connectToStart}
+            {t.home?.connectToStart || (t.locale === "en" ? "Connect wallet to start using ConfidentialSalary" : "连接钱包开始使用 ConfidentialSalary")}
           </p>
         </div>
       </div>
@@ -216,7 +233,7 @@ export default function ConfidentialSalaryPage() {
         />
       )}
 
-      {/* Video Subtitles - 用于无旁白视频录制 */}
+      {/* Video Subtitles - For no-voice video recording */}
       <VideoSubtitles />
       </div>
     </DataProvider>

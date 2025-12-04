@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "@fhevm/hardhat-plugin";
+import "solidity-coverage";
 
 // 从环境变量读取私钥和 API 密钥
 const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
