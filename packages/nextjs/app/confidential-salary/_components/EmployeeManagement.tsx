@@ -97,7 +97,7 @@ export function EmployeeManagement() {
     address,
     addEmployeeToContract,
     addEmployee,
-    employees.length,
+    employees,
     departments,
     validateAddress,
     validateName,

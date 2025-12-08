@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
  */
 export function FHEVMLoader() {
   const [loadStatus, setLoadStatus] = useState<"loading" | "loaded" | "error">("loading");
-  const [retryCount, setRetryCount] = useState(0);
   const maxRetries = 3;
 
   const checkRelayerSDK = (): boolean => {

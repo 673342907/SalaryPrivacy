@@ -15,7 +15,7 @@ export function StatusBadges() {
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
     return (window as any).ethereum;
-  }, [address]);
+  }, []);
 
   // 使用 wagmi 的 chainId，如果没有则使用 Sepolia
   const chainId = wagmiChainId || 11155111;

@@ -78,7 +78,7 @@ export function DepartmentManagement() {
     address,
     createDepartment,
     addDepartment,
-    departments.length,
+    departments,
     validateName,
     validateAmount,
     t.department?.errors?.createFailed,

@@ -46,11 +46,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [departments, setDepartments] = useState<Department[]>([]);
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [salaries, setSalaries] = useState<Salary[]>([]);
-  const [mounted, setMounted] = useState(false);
 
   // 在客户端挂载后从 localStorage 加载数据
   useEffect(() => {
-    setMounted(true);
     if (typeof window !== "undefined") {
       const savedDepartments = localStorage.getItem("confidentialSalary_departments");
       const savedEmployees = localStorage.getItem("confidentialSalary_employees");

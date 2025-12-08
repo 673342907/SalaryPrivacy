@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback } from "react";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import { ComplianceBadge } from "./ComplianceBadge";
 import { DemoDataGenerator } from "./DemoDataGenerator";
@@ -20,16 +20,17 @@ interface ConfidentialSalaryDashboardProps {
 
 export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalaryDashboardProps) {
   const { t } = useLocale();
-  const { address, chainId: wagmiChainId } = useAccount();
-  const [demoData, setDemoData] = useState<any>(null);
+  const { chainId: wagmiChainId } = useAccount();
   const { navigateToTab } = useQuickNavigation();
 
   // 使用自定义 Hook 管理 FHEVM 状态
   const chainId = wagmiChainId || 11155111;
   const isMockChain = chainId === 31337;
 
-  const { relayerSDKReady, relayerSDKLoading, fhevmStatus, fhevmError, refreshFhevm, handleRetryFhevm } =
-    useFhevmStatus({ chainId, isMockChain });
+  const { relayerSDKReady, relayerSDKLoading, fhevmStatus, fhevmError, handleRetryFhevm } = useFhevmStatus({
+    chainId,
+    isMockChain,
+  });
 
   // 处理快速操作按钮点击
   const handleQuickAction = useCallback(
@@ -118,49 +119,51 @@ export function ConfidentialSalaryDashboard({ onStartGuide }: ConfidentialSalary
           </div>
         </div>
         <DemoDataGenerator
-          onGenerate={data => {
-            setDemoData(data);
-            // 使用更友好的Toast提示
-            setTimeout(() => {
-              notification.success(
-                <div className="space-y-2">
-                  <div className="font-bold text-lg">
-                    ✅ {t.locale === "en" ? "Demo Data Generated!" : "演示数据已生成！"}
-                  </div>
-                  <div className="text-sm">
-                    <div className="font-semibold mb-1">📊 {t.locale === "en" ? "Created:" : "已创建："}</div>
-                    <ul className="list-disc list-inside space-y-1 ml-2">
-                      <li>
-                        {t.locale === "en"
-                          ? `${data.departments.length} departments`
-                          : `${data.departments.length} 个部门`}
-                      </li>
-                      <li>
-                        {t.locale === "en" ? `${data.employees.length} employees` : `${data.employees.length} 名员工`}
-                      </li>
-                      <li>
-                        {t.locale === "en"
-                          ? `${data.salaries.length} salary records`
-                          : `${data.salaries.length} 条薪资记录`}
-                      </li>
-                    </ul>
-                  </div>
-                  <div className="text-sm mt-2">
-                    <div className="font-semibold">💡 {t.locale === "en" ? "Now You Can:" : "现在您可以："}</div>
-                    <ol className="list-decimal list-inside space-y-1 ml-2">
-                      <li>{t.locale === "en" ? "View departments and employees" : "查看各部门和员工"}</li>
-                      <li>{t.locale === "en" ? "View encrypted salary records" : "查看加密薪资记录"}</li>
-                      <li>{t.locale === "en" ? "Experience statistical analysis features" : "体验统计分析功能"}</li>
-                    </ol>
-                  </div>
-                  <div className="text-xs text-gray-400 mt-2">
-                    {t.locale === "en" ? "Please go to the top navigation bar to view!" : "请前往上方导航栏查看！"}
-                  </div>
-                </div>,
-                { duration: 6000 },
-              );
-            }, 500);
-          }}
+          onGenerate={useCallback(
+            (data: any) => {
+              // 使用更友好的Toast提示
+              setTimeout(() => {
+                notification.success(
+                  <div className="space-y-2">
+                    <div className="font-bold text-lg">
+                      ✅ {t.locale === "en" ? "Demo Data Generated!" : "演示数据已生成！"}
+                    </div>
+                    <div className="text-sm">
+                      <div className="font-semibold mb-1">📊 {t.locale === "en" ? "Created:" : "已创建："}</div>
+                      <ul className="list-disc list-inside space-y-1 ml-2">
+                        <li>
+                          {t.locale === "en"
+                            ? `${data.departments.length} departments`
+                            : `${data.departments.length} 个部门`}
+                        </li>
+                        <li>
+                          {t.locale === "en" ? `${data.employees.length} employees` : `${data.employees.length} 名员工`}
+                        </li>
+                        <li>
+                          {t.locale === "en"
+                            ? `${data.salaries.length} salary records`
+                            : `${data.salaries.length} 条薪资记录`}
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="text-sm mt-2">
+                      <div className="font-semibold">💡 {t.locale === "en" ? "Now You Can:" : "现在您可以："}</div>
+                      <ol className="list-decimal list-inside space-y-1 ml-2">
+                        <li>{t.locale === "en" ? "View departments and employees" : "查看各部门和员工"}</li>
+                        <li>{t.locale === "en" ? "View encrypted salary records" : "查看加密薪资记录"}</li>
+                        <li>{t.locale === "en" ? "Experience statistical analysis features" : "体验统计分析功能"}</li>
+                      </ol>
+                    </div>
+                    <div className="text-xs text-gray-400 mt-2">
+                      {t.locale === "en" ? "Please go to the top navigation bar to view!" : "请前往上方导航栏查看！"}
+                    </div>
+                  </div>,
+                  { duration: 6000 },
+                );
+              }, 500);
+            },
+            [t.locale],
+          )}
         />
       </div>
 
