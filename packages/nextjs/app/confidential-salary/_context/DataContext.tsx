@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { ReactNode, createContext, useContext, useEffect, useState } from "react";
 
 export interface Department {
   id: number;
@@ -149,6 +149,3 @@ export function useData() {
   }
   return context;
 }
-
-
-

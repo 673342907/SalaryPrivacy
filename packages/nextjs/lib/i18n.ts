@@ -34,7 +34,8 @@ export const translations = {
       title: "Confidential Salary",
       tagline: "Revive Privacy",
       description: "Enterprise-grade privacy-preserving salary management system based on FHEVM",
-      subDescription: "All salary data is stored encrypted on-chain, supporting statistical calculations without decryption",
+      subDescription:
+        "All salary data is stored encrypted on-chain, supporting statistical calculations without decryption",
       connectToStart: "Connect wallet to start using ConfidentialSalary",
       enterPlatform: "Enter ConfidentialSalary Platform",
       firstTimeTip: "First-time entry will automatically show usage guide to help you quickly understand all features",
@@ -52,7 +53,8 @@ export const translations = {
       feature6: "Quick Demo",
       feature6Description: "One-click demo data generation, quickly experience all features",
       featureNavigation: "Feature Navigation",
-      featureNavigationDescription: "Click the feature cards below to enter the corresponding module and experience full functionality",
+      featureNavigationDescription:
+        "Click the feature cards below to enter the corresponding module and experience full functionality",
     },
     // Navigation
     nav: {
@@ -118,7 +120,8 @@ export const translations = {
       budgetLabel: "Budget:",
       employeeCountLabel: "Employee Count:",
       editFeature: "Edit Feature",
-      editFeatureDesc: "This feature will be implemented in a future version, supporting modification of department name and budget",
+      editFeatureDesc:
+        "This feature will be implemented in a future version, supporting modification of department name and budget",
       featureDescription: "Feature Description",
       feature1: "Department budgets are stored encrypted on the blockchain",
       feature2: "Only authorized users (Admin/HR) can create and manage departments",
@@ -138,7 +141,8 @@ export const translations = {
       budgetLabel: "Budget:",
       employeeCountLabel: "Employee Count:",
       editFeature: "Edit Feature",
-      editFeatureDesc: "This feature will be implemented in a future version, supporting modification of department name and budget",
+      editFeatureDesc:
+        "This feature will be implemented in a future version, supporting modification of department name and budget",
       featureDescription: "Feature Description",
       feature1: "Department budgets are stored encrypted on the blockchain",
       feature2: "Only authorized users (Admin/HR) can create and manage departments",
@@ -311,7 +315,8 @@ export const translations = {
       assign: "Assign",
       roleAssigned: "Role Assigned",
       roleAssignedDesc: "Target Address: {address}\nRole: {role}",
-      featureNote: "This operation will be executed in the smart contract, transaction confirmation required. Feature will be implemented in future versions",
+      featureNote:
+        "This operation will be executed in the smart contract, transaction confirmation required. Feature will be implemented in future versions",
       errors: {
         addressRequired: "Please enter target address",
         addressInvalid: "Please enter a valid Ethereum address (starts with 0x, 42 characters)",
@@ -620,4 +625,3 @@ export function getTranslations(locale: Locale = defaultLocale) {
 export function useTranslations(locale: Locale = defaultLocale) {
   return translations[locale];
 }
-

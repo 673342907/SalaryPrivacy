@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { useAccount } from "wagmi";
+import { useEffect, useMemo, useState } from "react";
 import { useFhevm } from "@fhevm-sdk";
+import { useAccount } from "wagmi";
 
 interface UseFhevmStatusOptions {
   chainId: number;
@@ -50,7 +50,7 @@ export function useFhevmStatus({ chainId, isMockChain }: UseFhevmStatusOptions):
       const win = window as any;
       const isReady = !!(win.relayerSDK && typeof win.relayerSDK.initSDK === "function");
 
-      setRelayerSDKReady((prev) => {
+      setRelayerSDKReady(prev => {
         if (isReady && !prev) {
           console.log("[useFhevmStatus] Relayer SDK is ready");
         } else if (!isReady && prev) {
@@ -156,6 +156,3 @@ export function useFhevmStatus({ chainId, isMockChain }: UseFhevmStatusOptions):
     handleRetryFhevm,
   };
 }
-
-
-

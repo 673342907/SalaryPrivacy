@@ -8,20 +8,25 @@ import { useLocale } from "~~/contexts/LocaleContext";
  */
 export function ZamaConnection() {
   const { t } = useLocale();
-  
+
   return (
     <div className="bg-gradient-to-r from-indigo-600 to-purple-700 rounded-xl shadow-lg p-6 text-white mb-6">
       <div className="flex items-center gap-4 mb-4">
         <div className="text-5xl">🔬</div>
         <div>
-          <h3 className="text-2xl font-bold mb-1">{t.locale === "en" ? "Based on Zama FHEVM Technology" : "基于 Zama FHEVM 技术"}</h3>
+          <h3 className="text-2xl font-bold mb-1">
+            {t.locale === "en" ? "Based on Zama FHEVM Technology" : "基于 Zama FHEVM 技术"}
+          </h3>
           <p className="text-indigo-100">Powered by Zama&apos;s Fully Homomorphic Encryption Virtual Machine</p>
         </div>
       </div>
 
       <div className="bg-white/10 rounded-lg p-4 mb-4">
         <p className="text-sm text-white/90 mb-3">
-          <strong>{t.locale === "en" ? "About Zama:" : "关于 Zama："}</strong> {t.locale === "en" ? "Zama is a leading developer of FHE (Fully Homomorphic Encryption) technology, committed to making privacy protection the default setting." : "Zama 是 FHE（全同态加密）技术的领先开发者，致力于让隐私保护成为默认设置。"}
+          <strong>{t.locale === "en" ? "About Zama:" : "关于 Zama："}</strong>{" "}
+          {t.locale === "en"
+            ? "Zama is a leading developer of FHE (Fully Homomorphic Encryption) technology, committed to making privacy protection the default setting."
+            : "Zama 是 FHE（全同态加密）技术的领先开发者，致力于让隐私保护成为默认设置。"}
         </p>
         <div className="flex items-center gap-4 text-sm">
           <a
@@ -78,12 +83,12 @@ export function ZamaConnection() {
 
       <div className="mt-4 bg-white/20 rounded-lg p-3 text-center">
         <p className="text-sm text-white/90">
-          <strong>{t.locale === "en" ? "Mission:" : "使命："}</strong> {t.locale === "en" ? "Make privacy protection the default setting, not an option" : "让隐私保护成为默认设置，而不是可选项"}
+          <strong>{t.locale === "en" ? "Mission:" : "使命："}</strong>{" "}
+          {t.locale === "en"
+            ? "Make privacy protection the default setting, not an option"
+            : "让隐私保护成为默认设置，而不是可选项"}
         </p>
       </div>
     </div>
   );
 }
-
-
-

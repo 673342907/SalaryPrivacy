@@ -57,9 +57,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {this.state.error && (
               <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mb-4">
                 <h2 className="text-lg font-semibold text-red-200 mb-2">错误信息：</h2>
-                <p className="text-red-100 font-mono text-sm break-all">
-                  {this.state.error.toString()}
-                </p>
+                <p className="text-red-100 font-mono text-sm break-all">{this.state.error.toString()}</p>
               </div>
             )}
 
@@ -99,6 +97,3 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
-
-
-

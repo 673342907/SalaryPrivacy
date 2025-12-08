@@ -1,8 +1,8 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { useFhevm } from "@fhevm-sdk";
 import { useAccount, useChainId } from "wagmi";
-import { useMemo, useState, useEffect } from "react";
 
 /**
  * 状态徽章组件
@@ -11,7 +11,7 @@ import { useMemo, useState, useEffect } from "react";
 export function StatusBadges() {
   const { address } = useAccount();
   const wagmiChainId = useChainId();
-  
+
   const provider = useMemo(() => {
     if (typeof window === "undefined") return undefined;
     return (window as any).ethereum;
@@ -22,14 +22,14 @@ export function StatusBadges() {
 
   // 检查是否是 mock chain（本地开发）
   const isMockChain = chainId === 31337;
-  
+
   // 对于真实网络（Sepolia），需要 relayer SDK
   // 对于 mock chain，使用本地 Hardhat 节点
   const initialMockChains = isMockChain ? { 31337: "http://localhost:8545" } : {};
 
   // 检查 Relayer SDK 是否已加载（用于 Sepolia）
   const [relayerSDKReady, setRelayerSDKReady] = useState(false);
-  
+
   useEffect(() => {
     if (typeof window !== "undefined" && chainId === 11155111) {
       const checkRelayerSDK = () => {
@@ -40,7 +40,7 @@ export function StatusBadges() {
           setRelayerSDKReady(false);
         }
       };
-      
+
       checkRelayerSDK();
       // 定期检查（因为 SDK 是异步加载的）
       const interval = setInterval(checkRelayerSDK, 1000);
@@ -68,15 +68,17 @@ export function StatusBadges() {
   return (
     <div className="absolute top-4 left-0 right-0 z-10 flex items-center justify-between px-4 sm:px-6 lg:px-8">
       {/* Left: FHEVM Ready Badge */}
-      <div className={`flex items-center gap-2 px-4 py-2 rounded-lg backdrop-blur-sm border ${
-        fhevmStatus === "ready"
-          ? "bg-green-500/20 border-green-400/50 text-green-100"
-          : fhevmStatus === "loading"
-          ? "bg-yellow-500/20 border-yellow-400/50 text-yellow-100"
-          : fhevmStatus === "error"
-          ? "bg-red-500/20 border-red-400/50 text-red-100"
-          : "bg-gray-500/20 border-gray-400/50 text-gray-100"
-      }`}>
+      <div
+        className={`flex items-center gap-2 px-4 py-2 rounded-lg backdrop-blur-sm border ${
+          fhevmStatus === "ready"
+            ? "bg-green-500/20 border-green-400/50 text-green-100"
+            : fhevmStatus === "loading"
+              ? "bg-yellow-500/20 border-yellow-400/50 text-yellow-100"
+              : fhevmStatus === "error"
+                ? "bg-red-500/20 border-red-400/50 text-red-100"
+                : "bg-gray-500/20 border-gray-400/50 text-gray-100"
+        }`}
+      >
         {fhevmStatus === "ready" ? (
           <>
             <span className="text-lg">✓</span>
@@ -117,4 +119,3 @@ export function StatusBadges() {
     </div>
   );
 }
-

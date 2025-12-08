@@ -110,27 +110,22 @@ export function OptimizationsShowcase() {
   ];
 
   const allItems = [
-    ...optimizations.examples.map((item) => ({ ...item, type: "examples" })),
-    ...optimizations.tests.map((item) => ({ ...item, type: "tests" })),
-    ...optimizations.tools.map((item) => ({ ...item, type: "tools" })),
-    ...optimizations.cicd.map((item) => ({ ...item, type: "cicd" })),
-    ...optimizations.docs.map((item) => ({ ...item, type: "docs" })),
+    ...optimizations.examples.map(item => ({ ...item, type: "examples" })),
+    ...optimizations.tests.map(item => ({ ...item, type: "tests" })),
+    ...optimizations.tools.map(item => ({ ...item, type: "tools" })),
+    ...optimizations.cicd.map(item => ({ ...item, type: "cicd" })),
+    ...optimizations.docs.map(item => ({ ...item, type: "docs" })),
   ];
 
-  const filteredItems =
-    activeCategory === "all"
-      ? allItems
-      : allItems.filter((item) => item.type === activeCategory);
+  const filteredItems = activeCategory === "all" ? allItems : allItems.filter(item => item.type === activeCategory);
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600/20 to-indigo-600/20 backdrop-blur-md rounded-xl p-6 border border-white/10">
         <h2 className="text-2xl font-bold text-white mb-2">🎯 {t.optimizations.title}</h2>
-        <p className="text-gray-300">
-          {t.optimizations.description}
-        </p>
-          <div className="mt-4 flex flex-wrap gap-2">
+        <p className="text-gray-300">{t.optimizations.description}</p>
+        <div className="mt-4 flex flex-wrap gap-2">
           <div className="bg-green-500/20 text-green-300 px-3 py-1 rounded-full text-sm">
             ✅ {t.locale === "en" ? "9 Example Contracts" : "9个示例合约"}
           </div>
@@ -151,7 +146,7 @@ export function OptimizationsShowcase() {
 
       {/* Category Filter */}
       <div className="flex flex-wrap gap-2">
-        {categories.map((category) => (
+        {categories.map(category => (
           <button
             key={category.id}
             onClick={() => setActiveCategory(category.id)}
@@ -177,11 +172,7 @@ export function OptimizationsShowcase() {
             key={index}
             className={`
               bg-white/5 backdrop-blur-md rounded-xl p-5 border
-              ${
-                item.highlight
-                  ? "border-yellow-500/50 bg-yellow-500/10"
-                  : "border-white/10 hover:border-white/20"
-              }
+              ${item.highlight ? "border-yellow-500/50 bg-yellow-500/10" : "border-white/10 hover:border-white/20"}
               transition-all hover:shadow-lg
             `}
           >
@@ -195,9 +186,7 @@ export function OptimizationsShowcase() {
             <h3 className="text-lg font-semibold text-white mb-2">{item.name}</h3>
             <p className="text-gray-400 text-sm mb-3">{item.description}</p>
             <div className="flex items-center justify-between mb-3">
-              <code className="text-xs text-gray-500 bg-black/30 px-2 py-1 rounded">
-                {item.file}
-              </code>
+              <code className="text-xs text-gray-500 bg-black/30 px-2 py-1 rounded">{item.file}</code>
               <span className="text-xs text-gray-500 capitalize">{item.category}</span>
             </div>
             {item.type === "examples" && (
@@ -206,12 +195,32 @@ export function OptimizationsShowcase() {
                   {t.locale === "en" ? "💡 How to use:" : "💡 使用方法："}
                 </p>
                 <div className="text-xs text-gray-400 space-y-1">
-                  <p>1. {t.locale === "en" ? "View the contract code in" : "查看合约代码："} <code className="text-gray-500">{item.file}</code></p>
-                  <p>2. {t.locale === "en" ? "Compile contracts:" : "编译合约："} <code className="text-gray-500">pnpm hardhat:compile</code></p>
-                  <p>3. {t.locale === "en" ? "Deploy to localhost (from project root):" : "部署到本地（在项目根目录）："} <code className="text-gray-500">pnpm deploy:localhost</code></p>
-                  <p>4. {t.locale === "en" ? "Or deploy from hardhat package:" : "或在 hardhat 目录下："} <code className="text-gray-500">pnpm deploy:localhost</code></p>
-                  <p>5. {t.locale === "en" ? "Use FHEVM SDK to encrypt values and interact with the contract" : "使用 FHEVM SDK 加密数值并与合约交互"}</p>
-                  <p>6. {t.locale === "en" ? "See GitHub repository for complete examples" : "查看 GitHub 仓库获取完整示例"}</p>
+                  <p>
+                    1. {t.locale === "en" ? "View the contract code in" : "查看合约代码："}{" "}
+                    <code className="text-gray-500">{item.file}</code>
+                  </p>
+                  <p>
+                    2. {t.locale === "en" ? "Compile contracts:" : "编译合约："}{" "}
+                    <code className="text-gray-500">pnpm hardhat:compile</code>
+                  </p>
+                  <p>
+                    3. {t.locale === "en" ? "Deploy to localhost (from project root):" : "部署到本地（在项目根目录）："}{" "}
+                    <code className="text-gray-500">pnpm deploy:localhost</code>
+                  </p>
+                  <p>
+                    4. {t.locale === "en" ? "Or deploy from hardhat package:" : "或在 hardhat 目录下："}{" "}
+                    <code className="text-gray-500">pnpm deploy:localhost</code>
+                  </p>
+                  <p>
+                    5.{" "}
+                    {t.locale === "en"
+                      ? "Use FHEVM SDK to encrypt values and interact with the contract"
+                      : "使用 FHEVM SDK 加密数值并与合约交互"}
+                  </p>
+                  <p>
+                    6.{" "}
+                    {t.locale === "en" ? "See GitHub repository for complete examples" : "查看 GitHub 仓库获取完整示例"}
+                  </p>
                 </div>
               </div>
             )}
@@ -258,11 +267,13 @@ export function OptimizationsShowcase() {
             📦 {t.locale === "en" ? "GitHub Repository - View all source code" : "GitHub 仓库 - 查看所有源代码"}
           </Link>
           <div className="text-gray-400 text-sm">
-            💡 {t.locale === "en" ? "Tip: View all optimization files on GitHub" : "提示：在 GitHub 上可以查看所有优化文件的完整代码"}
+            💡{" "}
+            {t.locale === "en"
+              ? "Tip: View all optimization files on GitHub"
+              : "提示：在 GitHub 上可以查看所有优化文件的完整代码"}
           </div>
         </div>
       </div>
     </div>
   );
 }
-

@@ -1,19 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { 
-  useFhevm, 
-  useFHEEncryption, 
-  useFHEDecrypt,
-  useInMemoryStorage,
-  FhevmInstance 
-} from "@fhevm-sdk";
-import { ethers } from "ethers";
-import { notification } from "~~/utils/helper/notification";
-import { useWagmiEthers } from "../wagmi/useWagmiEthers";
 import { useDeployedContractInfo } from "../helper";
+import { useWagmiEthers } from "../wagmi/useWagmiEthers";
+import { FhevmInstance, useFHEDecrypt, useFHEEncryption, useFhevm, useInMemoryStorage } from "@fhevm-sdk";
+import { ethers } from "ethers";
+import { useAccount, useReadContract, useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import type { AllowedChainIds } from "~~/utils/helper/networks";
+import { notification } from "~~/utils/helper/notification";
 
 // 合约地址（从环境变量或部署信息获取）
 const getContractAddress = (): `0x${string}` | undefined => {
@@ -26,7 +20,7 @@ const getContractAddress = (): `0x${string}` | undefined => {
 
 /**
  * useConfidentialSalary Hook
- * 
+ *
  * 提供与 ConfidentialSalary 智能合约交互的所有功能
  */
 export function useConfidentialSalary() {
@@ -38,9 +32,9 @@ export function useConfidentialSalary() {
 
   // 获取合约信息
   const allowedChainId = typeof chainId === "number" ? (chainId as AllowedChainIds) : undefined;
-  const { data: contractInfo } = useDeployedContractInfo({ 
-    contractName: "ConfidentialSalary", 
-    chainId: allowedChainId 
+  const { data: contractInfo } = useDeployedContractInfo({
+    contractName: "ConfidentialSalary",
+    chainId: allowedChainId,
   });
 
   // 合约地址（优先使用部署信息，其次使用环境变量）
@@ -84,10 +78,10 @@ export function useConfidentialSalary() {
   const { storage: fhevmDecryptionSignatureStorage } = useInMemoryStorage();
 
   // FHE 加密
-  const { encryptWith } = useFHEEncryption({ 
-    instance: fhevmInstance, 
-    ethersSigner: ethersSigner as any, 
-    contractAddress: contractAddress 
+  const { encryptWith } = useFHEEncryption({
+    instance: fhevmInstance,
+    ethersSigner: ethersSigner as any,
+    contractAddress: contractAddress,
   });
 
   // ============ 部门管理 ============
@@ -126,7 +120,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [fhevmInstance, address, contractAddress, ethersSigner, encryptWith, writeContract, contractABI]
+    [fhevmInstance, address, contractAddress, ethersSigner, encryptWith, writeContract, contractABI],
   );
 
   /**
@@ -156,7 +150,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [address, contractAddress, writeContract, contractABI]
+    [address, contractAddress, writeContract, contractABI],
   );
 
   /**
@@ -193,7 +187,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [fhevmInstance, address, contractAddress, ethersSigner, encryptWith, writeContract, contractABI]
+    [fhevmInstance, address, contractAddress, ethersSigner, encryptWith, writeContract, contractABI],
   );
 
   /**
@@ -223,7 +217,7 @@ export function useConfidentialSalary() {
         throw error;
       }
     },
-    [address, contractAddress, writeContract, contractABI]
+    [address, contractAddress, writeContract, contractABI],
   );
 
   // ============ 查询功能 ============
@@ -239,11 +233,7 @@ export function useConfidentialSalary() {
       }
 
       try {
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractABI as any,
-          ethersReadonlyProvider
-        );
+        const contract = new ethers.Contract(contractAddress, contractABI as any, ethersReadonlyProvider);
 
         const encryptedTotal = await contract.getDepartmentTotalSalary(departmentId);
         return encryptedTotal;
@@ -252,7 +242,7 @@ export function useConfidentialSalary() {
         return null;
       }
     },
-    [contractAddress, contractABI, ethersReadonlyProvider]
+    [contractAddress, contractABI, ethersReadonlyProvider],
   );
 
   /**
@@ -266,11 +256,7 @@ export function useConfidentialSalary() {
       }
 
       try {
-        const contract = new ethers.Contract(
-          contractAddress,
-          contractABI as any,
-          ethersReadonlyProvider
-        );
+        const contract = new ethers.Contract(contractAddress, contractABI as any, ethersReadonlyProvider);
 
         const encryptedSalary = await contract.getEncryptedSalary(employeeAddress);
         return encryptedSalary;
@@ -279,7 +265,7 @@ export function useConfidentialSalary() {
         return null;
       }
     },
-    [contractAddress, contractABI, ethersReadonlyProvider]
+    [contractAddress, contractABI, ethersReadonlyProvider],
   );
 
   /**
@@ -294,7 +280,7 @@ export function useConfidentialSalary() {
       }
       return [{ handle: encryptedSalaryHandle, contractAddress } as const];
     },
-    [contractAddress]
+    [contractAddress],
   );
 
   // 监听交易确认
@@ -323,7 +309,7 @@ export function useConfidentialSalary() {
     getDepartmentTotalSalary,
     getEncryptedSalary,
     prepareDecryptRequest,
-    
+
     // FHEVM 实例（供组件使用）
     fhevmInstance,
     ethersSigner,

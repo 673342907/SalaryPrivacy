@@ -72,13 +72,13 @@ export function SystemStatusCard({
     return t.locale === "en" ? "Waiting for initialization..." : "等待初始化...";
   };
 
-  const isRelayerError = fhevmError?.message && (
-    fhevmError.message.includes("relayerSDK") ||
-    fhevmError.message.includes("Relayer") ||
-    fhevmError.message.includes("Bad JSON") ||
-    fhevmError.message.includes("response correctly") ||
-    fhevmError.message.includes("didn't response")
-  );
+  const isRelayerError =
+    fhevmError?.message &&
+    (fhevmError.message.includes("relayerSDK") ||
+      fhevmError.message.includes("Relayer") ||
+      fhevmError.message.includes("Bad JSON") ||
+      fhevmError.message.includes("response correctly") ||
+      fhevmError.message.includes("didn't response"));
 
   return (
     <div className="bg-white/10 backdrop-blur-md rounded-lg shadow-md p-6 border border-white/20">
@@ -93,7 +93,7 @@ export function SystemStatusCard({
             </span>
           </div>
           <p className="text-xs text-gray-300">{getStatusMessage()}</p>
-          
+
           {chainId === 11155111 && relayerSDKLoading && !relayerSDKReady && (
             <div className="mt-2 p-2 bg-yellow-50/50 border border-yellow-200/50 rounded text-xs">
               <p className="text-yellow-700">
@@ -101,7 +101,7 @@ export function SystemStatusCard({
               </p>
             </div>
           )}
-          
+
           {fhevmError && (
             <div className="mt-2 p-3 bg-red-50/90 border-2 border-red-300 rounded-lg text-xs">
               <p className="text-red-800 font-semibold mb-2 flex items-center gap-2">
@@ -109,7 +109,7 @@ export function SystemStatusCard({
                 <span>{t.locale === "en" ? "Error Details:" : "错误详情:"}</span>
               </p>
               <p className="text-red-700 mb-3 font-medium">{fhevmError.message}</p>
-              
+
               {isRelayerError && (
                 <div className="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                   <p className="font-semibold text-yellow-900 mb-2 flex items-center gap-2">
@@ -118,28 +118,50 @@ export function SystemStatusCard({
                   </p>
                   <div className="space-y-2 text-yellow-800">
                     <div className="font-semibold">
-                      {t.locale === "en" ? "Option 1 (Recommended): Use Local Hardhat Node" : "方案 1（推荐）：使用本地 Hardhat 节点"}
+                      {t.locale === "en"
+                        ? "Option 1 (Recommended): Use Local Hardhat Node"
+                        : "方案 1（推荐）：使用本地 Hardhat 节点"}
                     </div>
                     <ol className="list-decimal list-inside ml-2 space-y-1 text-sm">
                       <li>
                         {t.locale === "en" ? "Start local Hardhat node:" : "启动本地 Hardhat 节点："}
                         <code className="ml-1 px-1.5 py-0.5 bg-yellow-100 rounded text-xs font-mono">pnpm chain</code>
                       </li>
-                      <li>{t.locale === "en" ? "Switch MetaMask to Localhost network (Chain ID: 31337)" : "在 MetaMask 中切换到本地网络（Chain ID: 31337）"}</li>
+                      <li>
+                        {t.locale === "en"
+                          ? "Switch MetaMask to Localhost network (Chain ID: 31337)"
+                          : "在 MetaMask 中切换到本地网络（Chain ID: 31337）"}
+                      </li>
                       <li>{t.locale === "en" ? "Refresh this page" : "刷新此页面"}</li>
                     </ol>
-                    
+
                     <div className="font-semibold mt-3">
-                      {t.locale === "en" ? "Option 2: Use Sepolia Testnet (Requires Relayer SDK)" : "方案 2：使用 Sepolia 测试网（需要 Relayer SDK）"}
+                      {t.locale === "en"
+                        ? "Option 2: Use Sepolia Testnet (Requires Relayer SDK)"
+                        : "方案 2：使用 Sepolia 测试网（需要 Relayer SDK）"}
                     </div>
                     <ol className="list-decimal list-inside ml-2 space-y-1 text-sm">
-                      <li>{t.locale === "en" ? "Click the 'Retry FHEVM Connection' button below" : "点击下方的「重试 FHEVM 连接」按钮"}</li>
-                      <li>{t.locale === "en" ? "Wait 5-10 seconds for Relayer service to respond" : "等待 5-10 秒让 Relayer 服务响应"}</li>
-                      <li>{t.locale === "en" ? "If error persists, refresh the page" : "如果错误仍然存在，请刷新页面"}</li>
-                      <li>{t.locale === "en" ? "Check browser console (F12) for detailed logs" : "检查浏览器控制台（F12）查看详细日志"}</li>
+                      <li>
+                        {t.locale === "en"
+                          ? "Click the 'Retry FHEVM Connection' button below"
+                          : "点击下方的「重试 FHEVM 连接」按钮"}
+                      </li>
+                      <li>
+                        {t.locale === "en"
+                          ? "Wait 5-10 seconds for Relayer service to respond"
+                          : "等待 5-10 秒让 Relayer 服务响应"}
+                      </li>
+                      <li>
+                        {t.locale === "en" ? "If error persists, refresh the page" : "如果错误仍然存在，请刷新页面"}
+                      </li>
+                      <li>
+                        {t.locale === "en"
+                          ? "Check browser console (F12) for detailed logs"
+                          : "检查浏览器控制台（F12）查看详细日志"}
+                      </li>
                     </ol>
                   </div>
-                  
+
                   {onRetry && (
                     <div className="mt-3 pt-2 border-t border-yellow-300">
                       <button
@@ -148,20 +170,26 @@ export function SystemStatusCard({
                         className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg font-semibold transition-colors text-sm"
                       >
                         {fhevmStatus === "loading"
-                          ? (t.locale === "en" ? "⏳ Retrying..." : "⏳ 重试中...")
-                          : (t.locale === "en" ? "🔄 Retry FHEVM Connection" : "🔄 重试 FHEVM 连接")}
+                          ? t.locale === "en"
+                            ? "⏳ Retrying..."
+                            : "⏳ 重试中..."
+                          : t.locale === "en"
+                            ? "🔄 Retry FHEVM Connection"
+                            : "🔄 重试 FHEVM 连接"}
                       </button>
                     </div>
                   )}
-                  
+
                   <div className="mt-3 pt-2 border-t border-yellow-300">
                     <p className="text-xs text-yellow-700">
                       <strong>{t.locale === "en" ? "Current Network:" : "当前网络:"}</strong>{" "}
                       {chainId === 31337
-                        ? (t.locale === "en" ? "✅ Local Development (Recommended)" : "✅ 本地开发（推荐）")
+                        ? t.locale === "en"
+                          ? "✅ Local Development (Recommended)"
+                          : "✅ 本地开发（推荐）"
                         : chainId === 11155111
-                        ? `⚠️ Sepolia (${chainId}) - ${t.locale === "en" ? "Requires Relayer SDK" : "需要 Relayer SDK"}`
-                        : `❓ Chain ${chainId} - ${t.locale === "en" ? "Please switch to Localhost or Sepolia" : "请切换到本地网络或 Sepolia"}`}
+                          ? `⚠️ Sepolia (${chainId}) - ${t.locale === "en" ? "Requires Relayer SDK" : "需要 Relayer SDK"}`
+                          : `❓ Chain ${chainId} - ${t.locale === "en" ? "Please switch to Localhost or Sepolia" : "请切换到本地网络或 Sepolia"}`}
                     </p>
                   </div>
                 </div>
@@ -173,13 +201,25 @@ export function SystemStatusCard({
         {/* 钱包地址 */}
         <div className="p-4 border-2 border-white/20 rounded-lg bg-white/10 backdrop-blur-sm">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-100 font-medium">{t.locale === "en" ? "Wallet Address" : "钱包地址"}</span>
+            <span className="text-sm text-gray-100 font-medium">
+              {t.locale === "en" ? "Wallet Address" : "钱包地址"}
+            </span>
             <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-500/40 text-blue-50 border border-blue-400/60">
-              {address ? (t.locale === "en" ? "✓ Connected" : "✓ 已连接") : (t.locale === "en" ? "Not Connected" : "未连接")}
+              {address
+                ? t.locale === "en"
+                  ? "✓ Connected"
+                  : "✓ 已连接"
+                : t.locale === "en"
+                  ? "Not Connected"
+                  : "未连接"}
             </span>
           </div>
           <p className="text-xs text-gray-100 font-mono break-all font-medium">
-            {address ? `${address.slice(0, 10)}...${address.slice(-8)}` : (t.locale === "en" ? "Please connect wallet" : "请连接钱包")}
+            {address
+              ? `${address.slice(0, 10)}...${address.slice(-8)}`
+              : t.locale === "en"
+                ? "Please connect wallet"
+                : "请连接钱包"}
           </p>
         </div>
 
@@ -192,8 +232,8 @@ export function SystemStatusCard({
                 chainId === 11155111
                   ? "bg-purple-100 text-purple-800"
                   : chainId === 31337
-                  ? "bg-green-100 text-green-800"
-                  : "bg-orange-100 text-orange-800"
+                    ? "bg-green-100 text-green-800"
+                    : "bg-orange-100 text-orange-800"
               }`}
             >
               {chainId === 11155111 ? "Sepolia" : chainId === 31337 ? "Localhost" : `Chain ${chainId}`}
@@ -201,10 +241,16 @@ export function SystemStatusCard({
           </div>
           <p className="text-xs text-gray-300">
             {chainId === 11155111
-              ? (t.locale === "en" ? "Test Network (Requires Relayer SDK)" : "测试网络（需要 Relayer SDK）")
+              ? t.locale === "en"
+                ? "Test Network (Requires Relayer SDK)"
+                : "测试网络（需要 Relayer SDK）"
               : chainId === 31337
-              ? (t.locale === "en" ? "Local Development Network (Hardhat)" : "本地开发网络（Hardhat）")
-              : (t.locale === "en" ? `Chain ${chainId} (Please switch to Sepolia or local network)` : `Chain ${chainId}（请切换到 Sepolia 或本地网络）`)}
+                ? t.locale === "en"
+                  ? "Local Development Network (Hardhat)"
+                  : "本地开发网络（Hardhat）"
+                : t.locale === "en"
+                  ? `Chain ${chainId} (Please switch to Sepolia or local network)`
+                  : `Chain ${chainId}（请切换到 Sepolia 或本地网络）`}
           </p>
           {chainId === 11155111 && (
             <div className="mt-2 space-y-1">
@@ -222,7 +268,10 @@ export function SystemStatusCard({
               )}
               {fhevmStatus === "error" && (
                 <p className="text-xs text-orange-400 font-medium">
-                  ⚠️ {t.locale === "en" ? "Sepolia requires Relayer SDK. If error persists, try refreshing the page or use local Hardhat node" : "Sepolia 需要 Relayer SDK。如果错误持续，请尝试刷新页面或使用本地 Hardhat 节点"}
+                  ⚠️{" "}
+                  {t.locale === "en"
+                    ? "Sepolia requires Relayer SDK. If error persists, try refreshing the page or use local Hardhat node"
+                    : "Sepolia 需要 Relayer SDK。如果错误持续，请尝试刷新页面或使用本地 Hardhat 节点"}
                 </p>
               )}
             </div>
@@ -232,6 +281,3 @@ export function SystemStatusCard({
     </div>
   );
 }
-
-
-

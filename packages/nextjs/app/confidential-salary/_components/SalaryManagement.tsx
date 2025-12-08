@@ -1,25 +1,25 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { useAccount } from "wagmi";
+import { useCallback, useMemo, useState } from "react";
 import { useData } from "../_context/DataContext";
-import { notification } from "~~/utils/helper/notification";
-import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
 import { useFHEDecrypt } from "@fhevm-sdk";
 import { ethers } from "ethers";
+import { useAccount } from "wagmi";
 import { useLocale } from "~~/contexts/LocaleContext";
+import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
 import { useFormValidation } from "~~/hooks/confidential-salary/useFormValidation";
+import { notification } from "~~/utils/helper/notification";
 
 export function SalaryManagement() {
   const { t } = useLocale();
   const { address } = useAccount();
   const { salaries, addSalary } = useData();
   const { validateAddress, validateAmount } = useFormValidation();
-  const { 
-    submitSalary, 
-    getEncryptedSalary, 
-    hasContract, 
-    isPending, 
+  const {
+    submitSalary,
+    getEncryptedSalary,
+    hasContract,
+    isPending,
     fhevmStatus,
     contractAddress,
     fhevmInstance,
@@ -93,7 +93,7 @@ export function SalaryManagement() {
             <div className="font-bold">✅ {t.salary.success}</div>
             <div className="text-sm">{t.salary.successMessage}</div>
           </div>,
-          { duration: 4000 }
+          { duration: 4000 },
         );
         setTimeout(() => setShowSuccess(false), 3000);
       } catch (error: any) {
@@ -104,7 +104,7 @@ export function SalaryManagement() {
       // 使用本地数据（演示模式）
       setIsEncrypting(true);
       const loadingId = notification.loading(t.salary.encrypting, { duration: Infinity });
-      
+
       // 模拟加密过程
       await new Promise(resolve => setTimeout(resolve, 1500));
       setIsEncrypting(false);
@@ -116,7 +116,7 @@ export function SalaryManagement() {
         employeeName: t.locale === "en" ? `Employee ${salaries.length + 1}` : `员工 ${salaries.length + 1}`,
         amount: formData.amount,
         encrypted: true,
-        submittedAt: new Date().toLocaleString('zh-CN'),
+        submittedAt: new Date().toLocaleString("zh-CN"),
       };
       addSalary(newSalary);
       setFormData({ employeeAddress: "", amount: "" });
@@ -127,11 +127,24 @@ export function SalaryManagement() {
           <div className="font-bold">✅ {t.salary.success}</div>
           <div className="text-sm">{t.salary.successMessage}</div>
         </div>,
-        { duration: 4000 }
+        { duration: 4000 },
       );
       setTimeout(() => setShowSuccess(false), 3000);
     }
-  }, [formData.employeeAddress, formData.amount, useBlockchain, hasContract, address, submitSalary, addSalary, salaries.length, validateAddress, validateAmount, t.salary, t.locale]);
+  }, [
+    formData.employeeAddress,
+    formData.amount,
+    useBlockchain,
+    hasContract,
+    address,
+    submitSalary,
+    addSalary,
+    salaries,
+    validateAddress,
+    validateAmount,
+    t.salary,
+    t.locale,
+  ]);
 
   const handleViewSalary = async () => {
     if (!viewAddress) {
@@ -147,12 +160,15 @@ export function SalaryManagement() {
     if (useBlockchain && hasContract && address) {
       try {
         setIsDecrypting(true);
-        const loadingId = notification.loading(t.locale === "en" ? "Retrieving encrypted salary..." : "正在获取加密薪资...", { duration: Infinity });
-        
+        const loadingId = notification.loading(
+          t.locale === "en" ? "Retrieving encrypted salary..." : "正在获取加密薪资...",
+          { duration: Infinity },
+        );
+
         // 获取加密薪资
         const encryptedHandle = await getEncryptedSalary(viewAddress);
         notification.remove(loadingId);
-        
+
         if (!encryptedHandle) {
           setIsDecrypting(false);
           notification.warning(t.salary.notFound, { duration: 3000 });
@@ -161,16 +177,18 @@ export function SalaryManagement() {
 
         // 设置要解密的 handle
         setEncryptedSalaryHandle(encryptedHandle);
-        
+
         // 触发解密
         if (canDecrypt && decrypt) {
           await decrypt();
         }
-        
+
         setIsDecrypting(false);
       } catch (error: any) {
         setIsDecrypting(false);
-        notification.error(`${t.locale === "en" ? "Failed to view salary" : "查看薪资失败"}: ${error.message}`, { duration: 5000 });
+        notification.error(`${t.locale === "en" ? "Failed to view salary" : "查看薪资失败"}: ${error.message}`, {
+          duration: 5000,
+        });
       }
     } else {
       // 使用本地数据（演示模式）
@@ -180,22 +198,26 @@ export function SalaryManagement() {
       await new Promise(resolve => setTimeout(resolve, 1500));
       setIsDecrypting(false);
       notification.remove(loadingId);
-      
+
       const salary = salaries.find(s => s.employeeAddress.toLowerCase() === viewAddress.toLowerCase());
       if (salary) {
         notification.success(
           <div className="space-y-1">
             <div className="font-bold">✅ {t.salary.decryptSuccess}</div>
-            <div className="text-sm">{t.locale === "en" ? "Employee" : "员工"}：{salary.employeeName}</div>
-            <div className="text-sm">{t.locale === "en" ? "Salary" : "薪资"}：{salary.amount} ETH</div>
+            <div className="text-sm">
+              {t.locale === "en" ? "Employee" : "员工"}：{salary.employeeName}
+            </div>
+            <div className="text-sm">
+              {t.locale === "en" ? "Salary" : "薪资"}：{salary.amount} ETH
+            </div>
           </div>,
-          { duration: 4000 }
+          { duration: 4000 },
         );
       } else {
         notification.warning(t.salary.notFound, { duration: 3000 });
       }
     }
-    
+
     setShowViewForm(false);
   };
 
@@ -206,9 +228,13 @@ export function SalaryManagement() {
       notification.success(
         <div className="space-y-1">
           <div className="font-bold">✅ {t.salary.decryptSuccess}</div>
-          <div className="text-sm">{t.salary.decryptSuccessMessage.replace("{address}", `${viewAddress.slice(0, 10)}...${viewAddress.slice(-8)}`).replace("{amount}", Number(decryptedValue).toString())}</div>
+          <div className="text-sm">
+            {t.salary.decryptSuccessMessage
+              .replace("{address}", `${viewAddress.slice(0, 10)}...${viewAddress.slice(-8)}`)
+              .replace("{amount}", Number(decryptedValue).toString())}
+          </div>
         </div>,
-        { duration: 5000 }
+        { duration: 5000 },
       );
       setEncryptedSalaryHandle(null);
     }
@@ -226,10 +252,7 @@ export function SalaryManagement() {
               <p className="text-sm text-green-700">{t.salary.successMessage}</p>
             </div>
           </div>
-          <button
-            onClick={() => setShowSuccess(false)}
-            className="text-green-600 hover:text-green-800"
-          >
+          <button onClick={() => setShowSuccess(false)} className="text-green-600 hover:text-green-800">
             ✕
           </button>
         </div>
@@ -240,16 +263,27 @@ export function SalaryManagement() {
         <div className="flex items-start gap-4">
           <div className="text-4xl">💼</div>
           <div className="flex-1">
-            <h3 className="text-xl font-bold text-gray-900 mb-2">{t.locale === "en" ? "Real-World Use Case" : "真实应用场景"}</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">
+              {t.locale === "en" ? "Real-World Use Case" : "真实应用场景"}
+            </h3>
             <p className="text-gray-700 mb-3">
-              <strong>{t.locale === "en" ? "Problem:" : "问题："}</strong> {t.locale === "en" ? "Traditional salary management systems have serious privacy leakage risks. Even with encrypted storage, all data needs to be decrypted for statistical analysis, leading to privacy exposure." : "传统薪资管理系统存在严重的隐私泄露风险。即使使用加密存储，在进行统计分析时也需要解密所有数据，导致隐私暴露。"}
+              <strong>{t.locale === "en" ? "Problem:" : "问题："}</strong>{" "}
+              {t.locale === "en"
+                ? "Traditional salary management systems have serious privacy leakage risks. Even with encrypted storage, all data needs to be decrypted for statistical analysis, leading to privacy exposure."
+                : "传统薪资管理系统存在严重的隐私泄露风险。即使使用加密存储，在进行统计分析时也需要解密所有数据，导致隐私暴露。"}
             </p>
             <p className="text-gray-700 mb-3">
-              <strong>{t.locale === "en" ? "Solution:" : "解决方案："}</strong> {t.locale === "en" ? "Using FHE technology, salary data is fully encrypted and stored, allowing statistical calculations without decryption, protecting privacy while supporting data analysis." : "使用 FHE 技术，薪资数据全程加密存储，在不解密的情况下进行统计计算，既保护了隐私，又支持数据分析。"}
+              <strong>{t.locale === "en" ? "Solution:" : "解决方案："}</strong>{" "}
+              {t.locale === "en"
+                ? "Using FHE technology, salary data is fully encrypted and stored, allowing statistical calculations without decryption, protecting privacy while supporting data analysis."
+                : "使用 FHE 技术，薪资数据全程加密存储，在不解密的情况下进行统计计算，既保护了隐私，又支持数据分析。"}
             </p>
             <div className="bg-white rounded-lg p-3 mt-3">
               <p className="text-sm text-gray-700">
-                <strong>✅ {t.locale === "en" ? "Actual Value:" : "实际价值："}</strong> {t.locale === "en" ? "Enterprises can securely manage salary data, perform budget analysis and compliance checks, while fully protecting employee privacy, complying with data protection regulations like GDPR, CCPA." : "企业可以安全地管理薪资数据，进行预算分析和合规检查，同时完全保护员工隐私，符合 GDPR、CCPA 等数据保护法规。"}
+                <strong>✅ {t.locale === "en" ? "Actual Value:" : "实际价值："}</strong>{" "}
+                {t.locale === "en"
+                  ? "Enterprises can securely manage salary data, perform budget analysis and compliance checks, while fully protecting employee privacy, complying with data protection regulations like GDPR, CCPA."
+                  : "企业可以安全地管理薪资数据，进行预算分析和合规检查，同时完全保护员工隐私，符合 GDPR、CCPA 等数据保护法规。"}
               </p>
             </div>
           </div>
@@ -273,7 +307,9 @@ export function SalaryManagement() {
                 <li>{t.locale === "en" ? "Enter employee address and salary amount" : "输入员工地址和薪资金额"}</li>
                 <li>{t.locale === "en" ? "System encrypts salary using FHEVM" : "系统使用 FHEVM 对薪资进行加密"}</li>
                 <li>{t.locale === "en" ? "Encrypted data is stored on blockchain" : "加密后的数据存储在区块链上"}</li>
-                <li>{t.locale === "en" ? "Only authorized users can decrypt and view" : "只有有权限的用户可以解密查看"}</li>
+                <li>
+                  {t.locale === "en" ? "Only authorized users can decrypt and view" : "只有有权限的用户可以解密查看"}
+                </li>
               </ol>
             </div>
           </div>
@@ -286,17 +322,13 @@ export function SalaryManagement() {
           <div className="flex items-center justify-between">
             <div>
               <h4 className="font-semibold text-yellow-900 mb-1">🔗 {t.salary.blockchainMode}</h4>
-              <p className="text-sm text-yellow-800">
-                {useBlockchain 
-                  ? t.salary.blockchainTip
-                  : t.salary.demoMode}
-              </p>
+              <p className="text-sm text-yellow-800">{useBlockchain ? t.salary.blockchainTip : t.salary.demoMode}</p>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
               <input
                 type="checkbox"
                 checked={useBlockchain}
-                onChange={(e) => setUseBlockchain(e.target.checked)}
+                onChange={e => setUseBlockchain(e.target.checked)}
                 className="sr-only peer"
               />
               <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-yellow-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-600"></div>
@@ -304,7 +336,10 @@ export function SalaryManagement() {
           </div>
           {useBlockchain && fhevmStatus !== "ready" && (
             <div className="mt-2 text-sm text-yellow-700">
-              ⚠️ {t.locale === "en" ? `FHEVM Status: ${fhevmStatus}, please wait for initialization` : `FHEVM 状态: ${fhevmStatus}，请等待初始化完成`}
+              ⚠️{" "}
+              {t.locale === "en"
+                ? `FHEVM Status: ${fhevmStatus}, please wait for initialization`
+                : `FHEVM 状态: ${fhevmStatus}，请等待初始化完成`}
             </div>
           )}
         </div>
@@ -313,7 +348,11 @@ export function SalaryManagement() {
       <div className="flex items-center justify-between mb-4">
         <div>
           <h3 className="text-xl font-semibold text-white">{t.locale === "en" ? "Salary Records" : "薪资记录"}</h3>
-          <p className="text-sm text-gray-200">{t.locale === "en" ? `Currently ${salaries.length} encrypted salary records` : `当前共有 ${salaries.length} 条加密薪资记录`}</p>
+          <p className="text-sm text-gray-200">
+            {t.locale === "en"
+              ? `Currently ${salaries.length} encrypted salary records`
+              : `当前共有 ${salaries.length} 条加密薪资记录`}
+          </p>
         </div>
         <div className="flex gap-3">
           <button
@@ -336,7 +375,9 @@ export function SalaryManagement() {
       {/* Submit Salary Form */}
       {showSubmitForm && (
         <div className="bg-white rounded-lg shadow-md p-6 border-2 border-purple-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.locale === "en" ? "Submit Encrypted Salary" : "提交加密薪资"}</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            {t.locale === "en" ? "Submit Encrypted Salary" : "提交加密薪资"}
+          </h3>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -346,7 +387,7 @@ export function SalaryManagement() {
                 <input
                   type="text"
                   value={formData.employeeAddress}
-                  onChange={(e) => setFormData({ ...formData, employeeAddress: e.target.value })}
+                  onChange={e => setFormData({ ...formData, employeeAddress: e.target.value })}
                   placeholder="0x..."
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
                 />
@@ -361,7 +402,14 @@ export function SalaryManagement() {
                 )}
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 {address ? (t.locale === "en" ? `Current wallet: ${address.slice(0, 10)}...${address.slice(-8)}` : `当前钱包：${address.slice(0, 10)}...${address.slice(-8)}`) : (t.locale === "en" ? "Please connect wallet first" : "请先连接钱包")}
+                💡{" "}
+                {address
+                  ? t.locale === "en"
+                    ? `Current wallet: ${address.slice(0, 10)}...${address.slice(-8)}`
+                    : `当前钱包：${address.slice(0, 10)}...${address.slice(-8)}`
+                  : t.locale === "en"
+                    ? "Please connect wallet first"
+                    : "请先连接钱包"}
               </p>
             </div>
             <div>
@@ -371,7 +419,7 @@ export function SalaryManagement() {
               <input
                 type="number"
                 value={formData.amount}
-                onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                onChange={e => setFormData({ ...formData, amount: e.target.value })}
                 placeholder={t.locale === "en" ? "e.g., 10000" : "例如：10000"}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 autoFocus
@@ -407,7 +455,10 @@ export function SalaryManagement() {
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                💡 {t.locale === "en" ? "Amount will be stored encrypted on the blockchain" : "金额将以加密形式存储在区块链上"}
+                💡{" "}
+                {t.locale === "en"
+                  ? "Amount will be stored encrypted on the blockchain"
+                  : "金额将以加密形式存储在区块链上"}
               </p>
             </div>
 
@@ -418,36 +469,51 @@ export function SalaryManagement() {
                   <div className="flex items-center gap-3">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
                     <div className="flex-1">
-                      <p className="font-semibold text-purple-900 text-lg">🔐 {t.locale === "en" ? "FHE Encryption in Progress..." : "FHE 加密进行中..."}</p>
+                      <p className="font-semibold text-purple-900 text-lg">
+                        🔐 {t.locale === "en" ? "FHE Encryption in Progress..." : "FHE 加密进行中..."}
+                      </p>
                       <p className="text-sm text-purple-700 mt-1">
-                        {t.locale === "en" ? "Using fully homomorphic encryption to protect your data" : "使用全同态加密技术保护您的数据"}
+                        {t.locale === "en"
+                          ? "Using fully homomorphic encryption to protect your data"
+                          : "使用全同态加密技术保护您的数据"}
                       </p>
                     </div>
                   </div>
-                  
+
                   {/* Encryption Steps Animation */}
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-sm">
                       <span className="text-green-600">✓</span>
-                      <span className="text-gray-700">{t.locale === "en" ? "Raw Data" : "原始数据"}: <strong>{formData.amount}</strong> ETH</span>
+                      <span className="text-gray-700">
+                        {t.locale === "en" ? "Raw Data" : "原始数据"}: <strong>{formData.amount}</strong> ETH
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <div className="animate-pulse w-2 h-2 bg-purple-600 rounded-full"></div>
-                      <span className="text-purple-700">{t.locale === "en" ? "Encrypting with FHEVM..." : "正在使用 FHEVM 加密..."}</span>
+                      <span className="text-purple-700">
+                        {t.locale === "en" ? "Encrypting with FHEVM..." : "正在使用 FHEVM 加密..."}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm opacity-50">
                       <span className="text-gray-400">○</span>
-                      <span className="text-gray-500">{t.locale === "en" ? "Generating encrypted ciphertext..." : "生成加密密文..."}</span>
+                      <span className="text-gray-500">
+                        {t.locale === "en" ? "Generating encrypted ciphertext..." : "生成加密密文..."}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-sm opacity-30">
                       <span className="text-gray-400">○</span>
-                      <span className="text-gray-500">{t.locale === "en" ? "Storing to blockchain..." : "存储到区块链..."}</span>
+                      <span className="text-gray-500">
+                        {t.locale === "en" ? "Storing to blockchain..." : "存储到区块链..."}
+                      </span>
                     </div>
                   </div>
 
                   {/* Progress Bar */}
                   <div className="w-full bg-purple-200 rounded-full h-2">
-                    <div className="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                    <div
+                      className="bg-gradient-to-r from-purple-600 to-indigo-600 h-2 rounded-full animate-pulse"
+                      style={{ width: "60%" }}
+                    ></div>
                   </div>
                 </div>
               </div>
@@ -461,12 +527,18 @@ export function SalaryManagement() {
 
             <button
               onClick={handleSubmitSalary}
-              disabled={isEncrypting || isPending || !formData.employeeAddress || !formData.amount || (useBlockchain && fhevmStatus !== "ready")}
+              disabled={
+                isEncrypting ||
+                isPending ||
+                !formData.employeeAddress ||
+                !formData.amount ||
+                (useBlockchain && fhevmStatus !== "ready")
+              }
               className="w-full px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-semibold shadow-md hover:shadow-lg transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
-              {isEncrypting || isPending 
-                ? "🔐 加密中..." 
-                : useBlockchain 
+              {isEncrypting || isPending
+                ? "🔐 加密中..."
+                : useBlockchain
                   ? t.salary.submitBlockchain
                   : t.salary.submitDemo}
             </button>
@@ -480,13 +552,11 @@ export function SalaryManagement() {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">{t.salary.view}</h3>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                {t.salary.employeeAddress}
-              </label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t.salary.employeeAddress}</label>
               <input
                 type="text"
                 value={viewAddress}
-                onChange={(e) => setViewAddress(e.target.value)}
+                onChange={e => setViewAddress(e.target.value)}
                 placeholder="0x..."
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent font-mono text-sm"
               />
@@ -498,9 +568,13 @@ export function SalaryManagement() {
                 <div className="flex items-center gap-3">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
                   <div>
-                    <p className="font-semibold text-indigo-900">{t.locale === "en" ? "Decrypting..." : "正在解密..."}</p>
+                    <p className="font-semibold text-indigo-900">
+                      {t.locale === "en" ? "Decrypting..." : "正在解密..."}
+                    </p>
                     <p className="text-sm text-indigo-700">
-                      {t.locale === "en" ? "🔐 Encrypted Data → 🔓 Decrypting → ✅ Decrypted" : "🔐 加密数据 → 🔓 解密中 → ✅ 已解密"}
+                      {t.locale === "en"
+                        ? "🔐 Encrypted Data → 🔓 Decrypting → ✅ Decrypted"
+                        : "🔐 加密数据 → 🔓 解密中 → ✅ 已解密"}
                     </p>
                   </div>
                 </div>
@@ -509,12 +583,14 @@ export function SalaryManagement() {
 
             <button
               onClick={handleViewSalary}
-              disabled={isDecrypting || isDecryptingFromHook || !viewAddress || (useBlockchain && fhevmStatus !== "ready")}
+              disabled={
+                isDecrypting || isDecryptingFromHook || !viewAddress || (useBlockchain && fhevmStatus !== "ready")
+              }
               className="w-full px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isDecrypting || isDecryptingFromHook 
-                ? "解密中..." 
-                : useBlockchain 
+              {isDecrypting || isDecryptingFromHook
+                ? "解密中..."
+                : useBlockchain
                   ? t.salary.viewBlockchain
                   : t.salary.viewDemo}
             </button>
@@ -556,7 +632,7 @@ export function SalaryManagement() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {salaries.map((salary) => (
+                {salaries.map(salary => (
                   <tr key={salary.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{salary.employeeName}</div>
@@ -572,15 +648,21 @@ export function SalaryManagement() {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                        salary.encrypted ? "bg-purple-100 text-purple-800" : "bg-green-100 text-green-800"
-                      }`}>
-                        {salary.encrypted ? (t.locale === "en" ? "Encrypted" : "加密") : (t.locale === "en" ? "Decrypted" : "已解密")}
+                      <span
+                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          salary.encrypted ? "bg-purple-100 text-purple-800" : "bg-green-100 text-green-800"
+                        }`}
+                      >
+                        {salary.encrypted
+                          ? t.locale === "en"
+                            ? "Encrypted"
+                            : "加密"
+                          : t.locale === "en"
+                            ? "Decrypted"
+                            : "已解密"}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {salary.submittedAt}
-                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{salary.submittedAt}</td>
                   </tr>
                 ))}
               </tbody>
@@ -591,7 +673,9 @@ export function SalaryManagement() {
 
       {/* Info Card */}
       <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-        <h4 className="font-semibold text-purple-900 mb-2">💡 {t.locale === "en" ? "FHE Encryption Features" : "FHE 加密特性"}</h4>
+        <h4 className="font-semibold text-purple-900 mb-2">
+          💡 {t.locale === "en" ? "FHE Encryption Features" : "FHE 加密特性"}
+        </h4>
         <ul className="text-sm text-purple-800 space-y-1">
           <li>• {t.salary.feature1}</li>
           <li>• {t.salary.feature2}</li>
@@ -602,4 +686,3 @@ export function SalaryManagement() {
     </div>
   );
 }
-

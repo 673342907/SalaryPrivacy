@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocale } from "~~/contexts/LocaleContext";
 
 type Step = {
@@ -25,35 +25,47 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [animationPhase, setAnimationPhase] = useState(0);
 
-  const steps: Step[] = useMemo(() => [
-    {
-      id: 1,
-      title: t.locale === "en" ? "Quick Start" : "快速开始",
-      description: t.locale === "en" ? "Click the \"Generate Demo Data\" button in Dashboard, the system will automatically create departments, employees, and salary data, allowing you to experience all features immediately." : "点击 Dashboard 中的\"一键生成演示数据\"按钮，系统会自动创建部门、员工和薪资数据，让您立即体验所有功能。",
-      icon: "🚀",
-      action: t.locale === "en" ? "Back to Dashboard" : "返回 Dashboard",
-      tab: "dashboard",
-      animation: t.locale === "en" ? "Data generation animation" : "数据生成动画",
-    },
-    {
-      id: 2,
-      title: t.locale === "en" ? "View Data" : "查看数据",
-      description: t.locale === "en" ? "After generating data, you can browse departments, employees, and salary records. All data is encrypted and stored." : "生成数据后，您可以浏览各部门、员工和薪资记录，所有数据都已加密存储。",
-      icon: "👀",
-      action: t.locale === "en" ? "Browse Data" : "浏览数据",
-      tab: "departments",
-      animation: t.locale === "en" ? "Data browsing animation" : "数据浏览动画",
-    },
-    {
-      id: 3,
-      title: t.locale === "en" ? "Experience Features" : "体验功能",
-      description: t.locale === "en" ? "Try the statistical analysis feature to see how statistical calculations are performed without decrypting raw data." : "尝试统计分析功能，查看如何在不解密原始数据的情况下进行统计计算。",
-      icon: "📊",
-      action: t.locale === "en" ? "Go to Statistical Analysis" : "前往统计分析",
-      tab: "statistics",
-      animation: t.locale === "en" ? "Statistical computation animation" : "统计计算动画",
-    },
-  ], [t.locale]);
+  const steps: Step[] = useMemo(
+    () => [
+      {
+        id: 1,
+        title: t.locale === "en" ? "Quick Start" : "快速开始",
+        description:
+          t.locale === "en"
+            ? 'Click the "Generate Demo Data" button in Dashboard, the system will automatically create departments, employees, and salary data, allowing you to experience all features immediately.'
+            : '点击 Dashboard 中的"一键生成演示数据"按钮，系统会自动创建部门、员工和薪资数据，让您立即体验所有功能。',
+        icon: "🚀",
+        action: t.locale === "en" ? "Back to Dashboard" : "返回 Dashboard",
+        tab: "dashboard",
+        animation: t.locale === "en" ? "Data generation animation" : "数据生成动画",
+      },
+      {
+        id: 2,
+        title: t.locale === "en" ? "View Data" : "查看数据",
+        description:
+          t.locale === "en"
+            ? "After generating data, you can browse departments, employees, and salary records. All data is encrypted and stored."
+            : "生成数据后，您可以浏览各部门、员工和薪资记录，所有数据都已加密存储。",
+        icon: "👀",
+        action: t.locale === "en" ? "Browse Data" : "浏览数据",
+        tab: "departments",
+        animation: t.locale === "en" ? "Data browsing animation" : "数据浏览动画",
+      },
+      {
+        id: 3,
+        title: t.locale === "en" ? "Experience Features" : "体验功能",
+        description:
+          t.locale === "en"
+            ? "Try the statistical analysis feature to see how statistical calculations are performed without decrypting raw data."
+            : "尝试统计分析功能，查看如何在不解密原始数据的情况下进行统计计算。",
+        icon: "📊",
+        action: t.locale === "en" ? "Go to Statistical Analysis" : "前往统计分析",
+        tab: "statistics",
+        animation: t.locale === "en" ? "Statistical computation animation" : "统计计算动画",
+      },
+    ],
+    [t.locale],
+  );
 
   const currentStepData = steps[currentStep];
   const progress = ((currentStep + 1) / steps.length) * 100;
@@ -130,28 +142,36 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
         return (
           <div className="relative h-64 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl overflow-hidden">
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className={`text-8xl transition-all duration-500 ${animationPhase === 1 ? 'scale-125 rotate-12' : animationPhase === 2 ? 'scale-110 -rotate-12' : 'scale-100 rotate-0'}`}>
+              <div
+                className={`text-8xl transition-all duration-500 ${animationPhase === 1 ? "scale-125 rotate-12" : animationPhase === 2 ? "scale-110 -rotate-12" : "scale-100 rotate-0"}`}
+              >
                 🏢
               </div>
             </div>
             <div className="absolute bottom-4 left-4 right-4">
               <div className="bg-white/90 rounded-lg p-3 text-sm">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className={`w-2 h-2 rounded-full ${animationPhase >= 1 ? 'bg-green-500' : 'bg-gray-300'} transition-all duration-300`}></div>
-                  <span className={animationPhase >= 1 ? 'text-green-700 font-semibold' : 'text-gray-500'}>
-                    {animationPhase >= 1 ? '✓' : '○'} {t.locale === "en" ? "Enter department name" : "输入部门名称"}
+                  <div
+                    className={`w-2 h-2 rounded-full ${animationPhase >= 1 ? "bg-green-500" : "bg-gray-300"} transition-all duration-300`}
+                  ></div>
+                  <span className={animationPhase >= 1 ? "text-green-700 font-semibold" : "text-gray-500"}>
+                    {animationPhase >= 1 ? "✓" : "○"} {t.locale === "en" ? "Enter department name" : "输入部门名称"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2 mb-2">
-                  <div className={`w-2 h-2 rounded-full ${animationPhase >= 2 ? 'bg-green-500' : 'bg-gray-300'} transition-all duration-300`}></div>
-                  <span className={animationPhase >= 2 ? 'text-green-700 font-semibold' : 'text-gray-500'}>
-                    {animationPhase >= 2 ? '✓' : '○'} {t.locale === "en" ? "Set encrypted budget" : "设置加密预算"}
+                  <div
+                    className={`w-2 h-2 rounded-full ${animationPhase >= 2 ? "bg-green-500" : "bg-gray-300"} transition-all duration-300`}
+                  ></div>
+                  <span className={animationPhase >= 2 ? "text-green-700 font-semibold" : "text-gray-500"}>
+                    {animationPhase >= 2 ? "✓" : "○"} {t.locale === "en" ? "Set encrypted budget" : "设置加密预算"}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${animationPhase >= 3 ? 'bg-green-500' : 'bg-gray-300'} transition-all duration-300`}></div>
-                  <span className={animationPhase >= 3 ? 'text-green-700 font-semibold' : 'text-gray-500'}>
-                    {animationPhase >= 3 ? '✓' : '○'} {t.locale === "en" ? "Department created" : "部门创建完成"}
+                  <div
+                    className={`w-2 h-2 rounded-full ${animationPhase >= 3 ? "bg-green-500" : "bg-gray-300"} transition-all duration-300`}
+                  ></div>
+                  <span className={animationPhase >= 3 ? "text-green-700 font-semibold" : "text-gray-500"}>
+                    {animationPhase >= 3 ? "✓" : "○"} {t.locale === "en" ? "Department created" : "部门创建完成"}
                   </span>
                 </div>
               </div>
@@ -164,13 +184,11 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
           <div className="relative h-64 bg-gradient-to-br from-green-50 to-emerald-100 rounded-xl overflow-hidden">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="flex gap-4">
-                {[0, 1, 2].map((i) => (
+                {[0, 1, 2].map(i => (
                   <div
                     key={i}
                     className={`text-6xl transition-all duration-500 ${
-                      animationPhase > i
-                        ? 'scale-110 translate-y-0 opacity-100'
-                        : 'scale-50 translate-y-8 opacity-0'
+                      animationPhase > i ? "scale-110 translate-y-0 opacity-100" : "scale-50 translate-y-8 opacity-0"
                     }`}
                     style={{ transitionDelay: `${i * 200}ms` }}
                   >
@@ -200,16 +218,16 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
           <div className="relative h-64 bg-gradient-to-br from-purple-50 to-indigo-100 rounded-xl overflow-hidden">
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
-                <div className={`text-6xl mb-4 transition-all duration-500 ${animationPhase >= 1 ? 'scale-125' : 'scale-100'}`}>
+                <div
+                  className={`text-6xl mb-4 transition-all duration-500 ${animationPhase >= 1 ? "scale-125" : "scale-100"}`}
+                >
                   💰
                 </div>
                 <div className="relative">
                   {animationPhase >= 1 && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-32 h-32 border-4 border-purple-500 rounded-full animate-spin-slow">
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                          🔐
-                        </div>
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">🔐</div>
                       </div>
                     </div>
                   )}
@@ -240,9 +258,13 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fadeIn">
         <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center animate-scaleIn">
           <div className="text-6xl mb-4 animate-bounce">🎉</div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4 animate-fadeInUp">{t.locale === "en" ? "Guide Complete!" : "引导完成！"}</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4 animate-fadeInUp">
+            {t.locale === "en" ? "Guide Complete!" : "引导完成！"}
+          </h2>
           <p className="text-gray-600 mb-6 animate-fadeInUp animation-delay-100">
-            {t.locale === "en" ? "You have learned all the core features of ConfidentialSalary. You can now start using the system!" : "您已经了解了 ConfidentialSalary 的所有核心功能。现在可以开始使用系统了！"}
+            {t.locale === "en"
+              ? "You have learned all the core features of ConfidentialSalary. You can now start using the system!"
+              : "您已经了解了 ConfidentialSalary 的所有核心功能。现在可以开始使用系统了！"}
           </p>
           <button
             onClick={onClose}
@@ -261,12 +283,14 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-t-2xl p-6 text-white">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold animate-fadeInLeft">{t.locale === "en" ? "Welcome to ConfidentialSalary" : "欢迎使用 ConfidentialSalary"}</h2>
+            <h2 className="text-2xl font-bold animate-fadeInLeft">
+              {t.locale === "en" ? "Welcome to ConfidentialSalary" : "欢迎使用 ConfidentialSalary"}
+            </h2>
             <div className="flex items-center gap-2">
               <button
                 onClick={handlePause}
                 className="text-white/80 hover:text-white transition-all duration-300 hover:scale-110"
-                title={isAutoPlaying ? (t.locale === "en" ? "Pause" : "暂停") : (t.locale === "en" ? "Play" : "播放")}
+                title={isAutoPlaying ? (t.locale === "en" ? "Pause" : "暂停") : t.locale === "en" ? "Play" : "播放"}
               >
                 {isAutoPlaying ? "⏸️" : "▶️"}
               </button>
@@ -287,20 +311,19 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
             </div>
           </div>
           <p className="text-sm text-blue-100 mt-2 animate-fadeIn">
-            {t.locale === "en" ? `Step ${currentStep + 1} / ${steps.length}` : `步骤 ${currentStep + 1} / ${steps.length}`} {isAutoPlaying && (t.locale === "en" ? "(Auto-playing...)" : "（自动播放中...）")}
+            {t.locale === "en"
+              ? `Step ${currentStep + 1} / ${steps.length}`
+              : `步骤 ${currentStep + 1} / ${steps.length}`}{" "}
+            {isAutoPlaying && (t.locale === "en" ? "(Auto-playing...)" : "（自动播放中...）")}
           </p>
         </div>
 
         {/* Content with Animation */}
         <div className="p-8">
           <div className="mb-6">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">
-              {currentStepData.title}
-            </h3>
-            <p className="text-gray-600 text-center mb-6">
-              {currentStepData.description}
-            </p>
-            
+            <h3 className="text-2xl font-bold text-gray-900 mb-2 text-center">{currentStepData.title}</h3>
+            <p className="text-gray-600 text-center mb-6">{currentStepData.description}</p>
+
             {/* Animation Area */}
             {renderAnimation()}
           </div>
@@ -314,8 +337,8 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
                   index === currentStep
                     ? "bg-blue-600 scale-125 animate-pulse"
                     : index < currentStep
-                    ? "bg-green-500 scale-110"
-                    : "bg-gray-300 scale-100"
+                      ? "bg-green-500 scale-110"
+                      : "bg-gray-300 scale-100"
                 }`}
               />
             ))}
@@ -364,7 +387,13 @@ export function OnboardingGuide({ onClose, onNavigateToTab }: OnboardingGuidePro
             className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 font-semibold transform hover:scale-105 hover:shadow-lg"
           >
             <span className="inline-flex items-center gap-1">
-              {currentStep === steps.length - 1 ? (t.locale === "en" ? "Complete" : "完成") : (t.locale === "en" ? "Next" : "下一步")}
+              {currentStep === steps.length - 1
+                ? t.locale === "en"
+                  ? "Complete"
+                  : "完成"
+                : t.locale === "en"
+                  ? "Next"
+                  : "下一步"}
               {currentStep !== steps.length - 1 && (
                 <span className="transition-transform duration-300 hover:translate-x-1">→</span>
               )}

@@ -50,7 +50,9 @@ export function FHEVMLoader() {
           if (!checkRelayerSDK()) {
             if (retry < maxRetries) {
               console.log(`[FHEVMLoader] Retrying... (${retry + 1}/${maxRetries})`);
-              loadRelayerSDK(retry + 1).then(resolve).catch(reject);
+              loadRelayerSDK(retry + 1)
+                .then(resolve)
+                .catch(reject);
             } else {
               setLoadStatus("error");
               reject(new Error("Relayer SDK failed to load after multiple retries"));
@@ -85,7 +87,9 @@ export function FHEVMLoader() {
               console.log(`[FHEVMLoader] Retrying... (${retry + 1}/${maxRetries})`);
               // 移除失败的脚本
               script.remove();
-              loadRelayerSDK(retry + 1).then(resolve).catch(reject);
+              loadRelayerSDK(retry + 1)
+                .then(resolve)
+                .catch(reject);
             } else {
               setLoadStatus("error");
               reject(new Error("Relayer SDK object not found after script load"));
@@ -99,7 +103,9 @@ export function FHEVMLoader() {
         if (retry < maxRetries) {
           console.log(`[FHEVMLoader] Retrying... (${retry + 1}/${maxRetries})`);
           setTimeout(() => {
-            loadRelayerSDK(retry + 1).then(resolve).catch(reject);
+            loadRelayerSDK(retry + 1)
+              .then(resolve)
+              .catch(reject);
           }, 2000);
         } else {
           setLoadStatus("error");
@@ -113,7 +119,7 @@ export function FHEVMLoader() {
   };
 
   useEffect(() => {
-    loadRelayerSDK(0).catch((error) => {
+    loadRelayerSDK(0).catch(error => {
       console.error("[FHEVMLoader] Error:", error);
       setLoadStatus("error");
     });
@@ -135,4 +141,3 @@ export function FHEVMLoader() {
   // 这个组件不渲染任何内容，只是预加载 SDK
   return null;
 }
-
