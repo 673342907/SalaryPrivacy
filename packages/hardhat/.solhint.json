@@ -10,7 +10,18 @@
     "func-name-mixedcase": "warn",
     "modifier-name-mixedcase": "warn",
     "private-vars-leading-underscore": "warn",
-    "use-forbidden-name": "warn"
+    "use-forbidden-name": "warn",
+    "max-line-length": ["warn", 120],
+    "indent": ["warn", 2],
+    "quotes": ["warn", "double"],
+    "no-unused-vars": "error",
+    "check-send-result": "error",
+    "no-simple-event-func-name": "warn",
+    "payable-fallback": "error",
+    "reason-string": ["warn", { "maxLength": 32 }],
+    "state-visibility": "warn",
+    "not-rely-on-time": "warn",
+    "not-rely-on-block-hash": "warn"
   }
 }
 

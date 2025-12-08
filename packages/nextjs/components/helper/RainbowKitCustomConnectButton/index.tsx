@@ -29,11 +29,27 @@ export const RainbowKitCustomConnectButton = () => {
               if (!connected) {
                 return (
                   <button
-                    className="btn btn-md rounded-none bg-[#FFD208] text-gray-900 cursor-pointer border-none"
+                    className="
+                      px-6 py-3 text-base font-bold text-gray-900 
+                      bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-400
+                      hover:from-yellow-300 hover:via-yellow-400 hover:to-yellow-300
+                      rounded-xl shadow-lg hover:shadow-xl
+                      transition-all duration-300
+                      transform hover:scale-105
+                      border-2 border-yellow-300
+                      cursor-pointer
+                      animate-pulse
+                      hover:animate-none
+                      relative overflow-hidden
+                    "
                     onClick={openConnectModal}
                     type="button"
                   >
-                    Connect Wallet
+                    <span className="relative z-10 flex items-center gap-2">
+                      <span className="text-xl">🔗</span>
+                      <span>Connect Wallet</span>
+                    </span>
+                    <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-1000"></span>
                   </button>
                 );
               }

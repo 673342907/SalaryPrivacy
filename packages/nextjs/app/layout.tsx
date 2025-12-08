@@ -1,8 +1,5 @@
 import "@rainbow-me/rainbowkit/styles.css";
-import { DappWrapperWithProviders } from "~~/components/DappWrapperWithProviders";
-import { ThemeProvider } from "~~/components/ThemeProvider";
-import { LocaleProvider } from "~~/contexts/LocaleContext";
-import { FHEVMLoader } from "./confidential-salary/_components/FHEVMLoader";
+import { ClientProviders } from "./ClientProviders";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/helper/getMetadata";
 
@@ -21,12 +18,7 @@ const DappWrapper = ({ children }: { children: React.ReactNode }) => {
         />
       </head>
       <body>
-        <FHEVMLoader />
-        <LocaleProvider>
-          <ThemeProvider enableSystem>
-            <DappWrapperWithProviders>{children}</DappWrapperWithProviders>
-          </ThemeProvider>
-        </LocaleProvider>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

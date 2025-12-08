@@ -10,10 +10,10 @@ import { StatisticsAnalysis } from "./_components/StatisticsAnalysis";
 import { PermissionManagement } from "./_components/PermissionManagement";
 import { OnboardingGuide } from "./_components/OnboardingGuide";
 import { DataProvider } from "./_context/DataContext";
-import { VideoSubtitles } from "./_components/VideoSubtitles";
 import { StatusBadges } from "./_components/StatusBadges";
 import { OptimizationsShowcase } from "./_components/OptimizationsShowcase";
 import { LanguageSwitcher } from "~~/components/LanguageSwitcher";
+import { QuickHelp } from "~~/components/QuickHelp";
 import { useLocale } from "~~/contexts/LocaleContext";
 import { useState, useEffect } from "react";
 
@@ -28,7 +28,12 @@ export default function ConfidentialSalaryPage() {
 
   // 确保只在客户端执行
   useEffect(() => {
-    setMounted(true);
+    // 使用 requestAnimationFrame 确保在浏览器准备好后立即设置
+    const rafId = requestAnimationFrame(() => {
+      setMounted(true);
+    });
+    
+    return () => cancelAnimationFrame(rafId);
   }, []);
 
   // 检查是否已经完成过引导
@@ -233,8 +238,8 @@ export default function ConfidentialSalaryPage() {
         />
       )}
 
-      {/* Video Subtitles - For no-voice video recording */}
-      <VideoSubtitles />
+      {/* Quick Help */}
+      <QuickHelp />
       </div>
     </DataProvider>
   );

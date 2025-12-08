@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useAccount } from "wagmi";
 import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
 import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
 import { useLocale } from "~~/contexts/LocaleContext";
+import { useFormValidation } from "~~/hooks/confidential-salary/useFormValidation";
 
 type Role = "Admin" | "HR" | "Manager" | "Employee";
 
@@ -22,6 +23,7 @@ export function EmployeeManagement() {
   const { address } = useAccount();
   const { employees, addEmployee, departments } = useData();
   const { addEmployee: addEmployeeToContract, hasContract, isPending, fhevmStatus } = useConfidentialSalary();
+  const { validateAddress, validateName, validateDepartment } = useFormValidation();
   const [showAddForm, setShowAddForm] = useState(false);
   const [formData, setFormData] = useState({
     address: "",
@@ -29,23 +31,27 @@ export function EmployeeManagement() {
     role: "Employee" as Role,
     department: "",
   });
-  const [useBlockchain, setUseBlockchain] = useState(false); // 是否使用区块链
-
+  const [useBlockchain, setUseBlockchain] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const handleAddEmployee = async () => {
-    // 验证输入
-    if (!formData.address.trim() || !formData.address.startsWith("0x") || formData.address.length !== 42) {
-      setErrorMessage(t.employee.errors.addressInvalid);
+  const handleAddEmployee = useCallback(async () => {
+    // 使用统一的验证逻辑
+    const addressValidation = validateAddress(formData.address);
+    if (!addressValidation.isValid) {
+      setErrorMessage(addressValidation.error || "");
       return;
     }
-    if (!formData.name.trim()) {
-      setErrorMessage(t.employee.errors.nameRequired);
+
+    const nameValidation = validateName(formData.name, "name");
+    if (!nameValidation.isValid) {
+      setErrorMessage(nameValidation.error || "");
       return;
     }
-    if (!formData.department) {
-      setErrorMessage(t.employee.errors.departmentRequired);
+
+    const departmentValidation = validateDepartment(formData.department, departments);
+    if (!departmentValidation.isValid) {
+      setErrorMessage(departmentValidation.error || "");
       return;
     }
 
@@ -89,7 +95,7 @@ export function EmployeeManagement() {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
     }
-  };
+  }, [formData, useBlockchain, hasContract, address, addEmployeeToContract, addEmployee, employees.length, departments, validateAddress, validateName, validateDepartment, t.employee.errors, t.common.unassigned]);
 
   const roleColors: Record<Role, string> = {
     Admin: "bg-red-100 text-red-800",

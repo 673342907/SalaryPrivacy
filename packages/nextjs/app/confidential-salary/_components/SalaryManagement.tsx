@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useAccount } from "wagmi";
 import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
@@ -8,11 +8,13 @@ import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfident
 import { useFHEDecrypt } from "@fhevm-sdk";
 import { ethers } from "ethers";
 import { useLocale } from "~~/contexts/LocaleContext";
+import { useFormValidation } from "~~/hooks/confidential-salary/useFormValidation";
 
 export function SalaryManagement() {
   const { t } = useLocale();
   const { address } = useAccount();
   const { salaries, addSalary } = useData();
+  const { validateAddress, validateAmount } = useFormValidation();
   const { 
     submitSalary, 
     getEncryptedSalary, 
@@ -33,10 +35,9 @@ export function SalaryManagement() {
   });
   const [viewAddress, setViewAddress] = useState("");
   const [encryptedSalaryHandle, setEncryptedSalaryHandle] = useState<string | null>(null);
-  const [useBlockchain, setUseBlockchain] = useState(false); // 是否使用区块链
+  const [useBlockchain, setUseBlockchain] = useState(false);
   const [isEncrypting, setIsEncrypting] = useState(false);
   const [isDecrypting, setIsDecrypting] = useState(false);
-
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -62,14 +63,17 @@ export function SalaryManagement() {
     requests: decryptRequests,
   });
 
-  const handleSubmitSalary = async () => {
-    // 验证输入
-    if (!formData.employeeAddress.trim() || !formData.employeeAddress.startsWith("0x") || formData.employeeAddress.length !== 42) {
-      setErrorMessage(t.salary.errors.addressInvalid);
+  const handleSubmitSalary = useCallback(async () => {
+    // 使用统一的验证逻辑
+    const addressValidation = validateAddress(formData.employeeAddress);
+    if (!addressValidation.isValid) {
+      setErrorMessage(addressValidation.error || "");
       return;
     }
-    if (!formData.amount || parseFloat(formData.amount) <= 0) {
-      setErrorMessage(t.salary.errors.amountRequired);
+
+    const amountValidation = validateAmount(formData.amount, "amount");
+    if (!amountValidation.isValid) {
+      setErrorMessage(amountValidation.error || "");
       return;
     }
 
@@ -127,7 +131,7 @@ export function SalaryManagement() {
       );
       setTimeout(() => setShowSuccess(false), 3000);
     }
-  };
+  }, [formData.employeeAddress, formData.amount, useBlockchain, hasContract, address, submitSalary, addSalary, salaries.length, validateAddress, validateAmount, t.salary, t.locale]);
 
   const handleViewSalary = async () => {
     if (!viewAddress) {

@@ -12,6 +12,8 @@ import { execSync } from "child_process";
  * - 生成 README.md
  * - 生成 GitBook 兼容的文档
  * - 支持章节标签（@custom:chapter）
+ * - 支持多种输出格式（Markdown, HTML, JSON）
+ * - 自动验证文档完整性
  */
 
 interface ContractDoc {

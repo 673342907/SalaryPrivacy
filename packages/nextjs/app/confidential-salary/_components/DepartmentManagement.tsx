@@ -1,22 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useData } from "../_context/DataContext";
 import { notification } from "~~/utils/helper/notification";
 import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
 import { useAccount } from "wagmi";
 import { useLocale } from "~~/contexts/LocaleContext";
+import { useFormValidation } from "~~/hooks/confidential-salary/useFormValidation";
 
 export function DepartmentManagement() {
   const { t } = useLocale();
   const { departments, addDepartment } = useData();
   const { address } = useAccount();
   const { createDepartment, hasContract, isPending, fhevmStatus } = useConfidentialSalary();
+  const { validateName, validateAmount } = useFormValidation();
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState({ name: "", budget: "" });
   const [useBlockchain, setUseBlockchain] = useState(false);
   const [mounted, setMounted] = useState(false);
-
   const [showSuccess, setShowSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -25,13 +26,17 @@ export function DepartmentManagement() {
     setMounted(true);
   }, []);
 
-  const handleCreateDepartment = async () => {
-    if (!formData.name.trim()) {
-      setErrorMessage(t.department?.errors?.nameRequired || (t.locale === "en" ? "Please enter department name" : "请输入部门名称"));
+  const handleCreateDepartment = useCallback(async () => {
+    // 使用统一的验证逻辑
+    const nameValidation = validateName(formData.name, "name");
+    if (!nameValidation.isValid) {
+      setErrorMessage(nameValidation.error || "");
       return;
     }
-    if (!formData.budget || parseFloat(formData.budget) <= 0) {
-      setErrorMessage(t.department?.errors?.budgetRequired || (t.locale === "en" ? "Please enter a valid budget amount (greater than 0)" : "请输入有效的预算金额（大于 0）"));
+
+    const budgetValidation = validateAmount(formData.budget, "budget");
+    if (!budgetValidation.isValid) {
+      setErrorMessage(budgetValidation.error || "");
       return;
     }
 
@@ -61,7 +66,7 @@ export function DepartmentManagement() {
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
     }
-  };
+  }, [formData.name, formData.budget, useBlockchain, hasContract, address, createDepartment, addDepartment, departments.length, validateName, validateAmount, t.department?.errors?.createFailed, t.locale]);
 
   // 在客户端挂载之前显示加载状态，避免 hydration 错误
   if (!mounted) {
