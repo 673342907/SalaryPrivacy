@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 /**
  * 组件：预加载 FHEVM Relayer SDK
@@ -17,7 +17,7 @@ export function FHEVMLoader() {
     return !!(win.relayerSDK && typeof win.relayerSDK.initSDK === "function");
   };
 
-  const loadRelayerSDK = (retry: number = 0): Promise<void> => {
+  const loadRelayerSDK = useCallback((retry: number = 0): Promise<void> => {
     return new Promise((resolve, reject) => {
       // 检查是否已经加载
       if (checkRelayerSDK()) {
@@ -115,14 +115,14 @@ export function FHEVMLoader() {
       console.log(`[FHEVMLoader] Loading Relayer SDK from ${SDK_CDN_URL} (attempt ${retry + 1})`);
       document.head.appendChild(script);
     });
-  };
+  }, []);
 
   useEffect(() => {
     loadRelayerSDK(0).catch(error => {
       console.error("[FHEVMLoader] Error:", error);
       setLoadStatus("error");
     });
-  }, []);
+  }, [loadRelayerSDK]);
 
   // 定期检查 SDK 状态（用于恢复）
   useEffect(() => {
