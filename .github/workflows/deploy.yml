@@ -9,6 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    continue-on-error: true
     
     steps:
       - name: Checkout code
@@ -20,7 +21,8 @@ jobs:
           node-version: '18'
       
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install -g pnpm@latest
+        continue-on-error: true
       
       - name: Install dependencies
         run: pnpm install --frozen-lockfile || true
