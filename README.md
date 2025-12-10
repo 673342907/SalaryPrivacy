@@ -53,10 +53,10 @@
 ### 📊 Privacy-Preserving Statistical Analysis
 The smart contract implements the following encrypted computation functions:
 
-- **`getDepartmentTotalSalary()`** - Calculate department total salary (encrypted addition, no decryption)
-- **`getDepartmentAverageSalary()`** - Calculate average salary (encrypted division, no decryption)
-- **`compareSalaries()`** - Compare two salaries (encrypted comparison, no decryption)
-- **`checkBudgetCompliance()`** - Check if department total salary is within budget (encrypted comparison)
+- **`getDepartmentTotalSalary(uint256 departmentId)`** - Calculate department total salary (encrypted addition, no decryption)
+- **`getDepartmentAverageSalary(uint256 departmentId)`** - Calculate average salary (encrypted division, no decryption)
+- **`compareSalaries(address employee1, address employee2)`** - Compare two salaries (encrypted comparison, no decryption)
+- **`checkBudgetCompliance(uint256 departmentId)`** - Check if department total salary is within budget (encrypted comparison)
 
 ### 🎨 Modern UI/UX
 - Responsive design supporting various devices
@@ -233,10 +233,10 @@ pnpm dev
 - ✅ Encryption process visualization
 
 ### 4. Statistical Analysis
-- ✅ Encrypted addition computation (`getDepartmentTotalSalary`)
-- ✅ Encrypted average computation (`getDepartmentAverageSalary`)
-- ✅ Encrypted data comparison (`compareSalaries`)
-- ✅ Budget compliance checks (`checkBudgetCompliance`)
+- ✅ Encrypted addition computation - Calculate department total salary without decryption
+- ✅ Encrypted average computation - Calculate average salary without decryption
+- ✅ Encrypted data comparison - Compare two salaries without decryption
+- ✅ Budget compliance checks - Verify budget compliance using encrypted comparison
 - ✅ Statistical chart display (Recharts)
 
 ### 5. Permission Management
@@ -297,6 +297,10 @@ SalaryPrivacy/
 │
 ├── README.md                            # This file
 ├── DEPLOYMENT_GUIDE.md                  # Deployment guide
+├── docs/                                # Documentation
+│   ├── ARCHITECTURE.md
+│   ├── BEST_PRACTICES.md
+│   └── PERFORMANCE.md
 └── package.json
 ```
 
