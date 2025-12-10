@@ -1,112 +1,112 @@
 # 🔐 ConfidentialSalary
 
-**基于全同态加密的隐私保护薪资管理系统**
+**Privacy-Preserving Salary Management System Based on Fully Homomorphic Encryption**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![FHEVM](https://img.shields.io/badge/FHEVM-0.9.0-green.svg)](https://docs.zama.org)
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.24-orange.svg)](https://soliditylang.org)
-[![Next.js](https://img.shields.io/badge/Next.js-15.2.5-black.svg)](https://nextjs.org)
+[![Next.js](https://img.shields.io/badge/Next.js-15.5.7-black.svg)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen.svg)](https://github.com/673342907/SalaryPrivacy/actions)
 [![Coverage](https://img.shields.io/badge/coverage-80%25+-green.svg)](./packages/hardhat/coverage)
 
-> 🏆 **Zama Developer Program 参赛项目** - 展示 FHE 技术在实际业务场景中的应用
+> 🏆 **Zama Developer Program Entry** - Demonstrating FHE technology in real-world business scenarios
 
-[🌐 在线演示](#-在线演示) • [📖 文档](#-文档) • [🚀 快速开始](#-快速开始) • [💻 开发](#-开发) • [📊 功能特性](#-功能特性)
-
----
-
-## 📖 项目简介
-
-**ConfidentialSalary** 是一个创新的去中心化应用（dApp），利用 Zama 的 FHEVM（全同态加密虚拟机）技术，实现了完全隐私保护的薪资管理系统。所有薪资数据在区块链上以加密形式存储，支持在不解密的情况下进行加密数据计算，只有授权用户才能解密查看原始数据。
-
-### 🎯 核心价值
-
-- **🔒 完全隐私保护** - 所有薪资数据在链上加密存储，智能合约无法看到原始数据
-- **📊 加密统计分析** - 在不解密原始数据的情况下进行统计计算（总和、平均值、比较等）
-- **👥 基于角色的权限管理** - 细粒度的访问控制，确保数据安全
-- **🏢 企业级应用** - 解决真实的 HR 管理痛点，符合数据保护法规要求
-- **✅ 合规性** - 符合 GDPR、CCPA 等数据保护法规
+[🌐 Live Demo](#-live-demo) • [📖 Documentation](#-documentation) • [🚀 Quick Start](#-quick-start) • [💻 Development](#-development) • [📊 Features](#-features)
 
 ---
 
-## ✨ 核心特性
+## 📖 Project Overview
 
-### 🔐 全同态加密保护
-- 所有薪资数据在链上以加密形式存储
-- 支持在不解密的情况下进行加密数据计算
-- 只有授权用户才能解密查看原始数据
-- 零知识保证：完全透明且不可篡改，同时保护数据隐私
+**ConfidentialSalary** is an innovative decentralized application (dApp) that leverages Zama's FHEVM (Fully Homomorphic Encryption Virtual Machine) technology to implement a fully privacy-preserving salary management system. All salary data is stored encrypted on the blockchain, supporting encrypted data computation without decryption, and only authorized users can decrypt and view the original data.
 
-### 👥 基于角色的权限管理
-- **Admin（管理员）**: 完全权限，可以管理所有功能和分配角色
-- **HR（人力资源）**: 可以创建部门、管理员工、提交薪资
-- **Manager（经理）**: 可以查看部门数据和员工薪资
-- **Employee（员工）**: 只能查看自己的薪资
+### 🎯 Core Values
 
-### 🏢 完整的组织管理
-- 部门创建和管理（加密预算设置）
-- 员工添加和角色分配
-- 加密预算设置和合规检查
-- 部门间数据隔离
-
-### 📊 隐私保护的统计分析
-- 加密加法：计算部门总薪资（不解密任何员工薪资）
-- 加密平均值：计算平均薪资（不解密原始数据）
-- 加密比较：比较两个薪资大小（不解密原始值）
-- 范围查询：查询薪资在指定范围内的员工数量
-- 预算合规检查：检查部门总薪资是否在预算内（全部加密计算）
-
-### 🎨 现代化 UI/UX
-- 响应式设计，支持各种设备
-- 流畅的动画效果和过渡
-- 直观的用户界面
-- 实时数据可视化（Recharts）
-- 完整的引导流程
+- **🔒 Complete Privacy Protection** - All salary data is encrypted on-chain, smart contracts cannot see raw data
+- **📊 Encrypted Statistical Analysis** - Perform statistical calculations (sum, average, comparison, etc.) without decrypting raw data
+- **👥 Role-Based Access Control** - Fine-grained access control ensuring data security
+- **🏢 Enterprise-Grade Application** - Solves real HR management pain points, compliant with data protection regulations
+- **✅ Compliance** - Compliant with GDPR, CCPA, and other data protection regulations
 
 ---
 
-## 🏗️ 技术架构
+## ✨ Core Features
 
-### 技术栈
+### 🔐 Fully Homomorphic Encryption Protection
+- All salary data is stored encrypted on-chain
+- Supports encrypted data computation without decryption
+- Only authorized users can decrypt and view original data
+- Zero-knowledge guarantee: Fully transparent and tamper-proof while protecting data privacy
 
-- **前端框架**: React 19 + Next.js 15.2.5
-- **区块链**: Ethereum Sepolia 测试网
-- **加密技术**: Zama FHEVM 0.9.0（全同态加密虚拟机）
-- **智能合约**: Solidity 0.8.24
-- **开发工具**: Hardhat
-- **UI框架**: Tailwind CSS + DaisyUI
-- **状态管理**: React Context API + Zustand
-- **Web3集成**: Wagmi + RainbowKit
-- **数据可视化**: Recharts
-- **包管理**: pnpm (Monorepo)
+### 👥 Role-Based Access Control
+- **Admin**: Full permissions, can manage all functions and assign roles
+- **HR**: Can create departments, manage employees, submit salaries
+- **Manager**: Can view department data and employee salaries
+- **Employee**: Can only view their own salary
 
-### 系统架构
+### 🏢 Complete Organization Management
+- Department creation and management (encrypted budget settings)
+- Employee addition and role assignment
+- Encrypted budget settings and compliance checks
+- Data isolation between departments
+
+### 📊 Privacy-Preserving Statistical Analysis
+- Encrypted addition: Calculate department total salary (without decrypting any employee salary)
+- Encrypted average: Calculate average salary (without decrypting raw data)
+- Encrypted comparison: Compare two salaries (without decrypting original values)
+- Range queries: Query the number of employees with salaries in a specified range
+- Budget compliance check: Check if department total salary is within budget (all encrypted computation)
+
+### 🎨 Modern UI/UX
+- Responsive design supporting various devices
+- Smooth animations and transitions
+- Intuitive user interface
+- Real-time data visualization (Recharts)
+- Complete onboarding flow
+
+---
+
+## 🏗️ Technical Architecture
+
+### Tech Stack
+
+- **Frontend Framework**: React 19 + Next.js 15.5.7
+- **Blockchain**: Ethereum Sepolia Testnet
+- **Encryption Technology**: Zama FHEVM 0.9.0 (Fully Homomorphic Encryption Virtual Machine)
+- **Smart Contracts**: Solidity 0.8.24
+- **Development Tools**: Hardhat
+- **UI Framework**: Tailwind CSS + DaisyUI
+- **State Management**: React Context API + Zustand
+- **Web3 Integration**: Wagmi + RainbowKit
+- **Data Visualization**: Recharts
+- **Package Manager**: pnpm (Monorepo)
+
+### System Architecture
 
 ```mermaid
 graph TB
-    subgraph "前端层 (Frontend)"
-        A[Next.js 应用] --> B[RainbowKit 钱包连接]
-        A --> C[FHEVM SDK 集成]
-        A --> D[React 组件]
-        D --> E[数据可视化 Recharts]
+    subgraph "Frontend Layer"
+        A[Next.js App] --> B[RainbowKit Wallet Connection]
+        A --> C[FHEVM SDK Integration]
+        A --> D[React Components]
+        D --> E[Data Visualization Recharts]
     end
     
-    subgraph "FHEVM 中间层"
-        C --> F[加密数据生成]
-        C --> G[解密请求处理]
-        C --> H[Relayer 交互]
+    subgraph "FHEVM Middleware"
+        C --> F[Encrypted Data Generation]
+        C --> G[Decryption Request Processing]
+        C --> H[Relayer Interaction]
     end
     
-    subgraph "智能合约层"
-        I[ConfidentialSalary.sol] --> J[部门管理]
-        I --> K[员工管理]
-        I --> L[薪资管理]
-        I --> M[权限控制]
-        I --> N[加密计算]
+    subgraph "Smart Contract Layer"
+        I[ConfidentialSalary.sol] --> J[Department Management]
+        I --> K[Employee Management]
+        I --> L[Salary Management]
+        I --> M[Access Control]
+        I --> N[Encrypted Computation]
     end
     
-    subgraph "区块链网络"
+    subgraph "Blockchain Network"
         O[Ethereum Sepolia]
         O --> P[FHEVM Network]
     end
@@ -119,288 +119,288 @@ graph TB
     style O fill:#627eea
 ```
 
-### 数据流架构
+### Data Flow Architecture
 
 ```mermaid
 sequenceDiagram
-    participant User as 用户
-    participant Frontend as 前端应用
+    participant User
+    participant Frontend as Frontend App
     participant FHEVM as FHEVM SDK
-    participant Contract as 智能合约
-    participant Blockchain as 区块链网络
+    participant Contract as Smart Contract
+    participant Blockchain as Blockchain Network
     
-    User->>Frontend: 提交薪资数据
-    Frontend->>FHEVM: 请求加密
-    FHEVM->>FHEVM: 生成加密数据
-    FHEVM-->>Frontend: 返回加密数据
-    Frontend->>Contract: 提交加密薪资
-    Contract->>Blockchain: 存储到链上
+    User->>Frontend: Submit salary data
+    Frontend->>FHEVM: Request encryption
+    FHEVM->>FHEVM: Generate encrypted data
+    FHEVM-->>Frontend: Return encrypted data
+    Frontend->>Contract: Submit encrypted salary
+    Contract->>Blockchain: Store on-chain
     
-    User->>Frontend: 请求统计计算
-    Frontend->>Contract: 调用加密计算函数
-    Contract->>Contract: 执行同态加密计算
-    Contract-->>Frontend: 返回加密结果
-    Frontend->>FHEVM: 请求解密
-    FHEVM-->>Frontend: 返回解密结果
-    Frontend-->>User: 显示统计结果
+    User->>Frontend: Request statistical computation
+    Frontend->>Contract: Call encrypted computation function
+    Contract->>Contract: Execute homomorphic encryption computation
+    Contract-->>Frontend: Return encrypted result
+    Frontend->>FHEVM: Request decryption
+    FHEVM-->>Frontend: Return decrypted result
+    Frontend-->>User: Display statistical result
 ```
 
 ---
 
-## 🌐 在线演示
+## 🌐 Live Demo
 
-### 🚀 生产环境
-- **Vercel 部署**: [https://salary-privacy.vercel.app](https://salary-privacy.vercel.app)
-- **GitHub 仓库**: [查看源代码](https://github.com/your-username/SalaryPrivacy)
+### 🚀 Production Environment
+- **Vercel Deployment**: [https://salary-privacy.vercel.app](https://salary-privacy.vercel.app)
+- **GitHub Repository**: [View Source Code](https://github.com/673342907/SalaryPrivacy)
 
-### 📹 演示视频
-- [YouTube 演示视频](#) - 完整功能演示（即将发布）
-- [演示视频制作指南](./docs/DEMO_GUIDE.md) - 详细的视频制作说明
+### 📹 Demo Video
+- [YouTube Demo Video](#) - Full feature demonstration (Coming Soon)
+- [Demo Video Guide](./docs/DEMO_GUIDE.md) - Detailed video production instructions
 
-### 📸 功能截图
+### 📸 Feature Screenshots
 
-> **💡 提示**: 如何添加截图？请参考 [截图制作指南](./docs/SCREENSHOT_GUIDE.md)
+> **💡 Tip**: How to add screenshots? Please refer to [Screenshot Guide](./docs/SCREENSHOT_GUIDE.md)
 
-#### 主要功能页面
+#### Main Feature Pages
 
 <table>
 <tr>
 <td width="50%">
 
-**Dashboard 首页**
-- 项目概览和快速导航
-- 统计卡片展示
-- 功能模块入口
+**Dashboard Homepage**
+- Project overview and quick navigation
+- Statistics cards display
+- Feature module entry
 
 ![Dashboard](./docs/images/screenshots/dashboard.png)
 
 </td>
 <td width="50%">
 
-**部门管理**
-- 创建和管理部门
-- 设置加密预算
-- 部门列表和详情
+**Department Management**
+- Create and manage departments
+- Set encrypted budgets
+- Department list and details
 
-![部门管理](./docs/images/screenshots/department-management.png)
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-**员工管理**
-- 添加员工
-- 分配角色和部门
-- 员工列表展示
-
-![员工管理](./docs/images/screenshots/employee-management.png)
-
-</td>
-<td width="50%">
-
-**薪资管理**
-- 提交加密薪资
-- 查看薪资记录
-- 加密过程可视化
-
-![薪资管理](./docs/images/screenshots/salary-management.png)
+![Department Management](./docs/images/screenshots/department-management.png)
 
 </td>
 </tr>
 <tr>
 <td width="50%">
 
-**统计分析**
-- 加密数据统计
-- 可视化图表（Recharts）
-- 预算合规检查
+**Employee Management**
+- Add employees
+- Assign roles and departments
+- Employee list display
 
-![统计分析](./docs/images/screenshots/statistics-analysis.png)
+![Employee Management](./docs/images/screenshots/employee-management.png)
 
 </td>
 <td width="50%">
 
-**权限管理**
-- 角色权限矩阵
-- 权限分配
-- 权限说明文档
+**Salary Management**
+- Submit encrypted salaries
+- View salary records
+- Encryption process visualization
 
-![权限管理](./docs/images/screenshots/permission-management.png)
+![Salary Management](./docs/images/screenshots/salary-management.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Statistical Analysis**
+- Encrypted data statistics
+- Visualization charts (Recharts)
+- Budget compliance checks
+
+![Statistical Analysis](./docs/images/screenshots/statistics-analysis.png)
+
+</td>
+<td width="50%">
+
+**Permission Management**
+- Role permission matrix
+- Permission assignment
+- Permission documentation
+
+![Permission Management](./docs/images/screenshots/permission-management.png)
 
 </td>
 </tr>
 </table>
 
-#### 技术特性展示
+#### Technical Feature Showcase
 
 <table>
 <tr>
 <td width="50%">
 
-**FHE 加密过程可视化**
-- 展示加密/解密流程
-- 实时加密状态
-- 安全证明展示
+**FHE Encryption Process Visualization**
+- Display encryption/decryption flow
+- Real-time encryption status
+- Security proof display
 
-![FHE 加密过程](./docs/images/screenshots/fhe-encryption-process.png)
+![FHE Encryption Process](./docs/images/screenshots/fhe-encryption-process.png)
 
 </td>
 <td width="50%">
 
-**安全证明和合规性**
-- 零知识证明说明
-- GDPR、CCPA 合规性
-- 安全特性展示
+**Security Proof and Compliance**
+- Zero-knowledge proof explanation
+- GDPR, CCPA compliance
+- Security feature display
 
-![安全证明](./docs/images/screenshots/security-proof.png)
+![Security Proof](./docs/images/screenshots/security-proof.png)
 
 </td>
 </tr>
 </table>
 
-> **📝 截图说明**: 
-> - 如果截图暂时不可用，请访问 [在线演示](#-在线演示) 查看实际效果
-> - 截图文件位于 `docs/images/screenshots/` 目录
-> - 如何添加截图请参考 [截图指南](./docs/SCREENSHOT_GUIDE.md)
+> **📝 Screenshot Notes**: 
+> - If screenshots are temporarily unavailable, please visit [Live Demo](#-live-demo) to view the actual effects
+> - Screenshot files are located in the `docs/images/screenshots/` directory
+> - How to add screenshots please refer to [Screenshot Guide](./docs/SCREENSHOT_GUIDE.md)
 
 ---
 
-## 📦 示例合约
+## 📦 Example Contracts
 
-项目包含 **8 个独立的 FHEVM 示例合约**，涵盖从基础到高级的各种应用场景：
+The project includes **8 independent FHEVM example contracts**, covering various application scenarios from basic to advanced:
 
-### 基础示例
-1. **FHEArithmetic** - 算术运算示例（加减乘除等基础操作）
-2. **FHEComparison** - 比较操作示例（等于、大于、小于等）
+### Basic Examples
+1. **FHEArithmetic** - Arithmetic operations example (basic operations like addition, subtraction, multiplication, division)
+2. **FHEComparison** - Comparison operations example (equal, greater than, less than, etc.)
 
-### 实用工具示例
-3. **FHEAccessControl** - 访问控制示例（FHE.allow, FHE.allowTransient）
-4. **FHEInputProof** - 输入证明说明
-5. **FHERangeQuery** - 范围查询示例（查询指定范围内的数据）
+### Utility Examples
+3. **FHEAccessControl** - Access control example (FHE.allow, FHE.allowTransient)
+4. **FHEInputProof** - Input proof explanation
+5. **FHERangeQuery** - Range query example (query data within specified range)
 
-### 高级应用示例
-6. **FHEBlindAuction** - 盲拍卖示例（隐私保护拍卖系统）
-7. **FHEVestingWallet** - 加密代币锁仓示例（时间锁定的加密钱包）
+### Advanced Application Examples
+6. **FHEBlindAuction** - Blind auction example (privacy-preserving auction system)
+7. **FHEVestingWallet** - Encrypted token vesting example (time-locked encrypted wallet)
 
-### 教育示例
-8. **FHEAntipatterns** - 反模式示例（展示常见错误和最佳实践）
+### Educational Examples
+8. **FHEAntipatterns** - Antipattern example (demonstrating common errors and best practices)
 
-所有示例都包含：
-- ✅ 完整的文档注释
-- ✅ 测试文件
-- ✅ 使用示例
-- ✅ 章节标签
+All examples include:
+- ✅ Complete documentation comments
+- ✅ Test files
+- ✅ Usage examples
+- ✅ Chapter tags
 
-## 🛠️ 脚手架工具
+## 🛠️ Scaffolding Tool
 
-项目包含 `create-fhevm-example` CLI 工具，可以快速创建新的示例项目：
+The project includes the `create-fhevm-example` CLI tool for quickly creating new example projects:
 
 ```bash
-# 创建新示例
+# Create new example
 npx create-fhevm-example example my-example
 
-# 创建新分类
+# Create new category
 npx create-fhevm-example category advanced
 ```
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 前置要求
+### Prerequisites
 
 - **Node.js** 18+ 
-- **pnpm** (推荐) 或 npm
-- **MetaMask** 浏览器扩展
-- **Sepolia ETH** (用于测试网交易)
+- **pnpm** (recommended) or npm
+- **MetaMask** browser extension
+- **Sepolia ETH** (for testnet transactions)
 
-### 安装步骤
+### Installation Steps
 
 ```bash
-# 1. 克隆仓库
-git clone https://github.com/your-username/SalaryPrivacy.git
+# 1. Clone repository
+git clone https://github.com/673342907/SalaryPrivacy.git
 cd SalaryPrivacy
 
-# 2. 安装依赖
+# 2. Install dependencies
 pnpm install
 
-# 3. 构建 SDK
+# 3. Build SDK
 pnpm sdk:build
 
-# 4. 启动开发服务器
+# 4. Start development server
 cd packages/nextjs
 pnpm dev
 ```
 
-### 访问应用
+### Access Application
 
-1. 打开浏览器访问 `http://localhost:3000`
-2. 点击 "连接钱包" 按钮
-3. 选择 MetaMask 并确认连接
-4. 切换到 Sepolia 测试网
-5. 等待 FHEVM 初始化完成
+1. Open browser and visit `http://localhost:3000`
+2. Click "Connect Wallet" button
+3. Select MetaMask and confirm connection
+4. Switch to Sepolia testnet
+5. Wait for FHEVM initialization to complete
 
-### 快速体验
+### Quick Experience
 
-1. 在 Dashboard 页面，点击 **"一键生成演示数据"** 按钮
-2. 系统会自动创建：
-   - 4 个部门（技术部、市场部、财务部、人事部）
-   - 7 名员工（不同角色和部门）
-   - 7 条加密薪资记录
-3. 现在可以体验所有功能模块
-
----
-
-## 📊 功能特性
-
-### 1. 部门管理
-- ✅ 创建部门并设置加密预算
-- ✅ 查看部门列表和详情
-- ✅ 部门员工统计
-- ✅ 预算合规检查
-
-### 2. 员工管理
-- ✅ 添加员工并分配角色
-- ✅ 员工列表展示
-- ✅ 角色和部门分配
-- ✅ 员工信息管理
-
-### 3. 薪资管理
-- ✅ 提交加密薪资（FHE 加密）
-- ✅ 查看加密薪资记录
-- ✅ 员工查看自己的薪资（自动解密）
-- ✅ 加密过程可视化
-
-### 4. 统计分析
-- ✅ 加密加法计算
-- ✅ 加密平均值计算
-- ✅ 加密数据比较
-- ✅ 范围查询
-- ✅ 统计图表展示（Recharts）
-- ✅ 预算合规检查
-
-### 5. 权限管理
-- ✅ 角色权限矩阵展示
-- ✅ 角色分配功能
-- ✅ 权限说明文档
-
-### 6. 技术亮点
-- ✅ FHE 加密过程可视化
-- ✅ 安全证明展示
-- ✅ 合规性说明（GDPR、CCPA）
-- ✅ Zama FHEVM 集成展示
-- ✅ 系统架构图
+1. On the Dashboard page, click the **"Generate Demo Data"** button
+2. The system will automatically create:
+   - 4 departments (Technical, Marketing, Finance, HR)
+   - 7 employees (different roles and departments)
+   - 7 encrypted salary records
+3. Now you can experience all feature modules
 
 ---
 
-## 🏗️ 项目结构
+## 📊 Features
+
+### 1. Department Management
+- ✅ Create departments and set encrypted budgets
+- ✅ View department list and details
+- ✅ Department employee statistics
+- ✅ Budget compliance checks
+
+### 2. Employee Management
+- ✅ Add employees and assign roles
+- ✅ Employee list display
+- ✅ Role and department assignment
+- ✅ Employee information management
+
+### 3. Salary Management
+- ✅ Submit encrypted salaries (FHE encryption)
+- ✅ View encrypted salary records
+- ✅ Employees view their own salaries (auto-decrypt)
+- ✅ Encryption process visualization
+
+### 4. Statistical Analysis
+- ✅ Encrypted addition computation
+- ✅ Encrypted average computation
+- ✅ Encrypted data comparison
+- ✅ Range queries
+- ✅ Statistical chart display (Recharts)
+- ✅ Budget compliance checks
+
+### 5. Permission Management
+- ✅ Role permission matrix display
+- ✅ Role assignment functionality
+- ✅ Permission documentation
+
+### 6. Technical Highlights
+- ✅ FHE encryption process visualization
+- ✅ Security proof display
+- ✅ Compliance explanation (GDPR, CCPA)
+- ✅ Zama FHEVM integration display
+- ✅ System architecture diagram
+
+---
+
+## 🏗️ Project Structure
 
 ```
 SalaryPrivacy/
 ├── packages/
-│   ├── nextjs/                          # Next.js 前端应用
+│   ├── nextjs/                          # Next.js frontend application
 │   │   ├── app/
-│   │   │   ├── confidential-salary/    # 主应用模块
-│   │   │   │   ├── _components/        # 组件
+│   │   │   ├── confidential-salary/    # Main application module
+│   │   │   │   ├── _components/        # Components
 │   │   │   │   │   ├── Dashboard.tsx
 │   │   │   │   │   ├── DepartmentManagement.tsx
 │   │   │   │   │   ├── EmployeeManagement.tsx
@@ -412,20 +412,20 @@ SalaryPrivacy/
 │   │   │   │   │   ├── OnboardingGuide.tsx
 │   │   │   │   │   └── ...
 │   │   │   │   ├── _context/
-│   │   │   │   │   └── DataContext.tsx  # 全局数据管理
+│   │   │   │   │   └── DataContext.tsx  # Global data management
 │   │   │   │   └── page.tsx
-│   │   │   ├── page.tsx                 # 首页
+│   │   │   ├── page.tsx                 # Homepage
 │   │   │   └── layout.tsx
 │   │   ├── hooks/
 │   │   │   └── confidential-salary/
-│   │   │       └── useConfidentialSalary.tsx  # 智能合约交互 Hook
+│   │   │       └── useConfidentialSalary.tsx  # Smart contract interaction Hook
 │   │   └── package.json
 │   │
-│   ├── hardhat/                         # 智能合约
+│   ├── hardhat/                         # Smart contracts
 │   │   ├── contracts/
-│   │   │   └── ConfidentialSalary.sol  # 主合约
+│   │   │   └── ConfidentialSalary.sol  # Main contract
 │   │   ├── scripts/
-│   │   │   └── deploy.ts               # 部署脚本
+│   │   │   └── deploy.ts               # Deployment script
 │   │   ├── test/
 │   │   │   ├── ConfidentialSalary.test.ts
 │   │   │   └── ConfidentialSalary.enhanced.test.ts
@@ -433,108 +433,108 @@ SalaryPrivacy/
 │   │
 │   └── fhevm-sdk/                      # FHEVM SDK (workspace)
 │
-├── README.md                            # 本文件
-├── DEPLOYMENT_GUIDE.md                  # 部署指南
-├── DEMO_VIDEO_GUIDE.md                  # 演示视频指南
+├── README.md                            # This file
+├── DEPLOYMENT_GUIDE.md                  # Deployment guide
+├── DEMO_VIDEO_GUIDE.md                  # Demo video guide
 └── package.json
 ```
 
 ---
 
-## 🧪 测试
+## 🧪 Testing
 
-### 运行测试
+### Run Tests
 
 ```bash
-# 运行所有测试
+# Run all tests
 pnpm hardhat:test
 
-# 运行覆盖率
+# Run coverage
 pnpm hardhat:coverage
 
-# 检查代码质量
+# Check code quality
 pnpm hardhat:lint
 ```
 
-### 测试覆盖
+### Test Coverage
 
-项目包含 **5 个测试文件**，提供全面的测试覆盖：
+The project includes **5 test files**, providing comprehensive test coverage:
 
-- `ConfidentialSalary.test.ts` - 基础功能测试
-- `ConfidentialSalary.enhanced.test.ts` - 增强功能测试
-- `ConfidentialSalary.comprehensive.test.ts` - 全面功能测试
-- `integration.test.ts` - 集成测试
-- `performance.test.ts` - 性能测试和 Gas 分析
+- `ConfidentialSalary.test.ts` - Basic functionality tests
+- `ConfidentialSalary.enhanced.test.ts` - Enhanced functionality tests
+- `ConfidentialSalary.comprehensive.test.ts` - Comprehensive functionality tests
+- `integration.test.ts` - Integration tests
+- `performance.test.ts` - Performance tests and Gas analysis
 
-**测试覆盖范围：**
-- ✅ 正常功能测试（所有核心功能）
-- ✅ 错误处理测试（异常情况处理）
-- ✅ 权限控制测试（RBAC 权限验证）
-- ✅ 反模式验证（常见错误检测）
-- ✅ 边界情况测试（极端值处理）
-- ✅ 加密计算测试（FHE 操作验证）
-- ✅ 集成测试（端到端流程）
-- ✅ 性能测试（Gas 使用优化）
+**Test Coverage Scope:**
+- ✅ Normal functionality tests (all core functions)
+- ✅ Error handling tests (exception handling)
+- ✅ Access control tests (RBAC permission verification)
+- ✅ Antipattern validation (common error detection)
+- ✅ Boundary case tests (extreme value handling)
+- ✅ Encryption computation tests (FHE operation verification)
+- ✅ Integration tests (end-to-end flow)
+- ✅ Performance tests (Gas usage optimization)
 
-**测试覆盖率：** 80%+ （使用 `solidity-coverage` 生成报告）
+**Test Coverage:** 80%+ (using `solidity-coverage` to generate reports)
 
 ## 📊 CI/CD
 
-项目配置了完整的 GitHub Actions 自动化工作流：
+The project is configured with complete GitHub Actions automation workflows:
 
-### 自动化工作流
+### Automation Workflows
 
-1. **测试工作流** (`.github/workflows/test.yml`)
-   - ✅ 自动运行所有测试
-   - ✅ 生成测试覆盖率报告
-   - ✅ 上传覆盖率到 Codecov
-   - ✅ 自动生成文档
+1. **Test Workflow** (`.github/workflows/test.yml`)
+   - ✅ Automatically run all tests
+   - ✅ Generate test coverage reports
+   - ✅ Upload coverage to Codecov
+   - ✅ Automatically generate documentation
 
-2. **代码质量检查** (`.github/workflows/lint.yml`)
-   - ✅ Solidity 代码检查（Solhint）
-   - ✅ TypeScript 代码检查（ESLint）
-   - ✅ 代码格式化检查（Prettier）
+2. **Code Quality Check** (`.github/workflows/lint.yml`)
+   - ✅ Solidity code check (Solhint)
+   - ✅ TypeScript code check (ESLint)
+   - ✅ Code formatting check (Prettier)
 
-3. **部署工作流** (`.github/workflows/deploy.yml`)
-   - ✅ 自动部署到 Vercel
-   - ✅ 环境变量管理
-   - ✅ 构建状态通知
+3. **Deployment Workflow** (`.github/workflows/deploy.yml`)
+   - ✅ Automatically deploy to Vercel
+   - ✅ Environment variable management
+   - ✅ Build status notifications
 
-### 质量保证
+### Quality Assurance
 
-- **代码覆盖率**: 80%+ （持续监控）
-- **代码质量**: A 级（Solhint + ESLint）
-- **构建状态**: 自动检查（每次 Push/PR）
-- **文档更新**: 自动生成（每次代码变更）
+- **Code Coverage**: 80%+ (continuous monitoring)
+- **Code Quality**: Grade A (Solhint + ESLint)
+- **Build Status**: Automatic check (on every Push/PR)
+- **Documentation Updates**: Auto-generated (on every code change)
 
-## 💻 开发
+## 💻 Development
 
-### 本地开发
+### Local Development
 
 ```bash
-# 启动开发服务器
+# Start development server
 cd packages/nextjs
 pnpm dev
 
-# 在另一个终端运行智能合约测试
+# Run smart contract tests in another terminal
 cd packages/hardhat
 pnpm test
 ```
 
-### 代码规范
+### Code Standards
 
 ```bash
-# 格式化代码
+# Format code
 pnpm format
 
-# 检查代码质量
+# Check code quality
 pnpm lint
 
-# 类型检查
+# Type check
 pnpm check-types
 ```
 
-### 构建生产版本
+### Build Production Version
 
 ```bash
 cd packages/nextjs
@@ -544,82 +544,82 @@ pnpm start
 
 ---
 
-## 🔧 智能合约
+## 🔧 Smart Contracts
 
-### 合约功能
+### Contract Functions
 
-`ConfidentialSalary.sol` 智能合约提供以下功能：
+The `ConfidentialSalary.sol` smart contract provides the following functions:
 
-- **部门管理**: `createDepartment()`, `getDepartment()`
-- **员工管理**: `addEmployee()`, `getDepartmentEmployees()`
-- **薪资管理**: `submitSalary()`, `getEncryptedSalary()`
-- **加密统计**: 
-  - `getDepartmentTotalSalary()` - 计算部门总薪资
-  - `getDepartmentAverageSalary()` - 计算平均薪资
-  - `compareSalaries()` - 比较两个薪资
-  - `checkBudgetCompliance()` - 预算合规检查
-- **权限管理**: `assignRole()`, `roles()`
+- **Department Management**: `createDepartment()`, `getDepartment()`
+- **Employee Management**: `addEmployee()`, `getDepartmentEmployees()`
+- **Salary Management**: `submitSalary()`, `getEncryptedSalary()`
+- **Encrypted Statistics**: 
+  - `getDepartmentTotalSalary()` - Calculate department total salary
+  - `getDepartmentAverageSalary()` - Calculate average salary
+  - `compareSalaries()` - Compare two salaries
+  - `checkBudgetCompliance()` - Budget compliance check
+- **Permission Management**: `assignRole()`, `roles()`
 
-### 部署合约
+### Deploy Contract
 
 ```bash
 cd packages/hardhat
 
-# 配置环境变量
-# 创建 .env 文件
+# Configure environment variables
+# Create .env file
 PRIVATE_KEY=your_private_key
 SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_KEY
 
-# 编译合约
+# Compile contract
 pnpm compile
 
-# 部署到 Sepolia
+# Deploy to Sepolia
 pnpm deploy:sepolia
 ```
 
-详细部署指南请参考 [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
+For detailed deployment guide, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
 
 ---
 
-## 🧪 测试
+## 🧪 Testing
 
-### 运行测试
+### Run Tests
 
 ```bash
 cd packages/hardhat
 pnpm test
 ```
 
-### 测试覆盖
+### Test Coverage
 
-- ✅ 部署和初始化测试
-- ✅ 部门管理测试
-- ✅ 员工管理测试
-- ✅ 薪资管理测试
-- ✅ 权限控制测试
-- ✅ 加密统计计算测试
-- ✅ 边界情况测试
+- ✅ Deployment and initialization tests
+- ✅ Department management tests
+- ✅ Employee management tests
+- ✅ Salary management tests
+- ✅ Access control tests
+- ✅ Encrypted statistical computation tests
+- ✅ Boundary case tests
 
 ---
 
-## 📚 文档
+## 📚 Documentation
 
-### 主要文档
+### Main Documentation
 
-- [部署指南](./DEPLOYMENT_GUIDE.md) - 智能合约部署和前端连接
-- [性能优化报告](./docs/PERFORMANCE.md) - Gas 使用分析和性能优化建议 ⚡
-- [演示视频指南](./docs/DEMO_GUIDE.md) - 详细的视频制作指南 🎬
-- [架构文档](./docs/ARCHITECTURE.md) - 系统架构详细说明
-- [最佳实践](./docs/BEST_PRACTICES.md) - 开发最佳实践指南
-- [优化总结](./OPTIMIZATION_SUMMARY_FINAL.md) - 项目优化总结和得分分析 📊
+- [Deployment Guide](./DEPLOYMENT_GUIDE.md) - Smart contract deployment and frontend connection
+- [Performance Optimization Report](./docs/PERFORMANCE.md) - Gas usage analysis and performance optimization recommendations ⚡
+- [Demo Video Guide](./docs/DEMO_GUIDE.md) - Detailed video production guide 🎬
+- [Architecture Documentation](./docs/ARCHITECTURE.md) - Detailed system architecture explanation
+- [Best Practices](./docs/BEST_PRACTICES.md) - Development best practices guide
+- [Optimization Summary](./OPTIMIZATION_SUMMARY_FINAL.md) - Project optimization summary and score analysis 📊
 
-### 视频制作文档
+### Video Production Documentation
 
-- [演示视频指南](./DEMO_VIDEO_GUIDE.md) - 视频录制指南
-- [无旁白视频脚本](./VIDEO_SCRIPT_NO_VOICE.md) - 视频脚本
-- [视频录制步骤](./VIDEO_RECORDING_STEP_BY_STEP.md) - 详细录制步骤
+- [Demo Video Guide](./DEMO_VIDEO_GUIDE.md) - Video recording guide
+- [Video Script Without Narration](./VIDEO_SCRIPT_NO_VOICE.md) - Video script
+- [Video Recording Steps](./VIDEO_RECORDING_STEP_BY_STEP.md) - Detailed recording steps
 
-### API 文档
+### API Documentation
 
 #### useConfidentialSalary Hook
 
@@ -627,13 +627,13 @@ pnpm test
 import { useConfidentialSalary } from "~~/hooks/confidential-salary/useConfidentialSalary";
 
 const {
-  // 状态
+  // State
   fhevmStatus,
   isPending,
   isConfirming,
   isConfirmed,
   
-  // 功能
+  // Functions
   createDepartment,
   addEmployee,
   submitSalary,
@@ -643,130 +643,130 @@ const {
 } = useConfidentialSalary();
 ```
 
-详细 API 文档请参考 [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md#前端与智能合约连接)
+For detailed API documentation, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md#frontend-smart-contract-connection)
 
 ---
 
-## 🎯 使用场景
+## 🎯 Use Cases
 
-### 企业薪资管理
-- 保护员工薪资隐私
-- 支持薪资统计分析
-- 符合数据保护法规
+### Enterprise Salary Management
+- Protect employee salary privacy
+- Support salary statistical analysis
+- Comply with data protection regulations
 
-### 隐私保护数据分析
-- 在不解密原始数据的情况下进行分析
-- 支持复杂的统计计算
-- 确保数据隐私和安全
+### Privacy-Preserving Data Analysis
+- Analyze without decrypting raw data
+- Support complex statistical computations
+- Ensure data privacy and security
 
-### 合规性要求高的场景
-- GDPR 合规
-- CCPA 合规
-- 其他数据保护法规
-
----
-
-## 🏆 项目亮点
-
-### 技术亮点 ⭐⭐⭐⭐⭐
-
-- ✅ **完整的 FHE 实现** - 使用 Zama FHEVM 0.9.0，实现真正的全同态加密
-- ✅ **多种加密计算** - 加法、平均值、比较、范围查询、预算检查
-- ✅ **智能合约集成** - 完整的 Solidity 合约实现，包含 8 个示例合约
-- ✅ **现代化前端** - Next.js 15 + React 19 + TypeScript，最新技术栈
-- ✅ **专业 UI/UX** - 响应式设计 + 流畅动画 + 国际化支持（中英文）
-- ✅ **完整的测试体系** - 5 个测试文件，80%+ 覆盖率
-- ✅ **CI/CD 自动化** - GitHub Actions 自动测试、检查、部署
-- ✅ **脚手架工具** - create-fhevm-example CLI（Zama Bounty 明确要求）
-
-### 业务亮点 ⭐⭐⭐⭐⭐
-
-- ✅ **解决真实问题** - 企业级薪资管理场景，有实际应用价值
-- ✅ **完整功能** - 从数据录入到统计分析，完整的业务流程
-- ✅ **权限系统** - 细粒度的角色权限控制（4 种角色）
-- ✅ **合规性** - 符合 GDPR、CCPA 等数据保护法规
-- ✅ **可扩展性** - Monorepo 架构，易于扩展和维护
-
-### 创新亮点 ⭐⭐⭐⭐⭐
-
-- ✅ **反模式示例** - 展示常见错误，帮助开发者避免陷阱
-- ✅ **完整的业务应用** - 不只是示例，而是完整的生产级应用
-- ✅ **文档自动化** - 自动从代码注释生成文档
-- ✅ **性能优化** - Gas 使用分析和优化建议
+### High Compliance Requirement Scenarios
+- GDPR compliance
+- CCPA compliance
+- Other data protection regulations
 
 ---
 
-## 🔒 安全特性
+## 🏆 Project Highlights
 
-- **全同态加密** - 数据全程加密，智能合约无法看到原始值
-- **零知识保证** - 完全透明且不可篡改
-- **权限控制** - 基于角色的访问控制
-- **加密计算** - 在不解密的情况下进行计算
-- **审计日志** - 所有操作都有事件记录
+### Technical Highlights ⭐⭐⭐⭐⭐
 
----
+- ✅ **Complete FHE Implementation** - Using Zama FHEVM 0.9.0, implementing true fully homomorphic encryption
+- ✅ **Multiple Encryption Computations** - Addition, average, comparison, range queries, budget checks
+- ✅ **Smart Contract Integration** - Complete Solidity contract implementation, including 8 example contracts
+- ✅ **Modern Frontend** - Next.js 15.5.7 + React 19 + TypeScript, latest tech stack
+- ✅ **Professional UI/UX** - Responsive design + smooth animations + internationalization support (English/Chinese)
+- ✅ **Complete Test System** - 5 test files, 80%+ coverage
+- ✅ **CI/CD Automation** - GitHub Actions automatic testing, checking, deployment
+- ✅ **Scaffolding Tool** - create-fhevm-example CLI (explicitly required by Zama Bounty)
 
-## 📈 路线图
+### Business Highlights ⭐⭐⭐⭐⭐
 
-### 已完成 ✅
-- [x] 前端 UI/UX 设计和实现
-- [x] 智能合约开发和测试
-- [x] FHEVM 集成
-- [x] 数据可视化
-- [x] 权限管理系统
-- [x] 部署到 Vercel
+- ✅ **Solves Real Problems** - Enterprise-grade salary management scenario with practical application value
+- ✅ **Complete Functionality** - Complete business flow from data entry to statistical analysis
+- ✅ **Permission System** - Fine-grained role-based access control (4 roles)
+- ✅ **Compliance** - Compliant with GDPR, CCPA, and other data protection regulations
+- ✅ **Scalability** - Monorepo architecture, easy to extend and maintain
 
-### 进行中 🚧
-- [ ] 智能合约部署到 Sepolia
-- [ ] 前端与智能合约完整连接
-- [ ] 演示视频录制
+### Innovation Highlights ⭐⭐⭐⭐⭐
 
-### 计划中 📅
-- [ ] 更多 FHE 计算操作
-- [ ] 性能优化
-- [ ] 移动端适配
-- [ ] 多语言支持
+- ✅ **Antipattern Examples** - Demonstrate common errors, helping developers avoid pitfalls
+- ✅ **Complete Business Application** - Not just examples, but a complete production-grade application
+- ✅ **Documentation Automation** - Auto-generate documentation from code comments
+- ✅ **Performance Optimization** - Gas usage analysis and optimization recommendations
 
 ---
 
-## 🤝 贡献
+## 🔒 Security Features
 
-欢迎贡献！请遵循以下步骤：
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
+- **Fully Homomorphic Encryption** - Data encrypted throughout, smart contracts cannot see raw values
+- **Zero-Knowledge Guarantee** - Fully transparent and tamper-proof
+- **Access Control** - Role-based access control
+- **Encrypted Computation** - Compute without decryption
+- **Audit Logs** - All operations have event records
 
 ---
 
-## 📝 许可证
+## 📈 Roadmap
 
-本项目采用 MIT 许可证 - 查看 [LICENSE](./LICENSE) 文件了解详情
+### Completed ✅
+- [x] Frontend UI/UX design and implementation
+- [x] Smart contract development and testing
+- [x] FHEVM integration
+- [x] Data visualization
+- [x] Permission management system
+- [x] Deployment to Vercel
+
+### In Progress 🚧
+- [ ] Smart contract deployment to Sepolia
+- [ ] Complete frontend and smart contract connection
+- [ ] Demo video recording
+
+### Planned 📅
+- [ ] More FHE computation operations
+- [ ] Performance optimization
+- [ ] Mobile adaptation
+- [ ] Multi-language support
 
 ---
 
-## 🙏 致谢
+## 🤝 Contributing
 
-- [Zama](https://www.zama.ai/) - 提供 FHEVM 技术
-- [FHEVM SDK](https://github.com/zama-ai/fhevm) - FHEVM 开发工具
-- [Next.js](https://nextjs.org/) - React 框架
-- [Hardhat](https://hardhat.org/) - 智能合约开发工具
+Contributions are welcome! Please follow these steps:
 
----
-
-## 📞 联系方式
-
-- **项目地址**: [GitHub](https://github.com/your-username/SalaryPrivacy)
-- **在线演示**: [Vercel](https://salary-privacy.vercel.app)
-- **问题反馈**: [Issues](https://github.com/your-username/SalaryPrivacy/issues)
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-## 🎉 特别说明
+## 📝 License
 
-本项目是 **Zama Developer Program** 的参赛项目，展示了 FHE 技术在实际业务场景中的应用。项目完全开源，欢迎学习和使用。
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details
+
+---
+
+## 🙏 Acknowledgments
+
+- [Zama](https://www.zama.ai/) - Providing FHEVM technology
+- [FHEVM SDK](https://github.com/zama-ai/fhevm) - FHEVM development tools
+- [Next.js](https://nextjs.org/) - React framework
+- [Hardhat](https://hardhat.org/) - Smart contract development tools
+
+---
+
+## 📞 Contact
+
+- **Project Repository**: [GitHub](https://github.com/673342907/SalaryPrivacy)
+- **Live Demo**: [Vercel](https://salary-privacy.vercel.app)
+- **Issue Reporting**: [Issues](https://github.com/673342907/SalaryPrivacy/issues)
+
+---
+
+## 🎉 Special Note
+
+This project is an entry for the **Zama Developer Program**, demonstrating FHE technology in real-world business scenarios. The project is fully open source, welcome to learn and use.
 
 **Built with Privacy for the Zama Developer Program** 🔐
 
@@ -774,7 +774,7 @@ const {
 
 <div align="center">
 
-**⭐ 如果这个项目对你有帮助，请给个 Star！⭐**
+**⭐ If this project helps you, please give it a Star! ⭐**
 
 Made with ❤️ using FHEVM
 
