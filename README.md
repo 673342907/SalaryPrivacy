@@ -33,7 +33,7 @@
 ## ✨ Core Features
 
 ### 🔐 Fully Homomorphic Encryption Protection
-- All salary data is stored encrypted on-chain
+- All salary data is stored encrypted on-chain using `euint32`
 - Supports encrypted data computation without decryption
 - Only authorized users can decrypt and view original data
 - Zero-knowledge guarantee: Fully transparent and tamper-proof while protecting data privacy
@@ -45,17 +45,18 @@
 - **Employee**: Can only view their own salary
 
 ### 🏢 Complete Organization Management
-- Department creation and management (encrypted budget settings)
+- Department creation and management with encrypted budget settings
 - Employee addition and role assignment
 - Encrypted budget settings and compliance checks
 - Data isolation between departments
 
 ### 📊 Privacy-Preserving Statistical Analysis
-- Encrypted addition: Calculate department total salary (without decrypting any employee salary)
-- Encrypted average: Calculate average salary (without decrypting raw data)
-- Encrypted comparison: Compare two salaries (without decrypting original values)
-- Range queries: Query the number of employees with salaries in a specified range
-- Budget compliance check: Check if department total salary is within budget (all encrypted computation)
+The smart contract implements the following encrypted computation functions:
+
+- **`getDepartmentTotalSalary()`** - Calculate department total salary (encrypted addition, no decryption)
+- **`getDepartmentAverageSalary()`** - Calculate average salary (encrypted division, no decryption)
+- **`compareSalaries()`** - Compare two salaries (encrypted comparison, no decryption)
+- **`checkBudgetCompliance()`** - Check if department total salary is within budget (encrypted comparison)
 
 ### 🎨 Modern UI/UX
 - Responsive design supporting various devices
@@ -63,6 +64,8 @@
 - Intuitive user interface
 - Real-time data visualization (Recharts)
 - Complete onboarding flow
+- Demo data generator for quick testing
+- Internationalization support (English/Chinese)
 
 ---
 
@@ -119,32 +122,6 @@ graph TB
     style O fill:#627eea
 ```
 
-### Data Flow Architecture
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend as Frontend App
-    participant FHEVM as FHEVM SDK
-    participant Contract as Smart Contract
-    participant Blockchain as Blockchain Network
-    
-    User->>Frontend: Submit salary data
-    Frontend->>FHEVM: Request encryption
-    FHEVM->>FHEVM: Generate encrypted data
-    FHEVM-->>Frontend: Return encrypted data
-    Frontend->>Contract: Submit encrypted salary
-    Contract->>Blockchain: Store on-chain
-    
-    User->>Frontend: Request statistical computation
-    Frontend->>Contract: Call encrypted computation function
-    Contract->>Contract: Execute homomorphic encryption computation
-    Contract-->>Frontend: Return encrypted result
-    Frontend->>FHEVM: Request decryption
-    FHEVM-->>Frontend: Return decrypted result
-    Frontend-->>User: Display statistical result
-```
-
 ---
 
 ## 🌐 Live Demo
@@ -153,125 +130,14 @@ sequenceDiagram
 - **Vercel Deployment**: [https://salary-privacy.vercel.app](https://salary-privacy.vercel.app)
 - **GitHub Repository**: [View Source Code](https://github.com/673342907/SalaryPrivacy)
 
-### 📹 Demo Video
-- [YouTube Demo Video](#) - Full feature demonstration (Coming Soon)
-- [Demo Video Guide](./docs/DEMO_GUIDE.md) - Detailed video production instructions
-
-### 📸 Feature Screenshots
-
-> **💡 Tip**: How to add screenshots? Please refer to [Screenshot Guide](./docs/SCREENSHOT_GUIDE.md)
-
-#### Main Feature Pages
-
-<table>
-<tr>
-<td width="50%">
-
-**Dashboard Homepage**
-- Project overview and quick navigation
-- Statistics cards display
-- Feature module entry
-
-![Dashboard](./docs/images/screenshots/dashboard.png)
-
-</td>
-<td width="50%">
-
-**Department Management**
-- Create and manage departments
-- Set encrypted budgets
-- Department list and details
-
-![Department Management](./docs/images/screenshots/department-management.png)
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-**Employee Management**
-- Add employees
-- Assign roles and departments
-- Employee list display
-
-![Employee Management](./docs/images/screenshots/employee-management.png)
-
-</td>
-<td width="50%">
-
-**Salary Management**
-- Submit encrypted salaries
-- View salary records
-- Encryption process visualization
-
-![Salary Management](./docs/images/screenshots/salary-management.png)
-
-</td>
-</tr>
-<tr>
-<td width="50%">
-
-**Statistical Analysis**
-- Encrypted data statistics
-- Visualization charts (Recharts)
-- Budget compliance checks
-
-![Statistical Analysis](./docs/images/screenshots/statistics-analysis.png)
-
-</td>
-<td width="50%">
-
-**Permission Management**
-- Role permission matrix
-- Permission assignment
-- Permission documentation
-
-![Permission Management](./docs/images/screenshots/permission-management.png)
-
-</td>
-</tr>
-</table>
-
-#### Technical Feature Showcase
-
-<table>
-<tr>
-<td width="50%">
-
-**FHE Encryption Process Visualization**
-- Display encryption/decryption flow
-- Real-time encryption status
-- Security proof display
-
-![FHE Encryption Process](./docs/images/screenshots/fhe-encryption-process.png)
-
-</td>
-<td width="50%">
-
-**Security Proof and Compliance**
-- Zero-knowledge proof explanation
-- GDPR, CCPA compliance
-- Security feature display
-
-![Security Proof](./docs/images/screenshots/security-proof.png)
-
-</td>
-</tr>
-</table>
-
-> **📝 Screenshot Notes**: 
-> - If screenshots are temporarily unavailable, please visit [Live Demo](#-live-demo) to view the actual effects
-> - Screenshot files are located in the `docs/images/screenshots/` directory
-> - How to add screenshots please refer to [Screenshot Guide](./docs/SCREENSHOT_GUIDE.md)
-
 ---
 
 ## 📦 Example Contracts
 
-The project includes **8 independent FHEVM example contracts**, covering various application scenarios from basic to advanced:
+The project includes **8 independent FHEVM example contracts** in `packages/hardhat/contracts/examples/`:
 
 ### Basic Examples
-1. **FHEArithmetic** - Arithmetic operations example (basic operations like addition, subtraction, multiplication, division)
+1. **FHEArithmetic** - Arithmetic operations example (addition, subtraction, multiplication, division)
 2. **FHEComparison** - Comparison operations example (equal, greater than, less than, etc.)
 
 ### Utility Examples
@@ -286,11 +152,7 @@ The project includes **8 independent FHEVM example contracts**, covering various
 ### Educational Examples
 8. **FHEAntipatterns** - Antipattern example (demonstrating common errors and best practices)
 
-All examples include:
-- ✅ Complete documentation comments
-- ✅ Test files
-- ✅ Usage examples
-- ✅ Chapter tags
+All example contracts include complete documentation comments and can be used as learning references.
 
 ## 🛠️ Scaffolding Tool
 
@@ -343,7 +205,7 @@ pnpm dev
 
 1. On the Dashboard page, click the **"Generate Demo Data"** button
 2. The system will automatically create:
-   - 4 departments (Technical, Marketing, Finance, HR)
+   - 4 departments (Technology, Marketing, Finance, HR)
    - 7 employees (different roles and departments)
    - 7 encrypted salary records
 3. Now you can experience all feature modules
@@ -371,12 +233,11 @@ pnpm dev
 - ✅ Encryption process visualization
 
 ### 4. Statistical Analysis
-- ✅ Encrypted addition computation
-- ✅ Encrypted average computation
-- ✅ Encrypted data comparison
-- ✅ Range queries
+- ✅ Encrypted addition computation (`getDepartmentTotalSalary`)
+- ✅ Encrypted average computation (`getDepartmentAverageSalary`)
+- ✅ Encrypted data comparison (`compareSalaries`)
+- ✅ Budget compliance checks (`checkBudgetCompliance`)
 - ✅ Statistical chart display (Recharts)
-- ✅ Budget compliance checks
 
 ### 5. Permission Management
 - ✅ Role permission matrix display
@@ -423,7 +284,8 @@ SalaryPrivacy/
 │   │
 │   ├── hardhat/                         # Smart contracts
 │   │   ├── contracts/
-│   │   │   └── ConfidentialSalary.sol  # Main contract
+│   │   │   ├── ConfidentialSalary.sol  # Main contract
+│   │   │   └── examples/               # 8 example contracts
 │   │   ├── scripts/
 │   │   │   └── deploy.ts               # Deployment script
 │   │   ├── test/
@@ -435,7 +297,6 @@ SalaryPrivacy/
 │
 ├── README.md                            # This file
 ├── DEPLOYMENT_GUIDE.md                  # Deployment guide
-├── DEMO_VIDEO_GUIDE.md                  # Demo video guide
 └── package.json
 ```
 
@@ -458,7 +319,7 @@ pnpm hardhat:lint
 
 ### Test Coverage
 
-The project includes **5 test files**, providing comprehensive test coverage:
+The project includes comprehensive test files:
 
 - `ConfidentialSalary.test.ts` - Basic functionality tests
 - `ConfidentialSalary.enhanced.test.ts` - Enhanced functionality tests
@@ -487,8 +348,6 @@ The project is configured with complete GitHub Actions automation workflows:
 1. **Test Workflow** (`.github/workflows/test.yml`)
    - ✅ Automatically run all tests
    - ✅ Generate test coverage reports
-   - ✅ Upload coverage to Codecov
-   - ✅ Automatically generate documentation
 
 2. **Code Quality Check** (`.github/workflows/lint.yml`)
    - ✅ Solidity code check (Solhint)
@@ -503,9 +362,8 @@ The project is configured with complete GitHub Actions automation workflows:
 ### Quality Assurance
 
 - **Code Coverage**: 80%+ (continuous monitoring)
-- **Code Quality**: Grade A (Solhint + ESLint)
+- **Code Quality**: A grade (Solhint + ESLint)
 - **Build Status**: Automatic check (on every Push/PR)
-- **Documentation Updates**: Auto-generated (on every code change)
 
 ## 💻 Development
 
@@ -550,15 +408,27 @@ pnpm start
 
 The `ConfidentialSalary.sol` smart contract provides the following functions:
 
-- **Department Management**: `createDepartment()`, `getDepartment()`
-- **Employee Management**: `addEmployee()`, `getDepartmentEmployees()`
-- **Salary Management**: `submitSalary()`, `getEncryptedSalary()`
-- **Encrypted Statistics**: 
-  - `getDepartmentTotalSalary()` - Calculate department total salary
-  - `getDepartmentAverageSalary()` - Calculate average salary
-  - `compareSalaries()` - Compare two salaries
-  - `checkBudgetCompliance()` - Budget compliance check
-- **Permission Management**: `assignRole()`, `roles()`
+#### Department Management
+- `createDepartment(string name, bytes encryptedBudget)` - Create department with encrypted budget
+- `getDepartment(uint256 departmentId)` - Get department information
+
+#### Employee Management
+- `addEmployee(address employeeAddress, string name, Role role, uint256 departmentId)` - Add employee
+- `getDepartmentEmployees(uint256 departmentId)` - Get all employees in a department
+
+#### Salary Management
+- `submitSalary(address employeeAddress, bytes encryptedSalary)` - Submit encrypted salary
+- `getEncryptedSalary(address employeeAddress)` - Get encrypted salary (returns bytes for decryption)
+
+#### Encrypted Statistics
+- `getDepartmentTotalSalary(uint256 departmentId)` - Calculate department total salary (encrypted addition)
+- `getDepartmentAverageSalary(uint256 departmentId)` - Calculate average salary (encrypted division)
+- `compareSalaries(address employee1, address employee2)` - Compare two salaries (encrypted comparison)
+- `checkBudgetCompliance(uint256 departmentId)` - Check budget compliance (encrypted comparison)
+
+#### Permission Management
+- `assignRole(address user, Role role)` - Assign role to user
+- `roles(address user)` - Get user's role
 
 ### Deploy Contract
 
@@ -581,43 +451,14 @@ For detailed deployment guide, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYMEN
 
 ---
 
-## 🧪 Testing
-
-### Run Tests
-
-```bash
-cd packages/hardhat
-pnpm test
-```
-
-### Test Coverage
-
-- ✅ Deployment and initialization tests
-- ✅ Department management tests
-- ✅ Employee management tests
-- ✅ Salary management tests
-- ✅ Access control tests
-- ✅ Encrypted statistical computation tests
-- ✅ Boundary case tests
-
----
-
 ## 📚 Documentation
 
 ### Main Documentation
 
 - [Deployment Guide](./DEPLOYMENT_GUIDE.md) - Smart contract deployment and frontend connection
-- [Performance Optimization Report](./docs/PERFORMANCE.md) - Gas usage analysis and performance optimization recommendations ⚡
-- [Demo Video Guide](./docs/DEMO_GUIDE.md) - Detailed video production guide 🎬
 - [Architecture Documentation](./docs/ARCHITECTURE.md) - Detailed system architecture explanation
 - [Best Practices](./docs/BEST_PRACTICES.md) - Development best practices guide
-- [Optimization Summary](./OPTIMIZATION_SUMMARY_FINAL.md) - Project optimization summary and score analysis 📊
-
-### Video Production Documentation
-
-- [Demo Video Guide](./DEMO_VIDEO_GUIDE.md) - Video recording guide
-- [Video Script Without Narration](./VIDEO_SCRIPT_NO_VOICE.md) - Video script
-- [Video Recording Steps](./VIDEO_RECORDING_STEP_BY_STEP.md) - Detailed recording steps
+- [Performance Report](./docs/PERFORMANCE.md) - Gas usage analysis and performance optimization recommendations
 
 ### API Documentation
 
@@ -659,7 +500,7 @@ For detailed API documentation, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYME
 - Support complex statistical computations
 - Ensure data privacy and security
 
-### High Compliance Requirement Scenarios
+### Compliance Requirement Scenarios
 - GDPR compliance
 - CCPA compliance
 - Other data protection regulations
@@ -671,13 +512,13 @@ For detailed API documentation, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYME
 ### Technical Highlights ⭐⭐⭐⭐⭐
 
 - ✅ **Complete FHE Implementation** - Using Zama FHEVM 0.9.0, implementing true fully homomorphic encryption
-- ✅ **Multiple Encryption Computations** - Addition, average, comparison, range queries, budget checks
+- ✅ **Multiple Encryption Computations** - Addition, average, comparison, budget checks
 - ✅ **Smart Contract Integration** - Complete Solidity contract implementation, including 8 example contracts
 - ✅ **Modern Frontend** - Next.js 15.5.7 + React 19 + TypeScript, latest tech stack
 - ✅ **Professional UI/UX** - Responsive design + smooth animations + internationalization support (English/Chinese)
 - ✅ **Complete Test System** - 5 test files, 80%+ coverage
 - ✅ **CI/CD Automation** - GitHub Actions automatic testing, checking, deployment
-- ✅ **Scaffolding Tool** - create-fhevm-example CLI (explicitly required by Zama Bounty)
+- ✅ **Scaffolding Tool** - create-fhevm-example CLI
 
 ### Business Highlights ⭐⭐⭐⭐⭐
 
@@ -691,7 +532,6 @@ For detailed API documentation, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYME
 
 - ✅ **Antipattern Examples** - Demonstrate common errors, helping developers avoid pitfalls
 - ✅ **Complete Business Application** - Not just examples, but a complete production-grade application
-- ✅ **Documentation Automation** - Auto-generate documentation from code comments
 - ✅ **Performance Optimization** - Gas usage analysis and optimization recommendations
 
 ---
@@ -715,17 +555,12 @@ For detailed API documentation, please refer to [DEPLOYMENT_GUIDE.md](./DEPLOYME
 - [x] Data visualization
 - [x] Permission management system
 - [x] Deployment to Vercel
+- [x] Internationalization (English/Chinese)
+- [x] Demo data generator
 
 ### In Progress 🚧
 - [ ] Smart contract deployment to Sepolia
-- [ ] Complete frontend and smart contract connection
-- [ ] Demo video recording
-
-### Planned 📅
-- [ ] More FHE computation operations
-- [ ] Performance optimization
-- [ ] Mobile adaptation
-- [ ] Multi-language support
+- [ ] Frontend and smart contract complete connection
 
 ---
 
